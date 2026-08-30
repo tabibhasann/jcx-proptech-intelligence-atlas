@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-08-30",
+  "research_cutoff": "2026-08-30",
+  "input_files": {
+    "global_real_estate_pioneers_agent.csv": 77,
+    "proptech_startups_agent.csv": 93,
+    "regional_companies_agent.csv": 37,
+    "coverage_gap_additions.csv": 45,
+    "operator_coverage_additions.csv": 18,
+    "startup_core_additions.csv": 25,
+    "enterprise_platform_additions.csv": 16,
+    "final_residual_additions.csv": 8
+  },
+  "auxiliary_datasets": {
+    "quantified_outcome_cases": 44,
+    "standards_registry": 39,
+    "yc_real_estate_construction_directory_2026-08-30": 128,
+    "built_environment_ecosystem_discovery_index": 683,
+    "full_corpus_source_inventory": 1625
+  },
+  "missing_optional_inputs": [],
+  "raw_records": 319,
+  "unique_master_records": 295,
+  "records_merged_as_duplicates": 24,
+  "records_with_status_conflicts": 4,
+  "unique_source_urls": 1600,
+  "normalized_schema_outputs": {
+    "atlas_entities": 295,
+    "claims_registry": 834,
+    "entity_field_assertions": 3896,
+    "entity_relationships": 174,
+    "discovery_universe": 978,
+    "lifecycle_taxonomy_terms": 12
+  },
+  "normalized_record_type_counts": {
+    "organization": 274,
+    "program_ecosystem": 12,
+    "product_offering": 8,
+    "project": 1
+  },
+  "discovery_universe_counts": {
+    "deduplicated_identities": 978,
+    "qualified_core_identities": 295,
+    "discovery_only_identities": 683,
+    "identities_with_yc_profiles": 128,
+    "identities_with_ecosystem_membership": 653,
+    "identity_ecosystem_memberships": 683,
+    "ecosystem_source_rows_represented": 683
+  },
+  "provisional_claim_grade_counts": {
+    "C4": 387,
+    "C3": 347,
+    "C5": 90,
+    "C2": 7,
+    "C1": 3
+  },
+  "normalized_review_queue": {
+    "entities_with_tier_conflicts": 22,
+    "entities_without_verified_canonical_domain": 52,
+    "entities_requiring_editorial_review": 130,
+    "claims_requiring_claim_level_review": 834,
+    "discovery_identities_requiring_resolution": 26
+  },
+  "status_counts": {
+    "active": 260,
+    "cohort-selected": 11,
+    "unclear": 6,
+    "unknown": 5,
+    "acquired": 5,
+    "inactive": 4,
+    "active-public": 1,
+    "acquired-active": 1,
+    "pilot": 1,
+    "restructured": 1
+  },
+  "top_hq_country_values": {
+    "United States": 136,
+    "United Kingdom": 17,
+    "India": 17,
+    "United Arab Emirates": 15,
+    "Bangladesh": 14,
+    "Australia": 11,
+    "Singapore": 11,
+    "Japan": 10,
+    "Canada": 8,
+    "Saudi Arabia": 7,
+    "France": 5,
+    "Israel": 4,
+    "Nigeria": 4,
+    "Switzerland": 3,
+    "Germany": 3,
+    "Hong Kong": 3,
+    "Colombia": 2,
+    "Sweden": 2,
+    "Brazil": 2,
+    "South Africa": 2
+  },
+  "important_note": "Counts describe a curated evidence-qualified core plus separate dated discovery layers, not the total global market. The legacy master preserves disagreements; use atlas_entities and child assertion/claim tables for website work. Provisional grades require editorial review before publication."
+}

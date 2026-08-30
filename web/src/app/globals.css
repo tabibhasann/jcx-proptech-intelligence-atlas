@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+@custom-variant on-dark (&:where(.on-dark, .on-dark *));
+
+@theme {
+  /* ::: Palette: architectural drawing language ::: */
+  --color-paper: #f4efe3;
+  --color-paper-raised: #faf7ee;
+  --color-paper-deep: #eae2cf;
+  --color-ink: #191b1e;
+  --color-ink-2: #2e3237;
+  --color-ink-soft: #565a52;
+  --color-line: #d8cfba;
+  --color-line-strong: #b8ae95;
+  --color-mark: #c2410c;
+  --color-mark-deep: #9a3408;
+  --color-data: #1f4e79;
+  --color-data-soft: #d3e0ec;
+  --color-pass: #1f6b4a;
+  --color-caution: #8a6100;
+  --color-dark: #14161a;
+  --color-dark-2: #1d2026;
+  --color-dark-line: #33373f;
+
+  /* ::: Type ::: */
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-sans: "Space Grotesk", "system-ui", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", "Menlo", monospace;
+
+  /* ::: Rhythm ::: */
+  --spacing-rail: 4.5rem;
+
+  --ease-section: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-rise: rise 0.9s var(--ease-section) both;
+  --animate-draw: draw 1.4s var(--ease-section) both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-mark);
+  color: var(--color-paper-raised);
+}
+
+/* ::: Drawing-paper texture: faint blueprint grid ::: */
+.grid-paper {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-line) 40%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 40%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.grid-paper-dark {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ::: Hatching: unresolved / unclear states ::: */
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, currentColor 14%, transparent) 0 2px,
+    transparent 2px 8px
+  );
+}
+
+/* ::: Focus ::: */
+:focus-visible {
+  outline: 2px solid var(--color-mark);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ::: Evidence thread marker ::: */
+.thread-mark {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
+  padding: 0.125rem 0.5rem;
+  white-space: nowrap;
+  vertical-align: baseline;
+  cursor: pointer;
+  background: var(--color-paper-raised);
+  color: var(--color-ink-2);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.thread-mark:hover,
+.thread-mark[aria-expanded="true"] {
+  border-color: var(--color-mark);
+  color: var(--color-mark-deep);
+  background: color-mix(in srgb, var(--color-mark) 7%, var(--color-paper-raised));
+}
+.on-dark .thread-mark {
+  background: var(--color-dark-2);
+  color: #d9d4c7;
+  border-color: var(--color-dark-line);
+}
+.on-dark .thread-mark:hover,
+.on-dark .thread-mark[aria-expanded="true"] {
+  border-color: var(--color-mark);
+  color: #f59e7c;
+  background: color-mix(in srgb, var(--color-mark) 16%, var(--color-dark-2));
+}
+
+/* ::: Reveal on scroll (JS adds .is-seen); default state is visible
+   for no-JS / reduced-motion: the animation is pure enhancement ::: */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.js-motion .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.9s var(--ease-section),
+    transform 0.9s var(--ease-section);
+}
+.js-motion .reveal.is-seen {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ::: Reduced motion: the experience must be fully intact ::: */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js-motion .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ::: Scrollbar ::: */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-soft);
+}
+
+/* ::: Mono numerals everywhere data appears ::: */
+.data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ::: Link underline treatment ::: */
+.u-link {
+  text-decoration: underline;
+  text-decoration-color: var(--color-line-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+.u-link:hover {
+  text-decoration-color: var(--color-mark);
+  color: var(--color-mark-deep);
+}

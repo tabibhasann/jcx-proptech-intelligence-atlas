@@ -1,0 +1,80 @@
+table,field,data_type,nullable,allowed_or_format,source_of_truth,legacy_source,public_exposure,validation_rule
+entity,entity_id,string,no,stable prefixed ID,identity_registry,record_id,public,immutable after creation
+entity,record_type,enum,no,organization|product_offering|program_ecosystem|project,reviewed identity decision,absent,public,exactly one enum
+entity,display_name,string,no,public display label,reviewed identity decision,name,public,non-empty
+entity,canonical_name,string,no,reviewed canonical name,reviewed identity decision,canonical_name,public,non-empty and not identity key
+entity,description_public,string,yes,plain text,editorial claim,headline_claim|tech_strategy,public,no raw sentinel values
+entity,status_current,enum,no,active|pilot|stealth_unclear|acquired|merged|pivoted|paused|inactive|dissolved|unknown,latest accepted status_event,status,public,enum and event-backed
+entity,status_as_of,date,yes,YYYY-MM-DD,latest accepted status_event,status_as_of,public,never copy last_verified without evidence
+entity,status_confidence,enum,yes,high|medium|low|unknown,reviewed status evidence,absent,public,required when status is public
+entity,founded_year,integer,yes,1800..current year,accepted identity claim,founding_year,public,integer or null
+entity,founded_year_precision,enum,no,year|range|circa|unknown,accepted identity claim,founding_year,public,required with founded_year
+entity,headquarters_country,string,yes,ISO-3166-1 alpha-2,accepted identity claim,hq_country,public,valid ISO code
+entity,last_reviewed_at,date,yes,YYYY-MM-DD,review event,last_verified,public,review date not status date
+entity,publication_state,enum,no,draft|reviewed|public|retired,editorial workflow,absent,internal,only public rows in website views
+organization,organization_subtype,enum,yes,startup|public_company|developer_operator|contractor|service_provider|investor|accelerator|government|association|standards_body,reviewed type,entity_type,public,not a record type
+organization,legal_name,string,yes,legal name,registry or authoritative source,entity_type,restricted,do not infer from display name
+organization,ownership_status,enum,yes,private|public|subsidiary|acquired|unknown,reviewed identity/status,entity_type,public,source-backed
+organization,public_domain,string,yes,normalized HTTP(S) URL,verified organization source,canonical_url,public,no directory URLs
+product_offering,owner_organization_id,string,no,entity_id,product relationship,entity_type|name,public,FK to organization
+product_offering,product_type,enum,yes,software|hardware|marketplace|service|platform|data|financial_product|other,reviewed product taxonomy,category|entity_type,public,enum
+product_offering,proposition_public,string,yes,plain text,product claim,headline_claim|tech_strategy,public,claim-linked
+product_offering,deployment_model,enum,yes,saas|api|on_premise|managed_service|hardware_plus_software|marketplace|hybrid|unknown,based on product evidence,business_model,public,do not infer from maturity
+product_offering,commercial_model,string,yes,controlled tags plus note,product claim,business_model,public,child taxonomy for multiple models
+product_offering,ai_mode,enum,yes,none|feature|workflow|decision_support|autonomous|unknown,product documentation,tech_strategy,public,claim-linked
+product_offering,integration_posture,enum,yes,open_api|exportable|standard_based|proprietary|unknown,product documentation,tech_strategy,public,claim-linked
+product_offering,data_sensitivity,enum,yes,public|business|personal|financial|regulated|unknown,reviewed diligence,absent,restricted,never expose security detail publicly
+product_offering,mrl,integer,yes,0..5,reviewed product readiness evidence,maturity,public,not inferred from funding or company scale
+product_offering,mrl_rationale_public,string,yes,plain text,reviewed product evidence,maturity|caveats,public,required for MRL >=3
+entity_alias,alias_id,string,no,stable ID,identity registry,absent,internal,immutable
+entity_alias,entity_id,string,no,entity_id,identity registry,name,public,FK to entity
+entity_alias,alias_text,string,no,observed spelling,staging observation,name|canonical_name,public only if approved,retain source
+entity_alias,alias_type,enum,no,trading_name|legal_name|former_name|brand|product_alias|source_spelling|collision_candidate,reviewed identity decision,name,internal,enum
+entity_identifier,identifier_type,enum,no,domain|registration_id|exchange_ticker|yc_company_id|discovery_profile|other,source-backed identifier,canonical_url|source_urls,public only when safe,normalized value required
+entity_identifier,normalized_value,string,no,normalized identifier,source normalization,canonical_url|source_urls,public for domain,unique with type where applicable
+entity_market,market_type,enum,no,headquarters|operating|served|source_geography,reviewed geography,hq_country|operating_regions,public,one country/region per row
+entity_market,country_code,string,yes,ISO-3166-1 alpha-2,accepted geography,hq_country|operating_regions,public,do not over-infer Global
+entity_taxonomy,vocabulary,enum,no,lifecycle|technology_layer|category|asset_type|buyer_role|business_model,taxonomy registry,primary_lifecycle|secondary_lifecycle|category,public,valid vocabulary/code
+entity_taxonomy,term_code,string,no,versioned code,term registry,primary_lifecycle|secondary_lifecycle,public,FK to taxonomy_term
+entity_taxonomy,role,enum,no,primary|secondary|tag,editorial taxonomy,primary_lifecycle|secondary_lifecycle,public,at most one primary lifecycle per product
+relationship,relationship_type,enum,no,owns|parent_of|subsidiary_of|brand_of|product_of|operated_by|acquired_by|successor_of|merged_into|invested_in|member_of_program|selected_for_cohort|partnered_with|implemented_for|pilot_for|associated_with,reviewed relationship,absent,public if evidence-backed,source or claim required
+relationship,status,enum,no,asserted|ended|disputed|unknown,relationship evidence,absent,public if safe,dated when material
+status_event,event_type,enum,no,launch|active_check|acquisition|merger|pivot|pause|shutdown|dissolution|restructure|cohort_selection|other,status source,status,public if safe,requires source_id or claim_id
+status_event,event_date,date,yes,YYYY-MM-DD,event source,status_as_of,public,not retrieval date
+status_event,evidence_date,date,yes,YYYY-MM-DD,date stated by source,status_as_of,public,may be null
+source,source_id,string,no,src- stable ID,source registry,source_urls,public,immutable after URL normalization
+source,url_observed,string,no,HTTP(S) URL as seen,staging/source register,source_urls,internal,retain original
+source,url_canonical,string,no,HTTP(S) normalized URL,URL normalizer,source_urls,public,normalized host/path
+source,source_type,enum,no,regulatory_filing|government|standards_body|official_product_docs|official_company_page|company_press_release|vendor_case_study|customer_announcement|independent_research|trade_media|major_media|accelerator_directory|investor_portfolio|social_profile|search_snippet|other,editorial source classification,inferred_source_class,public,enum
+source,quality_grade,enum,no,S1|S2|S3|S4|S5,reviewed source quality,absent,public,do not derive from legacy A/B/C/D alone
+source,retrieved_at,date,no,YYYY-MM-DD,ingestion/retrieval,last_verified,public,required
+source,publication_date,date,yes,YYYY-MM-DD,source metadata,absent,public,not inferred unless documented
+source,effective_date,date,yes,YYYY-MM-DD,source metadata,absent,public,distinct from retrieved_at
+source,access_condition,enum,yes,open|paywalled|login|blocked|manual_only|unknown,access log,absent,internal,do not call blocked broken
+claim,claim_id,string,no,claim- stable ID,claim registry,absent,public,immutable
+claim,subject_entity_id,string,no,entity_id,claim registry,all row fields,public,FK to entity
+claim,claim_kind,enum,no,identity|status|product_description|scale_signal|outcome|ownership|funding|market_presence|technology_support|negative_event|atlas_inference,editorial claim classification,claim_type|headline_claim,public,enum
+claim,statement_public,string,no,atomic assertion,claim editor,headline_claim|scale_signal|tech_strategy|named_initiatives,public,one independently reviewable assertion
+claim,value_type,enum,no,text|integer|decimal|date|boolean|range|structured,claim parser,all row fields,public,match value columns
+claim,value_number,decimal,yes,decimal,claim parser,scale_signal|headline_claim,public,unit required
+claim,value_unit,string,yes,controlled/free unit,claim parser,scale_signal|headline_claim,public,do not mix units
+claim,scope_geography,string,yes,country/region,claim review,operating_regions,public,scope claims explicitly
+claim,period_start,date,yes,YYYY-MM-DD,source/claim evidence,scale_signal|headline_claim,public,required for time-bounded outcomes
+claim,period_end,date,yes,YYYY-MM-DD,source/claim evidence,scale_signal|headline_claim,public,period_start <= period_end
+claim,reported_by,string,yes,company|customer|partner|government|independent|atlas,claim source,claim_type,public,required for C3 claims
+claim,claim_grade,enum,no,C1|C2|C3|C4|C5,reviewed claim evidence,legacy evidence_grade|claim_type,public,independent of source quality
+claim,confidence,enum,no,high|medium|low|unknown,editorial review,absent,public,requires rationale internally
+claim,limitation_public,string,yes,plain text,claim review,caveats,public,required for C3-C5 material claims
+claim_source,support_role,enum,no,supports|contradicts|contextualizes|discovery_only,claim review,source_urls,public,locator recommended
+case_study,case_id,string,no,case ID,case library,case_id,public,immutable
+case_study,customer_entity_id,string,yes,entity_id,case identity,organization,public if customer permission,do not proxy to all customers
+case_study,solution_entity_id,string,yes,entity_id,case identity,solution_vendor,public,FK to product/org
+case_study,reported_outcome,string,no,scoped outcome,case evidence,measured_outcome,public,claim-linked and caveated
+case_study,verification_state,enum,no,unverified|reported|corroborated|verified,case review,evidence_grade,public,do not use legacy grade directly
+score_snapshot,rubric_version,string,no,version,score process,absent,public,required
+score_snapshot,as_of,date,no,YYYY-MM-DD,score process,last_verified,public,not current status date
+score_snapshot,total_score,decimal,yes,0..100,score process,jcx_relevance,public,only with minimum evidence coverage
+score_snapshot,tier,enum,yes,A|B|C|D|H,editorial score process,relevance_tier,public,mixed candidates remain null
+review_event,action,enum,no,create|merge|split|correct|status_change|taxonomy_change|grade_change,editorial workflow,merged_record_count|identity_note,internal,required for material changes
+review_event,reviewer_id,string,no,internal reviewer ID,editorial workflow,absent,internal,never public by default
+review_event,reviewed_at,date,no,YYYY-MM-DD,editorial workflow,last_verified,internal,required

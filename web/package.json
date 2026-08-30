@@ -1,0 +1,33 @@
+{
+  "name": "jcx-proptech-intelligence-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JCX Global PropTech Intelligence Atlas — public analysis experience built from the 2026-08-30 research corpus.",
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "scripts": {
+    "build:data": "node scripts/build-data.mjs",
+    "verify": "node scripts/verify-content.mjs",
+    "prebuild": "node scripts/build-data.mjs && node scripts/verify-content.mjs",
+    "dev": "npm run build:data && next dev",
+    "build": "next build",
+    "start": "next start",
+    "serve:static": "node scripts/serve-static.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "15.4.6",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.11",
+    "@types/node": "24.3.0",
+    "@types/react": "19.1.9",
+    "@types/react-dom": "19.1.7",
+    "playwright-core": "^1.62.1",
+    "tailwindcss": "4.1.11",
+    "typescript": "5.9.2"
+  }
+}

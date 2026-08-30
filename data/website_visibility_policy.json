@@ -1,0 +1,235 @@
+{
+  "policy_id": "jcx-website-visibility-policy-v1",
+  "policy_version": "1.1",
+  "effective_date": "2026-08-30",
+  "research_cutoff": "2026-08-30",
+  "default_visibility": "internal_only",
+  "purpose": "Separate public global analysis, JCX-private strategy and internal diligence while preserving evidence, uncertainty and correction history.",
+  "visibility_levels": [
+    {
+      "id": "public_global",
+      "label": "Public global atlas",
+      "audience": "Client leadership, partners, founders, practitioners and interested public readers.",
+      "may_include": [
+        "Reviewed or explicitly attributed global market analysis.",
+        "Qualified entity and product records that pass the applicable publication gate.",
+        "Discovery-only records as visibly labeled discovery/watchlist cards, not endorsements or proven-company profiles.",
+        "Dated outcome and failure cases with source type, evidence grade, scope, denominator and caveat.",
+        "Standards and governance explanations with version, source and implementation limitation.",
+        "Regional analysis with headquarters, operating coverage, target market and verified deployment kept distinct.",
+        "Methodology, evidence legend, source trail, freshness, correction and limitation notices."
+      ],
+      "must_not_include": [
+        "Unapproved JCX internal observations, form defects, vendor/account strategy, meeting scripts or private system hypotheses.",
+        "Unreviewed material claims presented as established facts.",
+        "Private contact, procurement, security, legal, customer or employee information.",
+        "Rankings, endorsements, investment recommendations or guaranteed performance claims derived from the corpus.",
+        "Client-specific implementation assumptions presented as public market facts."
+      ],
+      "required_review": [
+        "Claim-level source and attribution review for material visible claims.",
+        "Identity/status/canonical-domain check for profile pages.",
+        "Caveat and date check for outcomes, funding, ownership, regulation, security and status.",
+        "Accessibility, licensing, correction and disclaimer review."
+      ]
+    },
+    {
+      "id": "jcx_private",
+      "label": "JCX-private strategy chapter",
+      "audience": "Authorized JCX stakeholders and the authorized delivery/research team.",
+      "may_include": [
+        "JCX-specific opportunity hypotheses and workflow maps.",
+        "Public-site observations and dated audit findings framed as observations requiring validation.",
+        "ERP/CRM/vendor signals, integration boundaries and source-of-truth hypotheses.",
+        "Jolshiri lead-to-booking, project truth, landowner/JV, procurement, progress, handover and smart-asset pilot canvases.",
+        "JCX relevance scoring, pilot gates, baseline-to-collect fields, owner/RACI and decision criteria.",
+        "Private comparisons of providers or ecosystem options, with evidence and conflicts disclosed."
+      ],
+      "must_not_include": [
+        "Information that JCX has not authorized for the specific recipient or project.",
+        "Credentials, personal data, customer/landowner/employee records, sensitive legal/title/finance documents or security test details unless separately approved and protected.",
+        "Internal hypotheses stated as confirmed JCX facts.",
+        "Public publication of client defects, performance findings or vendor assessments without written approval."
+      ],
+      "required_review": [
+        "Named JCX owner/approver for each private page or story.",
+        "Access control and audience check before sharing.",
+        "Clear distinction between observed, reported, inferred and unknown.",
+        "Confidentiality, privacy, security and legal review where relevant."
+      ]
+    },
+    {
+      "id": "internal_only",
+      "label": "Internal diligence and editorial workspace",
+      "audience": "Research, editorial, product and authorized implementation teams only.",
+      "may_include": [
+        "Raw notes, unresolved identity/status/tier conflicts and claim-review queues.",
+        "Source access conditions, archive/hash details, excerpts, locators and licensing notes.",
+        "Security/privacy concerns, vendor diligence, procurement contacts and unpublished research.",
+        "Draft score dimensions, reviewer comments, correction intake and superseded content.",
+        "Unredacted source assertions, data-quality conflicts and internal build/debug artifacts."
+      ],
+      "must_not_include": [
+        "Automatic public exposure or indexing.",
+        "Use of internal notes as facts without source and review state.",
+        "Credentials, secrets or unnecessary personal data in the content bundle."
+      ],
+      "required_review": [
+        "Least-privilege access and periodic access review.",
+        "Retention/deletion rules appropriate to the source and sensitivity.",
+        "Human review before promotion to JCX-private or public_global."
+      ]
+    }
+  ],
+  "dataset_rules": [
+    {
+      "dataset": "data/atlas_entities.json",
+      "default_visibility": "internal_only",
+      "public_treatment": "Use selected records after checking publication_readiness, review_flags_json, status, canonical_url_status and claim review. Nulls remain explicit.",
+      "private_treatment": "May support JCX opportunity and comparison work with approved access.",
+      "notes": ["295 typed qualified entities are not equally publishable.", "Programs, products and projects must not be counted as organizations."]
+    },
+    {
+      "dataset": "data/discovery_universe.json",
+      "default_visibility": "public_global",
+      "public_treatment": "Search/discovery frontier of 978 identities; display evidence_stage, discovery_only, source layers and snapshot date.",
+      "private_treatment": "May support diligence and promotion decisions.",
+      "notes": ["683 discovery-only identities are not proven companies.", "Directory and ecosystem membership is not deployment, traction, security or outcome evidence."]
+    },
+    {
+      "dataset": "data/claims_registry.json",
+      "default_visibility": "internal_only",
+      "public_treatment": "Only reviewed claims or explicitly attributed provisional claims with source, claim grade, caveat and date.",
+      "private_treatment": "May be used for JCX analysis when the review state is visible.",
+      "notes": ["All 834 claims currently require claim-level editorial review.", "public_use values are gates, not optional labels."]
+    },
+    {
+      "dataset": "data/entity_field_assertions.json",
+      "default_visibility": "internal_only",
+      "public_treatment": "Expose only resolved/approved values or an uncertainty explanation; do not expose raw conflicting values as a public scalar.",
+      "private_treatment": "Use for audit, conflict explanation and correction workflow.",
+      "notes": ["3,896 assertions preserve source observations and disagreements."]
+    },
+    {
+      "dataset": "data/entity_relationships.json",
+      "default_visibility": "public_global",
+      "public_treatment": "Show only with relationship type, status, source and date; distinguish membership, ownership, acquisition, product-of, implementation and partnership.",
+      "private_treatment": "Use unresolved relationship review for diligence.",
+      "notes": ["A reported/program relationship is not deployment or outcome proof."]
+    },
+    {
+      "dataset": "data/quantified_outcome_cases.json",
+      "default_visibility": "public_global",
+      "public_treatment": "Use as bounded evidence packets with baseline, intervention, metric, period/sample, source type, outcome grade, causal caveat and transferability.",
+      "private_treatment": "May inform JCX pilot hypotheses, never forecasts without JCX baseline data.",
+      "notes": ["44 cases: 40 B3, 2 B2 and 2 A1 under the case-library convention.", "Do not aggregate unlike units into a universal ROI score."]
+    },
+    {
+      "dataset": "data/standards_registry.json",
+      "default_visibility": "public_global",
+      "public_treatment": "Show domain, version/status, problem solved, JCX implication and lock-in/implementation caveat.",
+      "private_treatment": "Use for architecture and vendor acceptance criteria.",
+      "notes": ["39 standards/frameworks are reference records, not proof of vendor implementation or compliance."]
+    },
+    {
+      "dataset": "data/source_register.json",
+      "default_visibility": "internal_only",
+      "public_treatment": "Expose source identity, URL, title/publisher/date where reviewed, source quality, claim linkage, access/license notes and retrieval date as appropriate.",
+      "private_treatment": "Full lineage and access conditions available to authorized reviewers.",
+      "notes": ["1,600 normalized sources; source quality remains provisional/domain-level and is not claim verification."]
+    },
+    {
+      "dataset": "data/yc_real_estate_construction_directory_2026-08-30.json",
+      "default_visibility": "public_global",
+      "public_treatment": "Dated snapshot with YC status, batch, profile and explicit discovery caveat.",
+      "private_treatment": "Use for candidate diligence and promotion.",
+      "notes": ["YC selection/status does not establish product maturity, revenue, deployment, security or ROI."]
+    },
+    {
+      "dataset": "data/built_environment_ecosystem_discovery_index.json",
+      "default_visibility": "public_global",
+      "public_treatment": "Show ecosystem membership as discovery signal with source page, capture date and status note.",
+      "private_treatment": "Use source-row provenance for diligence and identity review.",
+      "notes": ["683 ecosystem pairs resolve to 653 linked identities; the pair count is not a company count."]
+    }
+  ],
+  "document_rules": [
+    {
+      "document": "JCX_Global_PropTech_Intelligence_Atlas_2026-08-30.md",
+      "default_visibility": "public_global",
+      "exceptions": ["Sections describing JCX-specific strategy, private implementation observations or unpublished client material require jcx_private or internal_only handling."]
+    },
+    {
+      "document": "research/atlas_methodology_and_website_ia.md",
+      "default_visibility": "public_global",
+      "exceptions": ["Treat proposed IA and visual/editorial direction as constraints and methodology, not a mandatory visual design."]
+    },
+    {
+      "document": "JCX_Meeting_Dossier_2026-08-29.md",
+      "default_visibility": "jcx_private",
+      "exceptions": ["Individual public-source facts may be promoted only after source/caveat review and JCX approval."]
+    },
+    {
+      "document": "JCX_Second_Pass_Strategy_PropTech_Startups_2026-08-29.md",
+      "default_visibility": "jcx_private",
+      "exceptions": ["Public benchmarks and general venture-client concepts may be separately rewritten for public_global; account-entry strategy and internal recommendations remain private."]
+    },
+    {
+      "document": "research/final_corpus_qa.md",
+      "default_visibility": "internal_only",
+      "exceptions": ["Use only to explain current quality controls; do not expose historical defects as current facts without context."]
+    },
+    {
+      "document": "research/post_remediation_validation.md",
+      "default_visibility": "internal_only",
+      "exceptions": ["Public methodology may summarize the PASS state and remaining editorial queue without exposing internal-only notes."]
+    }
+  ],
+  "field_rules": [
+    {
+      "field_class": "claim_text_and_interpretation",
+      "public_condition": "reviewed or explicitly attributed with claim grade, source, date, limitation and public_use approval",
+      "private_condition": "may remain provisional if review status and source trail are visible",
+      "internal_default": "raw assertion, reviewer note or unresolved conflict"
+    },
+    {
+      "field_class": "status",
+      "public_condition": "current status and observation date shown; event date used only when sourced",
+      "private_condition": "status conflict and unresolved source evidence may be shown to authorized users",
+      "internal_default": "raw or contradictory status assertions before review"
+    },
+    {
+      "field_class": "relevance_tier_and_score",
+      "public_condition": "reviewed snapshot with rubric version, rationale, confidence and unknown dimensions",
+      "private_condition": "provisional JCX scoring may be used for authorized decisions",
+      "internal_default": "draft score dimensions and reviewer deliberation"
+    },
+    {
+      "field_class": "canonical_identity_and_relationship",
+      "public_condition": "identity resolution, alias/parent/product/acquisition relationship and source are reviewed or visibly unresolved",
+      "private_condition": "collision candidates and relationship review queue may be shown",
+      "internal_default": "raw matching evidence, source-row notes and merge/split deliberation"
+    },
+    {
+      "field_class": "personal_or_sensitive_data",
+      "public_condition": "never expose personal, financial, identity, precise location/safety or confidential client data",
+      "private_condition": "only minimum necessary, consented/authorized data under applicable controls",
+      "internal_default": "restricted, minimized and retention-controlled"
+    }
+  ],
+  "universal_constraints": [
+    "Unknown is not zero, failure or a neutral score; preserve typed missingness.",
+    "Do not expose private JCX content through search, indexing, previews, source drawers, generated summaries or chart data.",
+    "Do not use a shared domain, directory listing, accelerator membership or customer logo as identity, ownership, deployment or outcome proof.",
+    "Do not present company/vendor/customer-reported metrics as independently verified or as JCX forecasts.",
+    "Do not convert legacy A–D, A1/B2/B3 or other source-layer labels into S1–S5/C1–C5 automatically.",
+    "Do not publish legal, privacy, finance, title, safety, engineering or cybersecurity conclusions as advice; route them to qualified review.",
+    "Preserve correction, supersession and source history; do not silently overwrite a prior statement.",
+    "Promotion between visibility levels requires a named reviewer/approver and an auditable reason."
+  ],
+  "promotion_workflow": [
+    {"from": "internal_only", "to": "jcx_private", "required": ["authorized audience", "source trail", "sensitivity review", "named JCX/private owner"]},
+    {"from": "internal_only", "to": "public_global", "required": ["public-source or approved public claim", "claim/source review", "identity/status review", "caveat/date check", "publication approval"]},
+    {"from": "jcx_private", "to": "public_global", "required": ["written JCX approval", "redaction of private facts", "public-source verification", "claim/source review", "visibility metadata update"]}
+  ]
+}

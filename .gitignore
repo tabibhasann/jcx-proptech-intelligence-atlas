@@ -1,0 +1,10 @@
+.DS_Store
+.playwright-cli/
+research/baseline-*.png
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel/
+web/.pnpm-store/
+*.log
+

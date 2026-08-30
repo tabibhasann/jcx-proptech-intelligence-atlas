@@ -1,0 +1,513 @@
+{
+  "manifest_id": "jcx-website-story-manifest-v1",
+  "manifest_version": "1.1",
+  "created_at": "2026-08-30",
+  "research_cutoff": "2026-08-30",
+  "purpose": "Implementation-neutral editorial story plan for an immersive analysis website built from the JCX PropTech corpus.",
+  "creative_boundary": "The receiving model may invent information architecture, pacing, interaction, composition and visual expression. It must not invent research facts, collapse evidence states, expose private JCX material, or prescribe its own unsupported rankings.",
+  "corpus_snapshot": {
+    "qualified_entities": 295,
+    "discovery_identities": 978,
+    "discovery_only_identities": 683,
+    "ecosystem_pairs": 683,
+    "yc_profiles": 128,
+    "claims": 834,
+    "field_assertions": 3896,
+    "relationships": 174,
+    "outcome_cases": 44,
+    "standards": 39,
+    "normalized_sources": 1600,
+    "note": "Counts describe a curated evidence-qualified core plus dated discovery layers, not the total global market. Read data/atlas_manifest.json at build time for current counts."
+  },
+  "thesis": {
+    "id": "thesis-built-environment-operating-system",
+    "statement": "Property technology is becoming a digital operating system for the built environment: governed data, connected workflows, physical evidence, customer and partner interfaces, bounded intelligence and accountable human control.",
+    "supporting_arguments": [
+      "Adoption is broad while scaled, measured value remains rare.",
+      "Data quality, change capability, interoperability and governance determine whether AI or automation can create durable value.",
+      "Construction, energy, climate, finance and physical workflows belong inside the PropTech analysis; a listings-only definition is too narrow.",
+      "Regional context changes transferability: Bangladesh, South Asia, MENA, Japan, Southeast Asia, Europe, Australia and North America are not interchangeable markets.",
+      "Negative and restructured cases are necessary to distinguish technology survival, company survival and business-model risk.",
+      "The most disciplined JCX innovation path is a measured venture-client pilot before a separate investment decision."
+    ],
+    "visibility": "public_global",
+    "evidence_references": [
+      {"type": "document", "id": "JCX_Global_PropTech_Intelligence_Atlas_2026-08-30.md"},
+      {"type": "document", "id": "research/market_trends_and_failure_lessons.md"},
+      {"type": "claim", "id": "clm-da1028f3e569", "note": "JLL AI adoption signal; company-reported."},
+      {"type": "claim", "id": "clm-a58576aaa003", "note": "Aldar digital-journey metrics; company-reported."},
+      {"type": "case", "id": "QOC-043", "note": "Zillow Offers accounting failure case."},
+      {"type": "case", "id": "QOC-044", "note": "WeWork restructuring case."}
+    ],
+    "caveats": [
+      "This is a decision-useful curated corpus, not a census or market-share estimate.",
+      "Most company scale, adoption and outcome figures are self-reported or vendor/customer reported.",
+      "The thesis is an atlas synthesis, not a claim that all included technologies form one product category."
+    ],
+    "open_questions": [
+      "Which audiences should receive the public global atlas versus a private JCX chapter?",
+      "Which launch claims will complete human claim-level review before publication?"
+    ]
+  },
+  "chapters": [
+    {
+      "order": 1,
+      "chapter_id": "chapter-01-orientation",
+      "title": "The operating system beneath the apps",
+      "narrative_purpose": "Orient the reader to the central thesis, corpus scope and evidence posture before introducing companies or charts.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-01-01-thesis",
+          "title": "From impressive apps to governed operating capability",
+          "references": [
+            {"type": "document", "id": "JCX_Global_PropTech_Intelligence_Atlas_2026-08-30.md", "locator": "sections 1–2"},
+            {"type": "standard", "id": "W3C-PROV"},
+            {"type": "standard", "id": "ISO-19650"}
+          ],
+          "caveats": ["Use the thesis as atlas interpretation; do not present it as a settled industry definition."],
+          "open_questions": ["What level of technical depth is appropriate for executive, practitioner and founder audiences?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-01-02-corpus-contract",
+          "title": "What this atlas counts—and what it does not",
+          "references": [
+            {"type": "document", "id": "JCX_PropTech_Research_Corpus_README.md"},
+            {"type": "manifest", "id": "data/atlas_manifest.json"},
+            {"type": "document", "id": "research/post_remediation_validation.md"}
+          ],
+          "caveats": ["Display layer labels beside counts: qualified entities, discovery identities, ecosystem memberships, cases and standards are different units."],
+          "open_questions": ["Which counters are useful above the fold without implying completeness or quality?"]
+        }
+      ],
+      "chapter_caveats": ["Do not use 978 as the number of proven companies or 683 ecosystem pairs as additional companies."],
+      "chapter_open_questions": ["Should discovery-only identities be indexed in the public experience by default or behind an explicit frontier mode?"]
+    },
+    {
+      "order": 2,
+      "chapter_id": "chapter-02-lifecycle-map",
+      "title": "Map the built environment by lifecycle and technology layer",
+      "narrative_purpose": "Give readers the analytical map: L1–L12 lifecycle domains crossed with T1–T7 technology layers.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-02-01-lifecycle",
+          "title": "Land to handover, with data and trust crossing every phase",
+          "references": [
+            {"type": "taxonomy", "id": "data/lifecycle_taxonomy.json"},
+            {"type": "document", "id": "research/atlas_methodology_and_website_ia.md", "locator": "section 3.1"}
+          ],
+          "caveats": ["Organizations may touch several lifecycle nodes; do not force each organization into one box."],
+          "open_questions": ["Which lifecycle labels need a plain-language explanation for non-specialist readers?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-02-02-technology-layers",
+          "title": "Record, workflow, intelligence, physical asset, visualization, rails and governance",
+          "references": [
+            {"type": "document", "id": "JCX_Global_PropTech_Intelligence_Atlas_2026-08-30.md", "locator": "sections 3–4"},
+            {"type": "standard", "id": "BSI-IFC"},
+            {"type": "standard", "id": "OSCRE-IDM"},
+            {"type": "standard", "id": "BRICK"}
+          ],
+          "caveats": ["AI, IoT and digital twins describe how something works; they do not establish workflow, buyer, maturity or outcome."],
+          "open_questions": ["Which cross-layer relationships should be explained through examples rather than taxonomy text?"]
+        }
+      ],
+      "chapter_caveats": ["Legacy/free-text lifecycle mappings and unmapped labels remain reviewable; do not silently convert them into certainty."],
+      "chapter_open_questions": ["Should L12 cross-lifecycle data/trust be treated as a connective layer or a searchable domain in the public experience?"]
+    },
+    {
+      "order": 3,
+      "chapter_id": "chapter-03-operating-archetypes",
+      "title": "How leading operators turn technology into an operating model",
+      "narrative_purpose": "Use selected operators to show different ways technology becomes repeatable capability, not to rank companies.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-03-01-integrated-developers",
+          "title": "Developer-controlled customer and project loops",
+          "references": [
+            {"type": "entity", "id": "org-aldar-properties-4218e8b"},
+            {"type": "entity", "id": "org-emaar-development-402d000"},
+            {"type": "entity", "id": "org-godrej-properties-b4130e4"},
+            {"type": "entity", "id": "org-mitsui-fudosan-e8608ec"}
+          ],
+          "claim_references": ["clm-a58576aaa003", "clm-965cdbecf84b", "clm-6d5174dff4f5", "clm-0614bcae2fba"],
+          "caveats": ["Company scale and named initiatives do not prove causal product ROI or equal implementation maturity."],
+          "open_questions": ["Which operator stories have enough reviewed claims to become full launch profiles?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-03-02-owner-and-service-platforms",
+          "title": "Portfolio, data and distribution as compounding advantage",
+          "references": [
+            {"type": "entity", "id": "org-jll-799c538"},
+            {"type": "entity", "id": "org-prologis-0017226"},
+            {"type": "entity", "id": "org-capitaland-investment-6aab108"},
+            {"type": "entity", "id": "org-lendlease-4cdee7b"},
+            {"type": "entity", "id": "org-ke-holdings-beike-860ac7b"}
+          ],
+          "claim_references": ["clm-da1028f3e569", "clm-d1d1dafb61a5", "clm-02ea1a01047d", "clm-0543eb71d6f7"],
+          "caveats": ["Internal AI use, tenant commerce and safety/portfolio metrics are context signals with scope and attribution limits."],
+          "open_questions": ["Which comparisons are like-for-like enough to place side by side?"]
+        }
+      ],
+      "chapter_caveats": ["Archetypes are analytical groupings, not an industry league table."],
+      "chapter_open_questions": ["Should selected operators be grouped by archetype, lifecycle problem or regional context?"]
+    },
+    {
+      "order": 4,
+      "chapter_id": "chapter-04-workflow-frontier",
+      "title": "Where the workflow frontier is moving",
+      "narrative_purpose": "Move from operators to products and bounded workflows: site feasibility, BIM/CDE, progress, CRM, transactions, operations and climate.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-04-01-land-and-design",
+          "title": "Land, feasibility and model-to-delivery continuity",
+          "references": [
+            {"type": "entity", "id": "org-testfit-cd578b3"},
+            {"type": "entity", "id": "org-landtech-82e0a84"},
+            {"type": "entity", "id": "org-autodesk-construction-cloud-1c9b0c9"},
+            {"type": "entity", "id": "org-one-click-lca-def3638"},
+            {"type": "entity", "id": "org-building-transparency-be3d8ba"}
+          ],
+          "claim_references": ["clm-0b82a420179a", "clm-1f611b2a6eb9", "clm-5d1e21094323", "clm-9f3cd895cdb6"],
+          "case_references": ["QOC-001", "QOC-007"],
+          "caveats": ["Local parcel, zoning, flood, cost, approval, factor and data conditions determine transferability."],
+          "open_questions": ["Which product facts are independently documented enough for a full product profile?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-04-02-construction-evidence",
+          "title": "Construction as an evidence and coordination problem",
+          "references": [
+            {"type": "entity", "id": "org-openspace-15aa2fd"},
+            {"type": "entity", "id": "org-buildots-abeb197"},
+            {"type": "entity", "id": "org-planradar-0ba22d1"},
+            {"type": "entity", "id": "org-procore-9fbe212"},
+            {"type": "entity", "id": "org-alice-technologies-3d2a5de"},
+            {"type": "entity", "id": "org-smartpm-technologies-b7ceac3"},
+            {"type": "entity", "id": "org-togal-ai-d6d6a17"}
+          ],
+          "claim_references": ["clm-52c76fc17d3f", "clm-85d2eb4f383a", "clm-9d27291e1387", "clm-830cc0c56686"],
+          "case_references": ["QOC-013", "QOC-015", "QOC-019", "QOC-021"],
+          "caveats": ["Capture, schedule, BIM and workflow quality are prerequisites; imagery or AI flags do not automatically constitute ground truth."],
+          "open_questions": ["Which case metrics include a baseline, denominator and comparison method suitable for comparison?"]
+        },
+        {
+          "order": 3,
+          "beat_id": "beat-04-03-customer-finance-operations",
+          "title": "The customer, transaction and asset-operation layer",
+          "references": [
+            {"type": "entity", "id": "org-salesforce-real-estate-cloud-7d7e68a"},
+            {"type": "entity", "id": "org-sell-do-33b7307"},
+            {"type": "entity", "id": "org-snapdocs-72c3c3a"},
+            {"type": "entity", "id": "org-facilio-ee1952a"},
+            {"type": "entity", "id": "org-brainbox-ai-f5deb8d"},
+            {"type": "entity", "id": "org-ke-holdings-beike-860ac7b"}
+          ],
+          "claim_references": ["clm-14852fa03d78", "clm-4f8ef0e533ff", "clm-1ab6686df5de", "clm-df8e619cb35c", "clm-f03ee14a7057"],
+          "case_references": ["QOC-026", "QOC-030", "QOC-037", "QOC-040", "QOC-041"],
+          "caveats": ["US, India and global product claims must not be presented as local legal, finance, data or operating fit for Bangladesh."],
+          "open_questions": ["Which products can be described at workflow level without overstating integration, security or maturity?"]
+        }
+      ],
+      "chapter_caveats": ["Do not let product category labels substitute for workflow, buyer, deployment and evidence details."],
+      "chapter_open_questions": ["Which story is the most useful bridge from global examples to JCX’s private workflow hypotheses?"]
+    },
+    {
+      "order": 5,
+      "chapter_id": "chapter-05-outcomes",
+      "title": "What has actually been measured",
+      "narrative_purpose": "Make the difference between a product claim, a bounded customer result and realized value tangible through comparable evidence packets.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-05-01-workflow-wins",
+          "title": "Workflow metrics before universal ROI",
+          "references": [
+            {"type": "case", "id": "QOC-001"},
+            {"type": "case", "id": "QOC-008"},
+            {"type": "case", "id": "QOC-019"},
+            {"type": "case", "id": "QOC-026"},
+            {"type": "case", "id": "QOC-037"}
+          ],
+          "caveats": ["Most cases are B3 vendor/customer evidence; preserve source type, baseline gaps, denominator and causal caveat."],
+          "open_questions": ["Which 6–10 cases have the clearest metric framing for the launch narrative?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-05-02-energy-and-physical-world",
+          "title": "Energy, spatial evidence and implementation conditions",
+          "references": [
+            {"type": "case", "id": "QOC-015"},
+            {"type": "case", "id": "QOC-030"},
+            {"type": "case", "id": "QOC-033"},
+            {"type": "case", "id": "QOC-034"},
+            {"type": "entity", "id": "org-sublime-systems-b5e57c0"},
+            {"type": "entity", "id": "org-biomason-5aaaaad"},
+            {"type": "entity", "id": "org-building-transparency-be3d8ba"}
+          ],
+          "caveats": ["Weather, occupancy, tariff, baseline, capture discipline and operator action affect transferability; identified savings are not realized savings."],
+          "open_questions": ["Can metric facts be normalized without losing the original case wording?"]
+        }
+      ],
+      "chapter_caveats": ["Never combine minutes, dollars, percentages, kWh, adoption and modeled scenarios into a universal ROI score."],
+      "chapter_open_questions": ["What outcome verification state should be visible before the 44 case rows complete editorial review?"]
+    },
+    {
+      "order": 6,
+      "chapter_id": "chapter-06-regional-transfer",
+      "title": "Transferability changes by place",
+      "narrative_purpose": "Use regional examples to show that technology is mediated by language, infrastructure, payment, land/title, regulation, labor, climate and operating context.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-06-01-bangladesh-and-south-asia",
+          "title": "Local workflow signals and South Asian comparators",
+          "references": [
+            {"type": "entity", "id": "org-proq-cf33256"},
+            {"type": "entity", "id": "org-barikoi-0f8853c"},
+            {"type": "entity", "id": "org-vextrus-988c4a5"},
+            {"type": "entity", "id": "org-landeed-505b2d4"},
+            {"type": "entity", "id": "org-sell-do-33b7307"},
+            {"type": "entity", "id": "org-brick-and-bolt-4809c48"},
+            {"type": "document", "id": "research/regional_proptech_landscape.md"}
+          ],
+          "claim_references": ["clm-3c3aa222bfe7", "clm-c6b1bcbdd85e", "clm-82de69e4bd31", "clm-1955f281aa82"],
+          "caveats": ["Local company claims and pilot signals need current product, customer, security and integration diligence; Indian state integrations are not automatically portable to Bangladesh."],
+          "open_questions": ["Which Bangladesh examples are public-global safe versus client-private opportunity inputs?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-06-02-mena-asia-and-global-contexts",
+          "title": "MENA, Japan, Southeast Asia, Europe, Australia and the Americas",
+          "references": [
+            {"type": "entity", "id": "org-brkz-3da166c"},
+            {"type": "entity", "id": "org-wakecap-a08c5b1"},
+            {"type": "entity", "id": "org-31ventures-1867c79"},
+            {"type": "entity", "id": "org-lendlease-4cdee7b"},
+            {"type": "entity", "id": "org-ke-holdings-beike-860ac7b"},
+            {"type": "document", "id": "research/regional_proptech_landscape.md"},
+            {"type": "document", "id": "research/coverage_gap_audit.md"}
+          ],
+          "caveats": ["HQ, operating region, target market, supported market and verified customer deployment are separate facts."],
+          "open_questions": ["How should the experience expose selection bias toward English-language and US ecosystem sources?"]
+        }
+      ],
+      "chapter_caveats": ["A global benchmark is not a Bangladesh implementation recommendation."],
+      "chapter_open_questions": ["Which context clusters should be compared directly, and which should remain parallel case studies?"]
+    },
+    {
+      "order": 7,
+      "chapter_id": "chapter-07-venture-client",
+      "title": "Why access to real projects matters more than another pitch deck",
+      "narrative_purpose": "Explain the venture-client/CVC ecosystem as a deployment and learning mechanism, while separating program membership from product evidence.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-07-01-ecosystem-engines",
+          "title": "Programs, capital, distribution and real assets",
+          "references": [
+            {"type": "entity", "id": "org-jll-spark-b674956"},
+            {"type": "entity", "id": "org-31ventures-1867c79"},
+            {"type": "entity", "id": "org-saudi-proptech-hub-rega-e45df16"},
+            {"type": "entity", "id": "org-metaprop-portfolio-bda9b60"}
+          ],
+          "claim_references": ["clm-caf30b110166", "clm-685bd724e592", "clm-cde3ab43d6ba", "clm-31e546cd23c9"],
+          "caveats": ["Program selection, portfolio membership and investor-reported capital are discovery/market-access signals, not deployment, outcome or investment recommendations."],
+          "open_questions": ["Which programs have source evidence sufficient for a program profile rather than a discovery card?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-07-02-pilot-logic",
+          "title": "Problem → paid pilot → measured decision → repeatable deployment",
+          "references": [
+            {"type": "document", "id": "JCX_Second_Pass_Strategy_PropTech_Startups_2026-08-29.md", "locator": "sections 1, 7–8, 11"},
+            {"type": "document", "id": "JCX_Global_PropTech_Intelligence_Atlas_2026-08-30.md", "locator": "sections 13.6–13.7"}
+          ],
+          "caveats": ["This is JCX strategy material; keep the public version conceptual unless explicitly approved."],
+          "open_questions": ["What public/global explanation of venture-client practice is useful without exposing JCX’s account strategy?"]
+        }
+      ],
+      "chapter_caveats": ["Do not present a cohort logo wall as evidence of product quality or operational adoption."],
+      "chapter_open_questions": ["Should this chapter be public as market analysis, private as JCX strategy, or split into both? "]
+    },
+    {
+      "order": 8,
+      "chapter_id": "chapter-08-failure-and-risk",
+      "title": "When technology meets economics, legitimacy and execution",
+      "narrative_purpose": "Counterbalance progress narratives with failure, restructuring, acquisition and technology-survival lessons.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-08-01-business-model-failure",
+          "title": "Inventory, leases, factories and capital can overwhelm software narratives",
+          "references": [
+            {"type": "entity", "id": "org-katerra-0503c58"},
+            {"type": "entity", "id": "org-wework-8768417"},
+            {"type": "case", "id": "QOC-043"},
+            {"type": "case", "id": "QOC-044"}
+          ],
+          "claim_references": ["clm-a96952cbbd48", "clm-d5a9b5879eff"],
+          "caveats": ["Accounting or restructuring evidence establishes events and losses, not that software alone caused them."],
+          "open_questions": ["Which controls should accompany each failure case so the lesson is actionable rather than sensational?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-08-02-legitimacy-and-continuity",
+          "title": "Projects terminate; products can survive; legitimacy is part of the product",
+          "references": [
+            {"type": "entity", "id": "org-sidewalk-labs-quayside-b7600cf"},
+            {"type": "entity", "id": "org-plangrid-378edb8"},
+            {"type": "entity", "id": "org-veev-by-lennar-844d2b1"}
+          ],
+          "claim_references": ["clm-2278df9b325d", "clm-e724d256bcef"],
+          "caveats": ["Acquired, inactive, pivoted and absorbed are different states; preserve historical identity and successor relationships."],
+          "open_questions": ["Which relationship and status events need reviewer confirmation before timeline publication?"]
+        }
+      ],
+      "chapter_caveats": ["Historical cases should be analytical and calm; do not imply present status or universal causal lessons."],
+      "chapter_open_questions": ["Can status-event facts be completed from current source evidence before a visual timeline is released?"]
+    },
+    {
+      "order": 9,
+      "chapter_id": "chapter-09-standards-and-trust",
+      "title": "The durable layer: standards, semantics, security and governance",
+      "narrative_purpose": "Show why identifiers, definitions, exchange, permissions, provenance and human oversight outlast individual products.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-09-01-interoperability",
+          "title": "A protocol is not semantic truth; an API is not a process",
+          "references": [
+            {"type": "standard", "id": "BSI-IFC"},
+            {"type": "standard", "id": "BSI-IDS"},
+            {"type": "standard", "id": "BSI-BCF"},
+            {"type": "standard", "id": "BSI-BSDD"},
+            {"type": "standard", "id": "OSCRE-IDM"},
+            {"type": "standard", "id": "OGC-FEATURES"}
+          ],
+          "caveats": ["Standards vary by version, adoption and implementation quality; require tested mappings and acceptance criteria."],
+          "open_questions": ["Which standards crosswalks are mature enough for an implementation-neutral public explanation?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-09-02-operational-and-ai-governance",
+          "title": "Security, privacy, climate and bounded AI",
+          "references": [
+            {"type": "standard", "id": "ISO-27001"},
+            {"type": "standard", "id": "NIST-CSF"},
+            {"type": "standard", "id": "NIST-AI-RMF"},
+            {"type": "standard", "id": "ISO-42001"},
+            {"type": "standard", "id": "GHG-PROTOCOL"},
+            {"type": "standard", "id": "BD-PDPO"},
+            {"type": "standard", "id": "BD-NDG"}
+          ],
+          "caveats": ["Bangladesh privacy, legal, title, finance and security material is issue-spotting, not legal advice. A standard or framework does not establish compliance."],
+          "open_questions": ["Which local legal/security claims require current counsel review before public copy is drafted?"]
+        }
+      ],
+      "chapter_caveats": ["Do not present standards as vendor certifications, product capabilities or proof of implementation."],
+      "chapter_open_questions": ["Which version/effective-date metadata must be visible on every standard record?"]
+    },
+    {
+      "order": 10,
+      "chapter_id": "chapter-10-jcx-translation",
+      "title": "What this could mean for JCX",
+      "narrative_purpose": "Translate global evidence into a conditional JCX opportunity sequence: governed project truth, connected commercial journey, land/JV and delivery trust, operations/energy, then bounded AI.",
+      "visibility": "jcx_private",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-10-01-digital-spine",
+          "title": "Digital front door connected to the operating model",
+          "references": [
+            {"type": "document", "id": "JCX_Meeting_Dossier_2026-08-29.md", "locator": "sections 1, 5–7"},
+            {"type": "document", "id": "JCX_Second_Pass_Strategy_PropTech_Startups_2026-08-29.md", "locator": "sections 1–4"}
+          ],
+          "caveats": ["Current ERP, vendor, website, portfolio and workflow statements are public signals/hypotheses requiring JCX validation."],
+          "open_questions": ["What is the authoritative source for project, unit, inventory, price, lead, customer, finance, progress and handover data?", "What is the actual ERP/CRM stage and accountable owner?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-10-02-priority-pilots",
+          "title": "Jolshiri lead-to-booking, project truth, land/JV and measured delivery pilots",
+          "references": [
+            {"type": "document", "id": "JCX_Second_Pass_Strategy_PropTech_Startups_2026-08-29.md", "locator": "sections 2, 4, 11"},
+            {"type": "document", "id": "JCX_Meeting_Dossier_2026-08-29.md", "locator": "sections 6–7, 11–12"}
+          ],
+          "caveats": ["Pilot priorities are JCX-private recommendations, not public company facts or a committed roadmap."],
+          "open_questions": ["Which journey has a sponsor, process owner, baseline data, manageable integration and visible quarterly value?", "Which claims and observations may JCX approve for public release?"]
+        }
+      ],
+      "chapter_caveats": ["Never expose client-site defects, internal hypotheses, meeting scripts, account strategy or unpublished diligence in the public global layer without written approval."],
+      "chapter_open_questions": ["Who owns authorization for each private section and each transition to public content?"]
+    },
+    {
+      "order": 11,
+      "chapter_id": "chapter-11-methodology-and-corrections",
+      "title": "How to trust, question and update the atlas",
+      "narrative_purpose": "Close with claim/source labels, missingness, review state, corrections, freshness and the distinction between research and advice.",
+      "visibility": "public_global",
+      "beats": [
+        {
+          "order": 1,
+          "beat_id": "beat-11-01-evidence-legend",
+          "title": "Source quality and claim attribution are separate",
+          "references": [
+            {"type": "document", "id": "research/atlas_methodology_and_website_ia.md", "locator": "sections 7, 16"},
+            {"type": "document", "id": "research/master_dataset_schema_remediation.md"},
+            {"type": "dataset", "id": "data/claims_registry.json"},
+            {"type": "dataset", "id": "data/source_register.json"}
+          ],
+          "caveats": ["Current claim grades and source grades are provisional; a source can be authoritative about an announcement without proving causality."],
+          "open_questions": ["Which claim subset will pass human review for launch?", "Which source metadata and locators are still missing?"]
+        },
+        {
+          "order": 2,
+          "beat_id": "beat-11-02-corrections-and-limitations",
+          "title": "Unknown is a meaningful state",
+          "references": [
+            {"type": "document", "id": "research/post_remediation_validation.md"},
+            {"type": "document", "id": "research/coverage_gap_audit.md"},
+            {"type": "dataset", "id": "data/atlas_entities.json"}
+          ],
+          "caveats": ["Blank, not disclosed, not applicable, source-schema omitted and not yet reviewed must not become zero or a guessed public value."],
+          "open_questions": ["What correction SLA, reviewer identity and supersession behavior will the website expose?", "Which 22 tier conflicts, 52 canonical-domain gaps, 130 flagged entities and 26 discovery identity reviews remain before release?"]
+        }
+      ],
+      "chapter_caveats": ["The atlas is informational research, not procurement, investment, legal, tax, engineering, safety, cybersecurity or performance advice."],
+      "chapter_open_questions": ["Who will own ongoing monthly, quarterly and annual refreshes after launch?"]
+    }
+  ],
+  "global_editorial_rules": [
+    "Use stable IDs for joins; names and URLs are not universal keys.",
+    "Keep discovery-only, qualified-core, program, product, project, historical and unresolved records visibly distinct.",
+    "Show S1–S5 source quality separately from C1–C5 claim attribution; do not translate legacy A–D/A1/B2/B3 labels mechanically.",
+    "Preserve reported, estimated, potential, up to, avoided, identified, implemented and realized as different result states.",
+    "Do not rank by funding, headcount, popularity, accelerator membership, logos, web traffic or media attention.",
+    "Do not infer MRL from funding, company scale, directory status or a polished demo.",
+    "Distinguish headquarters, operating coverage, target market, supported market, local partner and verified deployment.",
+    "Use historical/acquired/pivoted cases as lessons without implying present activity or universal causality.",
+    "Provide accessible textual/table alternatives for any derived view and expose units, denominators, periods, source and caveat in context.",
+    "When evidence is insufficient, render an explicit unknown, reported claim, analyst interpretation, unresolved review state or open question."
+  ],
+  "launch_selection_reference": {
+    "document": "research/website_launch_editorial_selection.md",
+    "count": 44,
+    "selection_note": "The launch selection is a balanced narrative sample across operators, workflow/data/physical vendors, Bangladesh/South Asia/MENA signals, programs/ecosystems and historical transitions. It is not a ranking or publication waiver."
+  }
+}
