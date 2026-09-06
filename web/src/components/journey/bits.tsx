@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { RecordTypeMark, StatusMark, TierMark, CaseGradeMark, Unknown } from "@/components/marks";
-import type { CaseRecord, EntitySlim, Standard } from "@/data/types";
+import type { CaseRecord, Entity, EntitySlim, Standard } from "@/data/types";
 import { taxonomyLabel } from "@/data";
 
-/* ::: Chapter shell ::: */
+/* Chapter shell */
 export function Chapter({
   id,
   order,
@@ -51,7 +51,7 @@ export function Chapter({
   );
 }
 
-/* ::: Editorial prose ::: */
+/* Editorial prose */
 export function Prose({
   children,
   className = "",
@@ -78,7 +78,7 @@ export function P({ children }: { children: React.ReactNode }) {
   return <p className="mt-5 first:mt-0">{children}</p>;
 }
 
-/* ::: A data point with mandatory unit/context ::: */
+/* A data point with mandatory unit/context */
 export function DataPoint({
   value,
   label,
@@ -103,7 +103,7 @@ export function DataPoint({
   );
 }
 
-/* ::: Entity reference card (story layer) ::: */
+/* Entity reference card (story layer) */
 export function EntityRefCard({ entity, note }: { entity: EntitySlim; note?: string | null }) {
   return (
     <li className="group flex h-full flex-col border border-line bg-paper-raised p-4 transition-colors hover:border-mark/60 on-dark:border-dark-line on-dark:bg-dark-2">
@@ -127,7 +127,7 @@ export function EntityRefCard({ entity, note }: { entity: EntitySlim; note?: str
   );
 }
 
-/* ::: Case reference card ::: */
+/* Case reference card */
 export function CaseRefCard({ c, note }: { c: CaseRecord; note?: string | null }) {
   return (
     <li className="flex h-full flex-col border border-line bg-paper-raised p-4 on-dark:border-dark-line on-dark:bg-dark-2">
@@ -151,7 +151,7 @@ export function CaseRefCard({ c, note }: { c: CaseRecord; note?: string | null }
   );
 }
 
-/* ::: Standard reference row ::: */
+/* Standard reference row */
 export function StandardRefRow({ s }: { s: Standard }) {
   return (
     <li className="border border-line bg-paper-raised p-4 on-dark:border-dark-line on-dark:bg-dark-2">
@@ -167,7 +167,7 @@ export function StandardRefRow({ s }: { s: Standard }) {
   );
 }
 
-/* ::: Chapter caveats: the honest boundary, always visible ::: */
+/* Chapter caveats: the honest boundary, always visible */
 export function CaveatRail({ items, dark = false }: { items: string[]; dark?: boolean }) {
   if (!items.length) return null;
   return (
@@ -190,7 +190,7 @@ export function CaveatRail({ items, dark = false }: { items: string[]; dark?: bo
   );
 }
 
-/* ::: Launch-profile card with editorial frame ::: */
+/* Launch-profile card with editorial frame */
 export function LaunchCard({
   entity,
   context,
@@ -198,12 +198,14 @@ export function LaunchCard({
   boundary,
   dark = false,
 }: {
-  entity: EntitySlim;
+  entity: Entity | EntitySlim;
   context?: string;
   why: string;
   boundary: string;
   dark?: boolean;
 }) {
+  const category =
+    "category" in entity ? entity.category : entity.categoryLabels?.[0] ?? null;
   return (
     <div
       className={`flex h-full flex-col border p-5 ${
@@ -223,6 +225,9 @@ export function LaunchCard({
       >
         {entity.name}
       </Link>
+      {category ? (
+        <p className={`mt-1.5 text-sm leading-snug ${dark ? "text-[#d9d4c7]" : "text-ink-2"}`}>{category}</p>
+      ) : null}
       {context ? (
         <p className={`mt-1 font-mono text-[10px] uppercase tracking-[0.12em] ${dark ? "text-[#8d8779]" : "text-ink-soft"}`}>
           {context}
@@ -248,7 +253,7 @@ export function LaunchCard({
   );
 }
 
-/* ::: Section heading inside chapters ::: */
+/* Section heading inside chapters */
 export function SceneTitle({ children, id }: { children: React.ReactNode; id?: string }) {
   return (
     <h3 id={id} className="font-display text-2xl font-semibold tracking-tight sm:text-[1.7rem]">
@@ -257,7 +262,7 @@ export function SceneTitle({ children, id }: { children: React.ReactNode; id?: s
   );
 }
 
-/* ::: Lifecycle chip ::: */
+/* Lifecycle chip */
 export function LChip({ code }: { code: string }) {
   return (
     <Link

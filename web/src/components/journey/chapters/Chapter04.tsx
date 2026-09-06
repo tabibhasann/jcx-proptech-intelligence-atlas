@@ -65,7 +65,7 @@ export function Chapter04() {
             <P>
               Every technology claim belongs somewhere on this ladder. Funding, headcount, media
               attention and accelerator membership do not move a company up a single rung by
-              themselves: and in this corpus, product-level maturity is deliberately{" "}
+              themselves, and in this corpus, product-level maturity is deliberately{" "}
               <strong>not inferred</strong> from company scale: where deployment evidence is missing,
               the field stays blank rather than pretending precision.
             </P>
@@ -112,7 +112,7 @@ export function Chapter04() {
             </div>
             <div className="flex items-end">
               <Link
-                href="/frontier?layer=yc"
+                href="/discovery?layer=yc"
                 className="u-link font-mono text-[11px] uppercase tracking-[0.14em] text-ink-2"
               >
                 Search the snapshot in the frontier →

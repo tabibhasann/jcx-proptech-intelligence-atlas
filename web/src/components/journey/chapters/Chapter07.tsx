@@ -27,12 +27,12 @@ export function Chapter07() {
           Built-environment startups face a constraint software startups do not: they need real
           projects, buildings, users, operational data, hardware access and credible references.
           That makes property owners and contractors unusually powerful <strong>venture
-          clients</strong>: and makes program design matter more than pitch events.
+          clients</strong>, and makes program design matter more than pitch events.
         </P>
         <P>
           The best programs connect startups with actual deployment owners and production decisions.
           The weakest end with a demo day and no procurement path. Membership, investment and cohort
-          badges are market-access signals: not deployment, outcome or investment recommendations.
+          badges are market-access signals, not deployment, outcome or investment recommendations.
         </P>
       </Prose>
 

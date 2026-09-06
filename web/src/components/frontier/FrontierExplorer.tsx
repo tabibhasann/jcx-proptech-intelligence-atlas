@@ -14,11 +14,15 @@ export function FrontierExplorer() {
   const [stage, setStage] = useState<string | null>(null);
   const [layer, setLayer] = useState<string | null>(null);
 
-  // Deep links (e.g. /frontier?layer=yc) resolve client-side for static export.
+  // Deep links (e.g. /discovery?layer=yc) resolve client-side for static export.
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     const l = p.get("layer");
     if (l && ["yc", "ecosystem", "qualified_core"].includes(l)) setLayer(l);
+    const s = p.get("stage");
+    if (s === "qualified_core" || s === "discovery_only") setStage(s);
+    const q = p.get("q");
+    if (q) setQuery(q);
   }, []);
   const [ecosystem, setEcosystem] = useState<string | null>(null);
   const [reviewOnly, setReviewOnly] = useState(false);
@@ -62,8 +66,8 @@ export function FrontierExplorer() {
     );
   }, [state, stage, layer, ecosystem, reviewOnly, query]);
 
-  if (state.status === "loading") return <DatasetLoading label="the discovery universe" />;
-  if (state.status === "error") return <DatasetError label="The discovery universe" />;
+  if (state.status === "loading") return <DatasetLoading label="the research leads" />;
+  if (state.status === "error") return <DatasetError label="The research leads" />;
 
   const visible = result?.slice(0, shown) ?? [];
 
@@ -72,7 +76,7 @@ export function FrontierExplorer() {
       <div className="border border-line bg-paper-raised p-4" role="search">
         <div className="flex flex-wrap items-center gap-3">
           <label className="grow sm:max-w-sm">
-            <span className="sr-only">Search the discovery universe</span>
+            <span className="sr-only">Search leads by name, domain, program, or place</span>
             <input
               type="search"
               value={query}
@@ -80,43 +84,43 @@ export function FrontierExplorer() {
                 setQuery(e.target.value);
                 setShown(PAGE);
               }}
-              placeholder="Search name, domain, ecosystem, country…"
+              placeholder="Try a name, a domain, a program, a country…"
               className="w-full rounded-sm border border-line-strong bg-paper px-3 py-2 text-sm outline-none placeholder:text-ink-soft/70 focus:border-mark"
             />
           </label>
           <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-            Stage
+            Standing
             <select
               value={stage ?? ""}
               onChange={(e) => setStage(e.target.value === "" ? null : e.target.value)}
               className="rounded-sm border border-line-strong bg-paper px-2 py-2 text-xs normal-case tracking-normal text-ink-2"
             >
-              <option value="">All stages</option>
-              <option value="qualified_core">Qualified core</option>
-              <option value="discovery_only">Discovery only</option>
+              <option value="">Qualified and leads</option>
+              <option value="qualified_core">Qualified records</option>
+              <option value="discovery_only">Leads only</option>
             </select>
           </label>
           <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-            Source layer
+            Found in
             <select
               value={layer ?? ""}
               onChange={(e) => setLayer(e.target.value === "" ? null : e.target.value)}
               className="rounded-sm border border-line-strong bg-paper px-2 py-2 text-xs normal-case tracking-normal text-ink-2"
             >
-              <option value="">All layers</option>
+              <option value="">Everywhere</option>
               <option value="qualified_core">Qualified core</option>
-              <option value="yc">YC snapshot (2026-08-30)</option>
-              <option value="ecosystem">Ecosystem memberships</option>
+              <option value="yc">YC snapshot (30 Aug 2026)</option>
+              <option value="ecosystem">Program memberships</option>
             </select>
           </label>
           <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-            Ecosystem
+            Program
             <select
               value={ecosystem ?? ""}
               onChange={(e) => setEcosystem(e.target.value === "" ? null : e.target.value)}
               className="max-w-56 rounded-sm border border-line-strong bg-paper px-2 py-2 text-xs normal-case tracking-normal text-ink-2"
             >
-              <option value="">All ecosystems</option>
+              <option value="">All programs</option>
               {ecosystems.map(([name, n]) => (
                 <option key={name} value={name}>
                   {name} ({n})
@@ -131,19 +135,19 @@ export function FrontierExplorer() {
               onChange={(e) => setReviewOnly(e.target.checked)}
               className="h-3.5 w-3.5 accent-[#c2410c]"
             />
-            Identity review only
+            Needs identity check only
           </label>
         </div>
       </div>
 
       <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft" role="status">
-        {result?.length ?? 0} of {state.data.length} identities
+        {result?.length ?? 0} of {state.data.length} leads
       </p>
 
       {result && result.length === 0 ? (
         <DatasetEmpty
-          label="No identities match"
-          hint="An empty frontier result is a true state of the corpus. Try a broader term or clear a filter."
+          label="No leads match"
+          hint="Nothing found under that combination. Try a broader term or clear a filter: an empty result here is a true state."
         />
       ) : (
         <>
@@ -167,10 +171,9 @@ export function FrontierExplorer() {
       )}
 
       <p className="mt-8 max-w-2xl text-xs leading-relaxed text-ink-soft">
-        Discovery presence is not operating, traction, outcome, security or localization evidence.
-        Ecosystem membership, accelerator badges, a live domain and a polished directory profile are
-        discovery signals. Identities flagged for identity review are kept deliberately separate
-        rather than merged.
+        Being listed here proves nothing about operation, traction, outcomes, security, or local
+        fit. Program membership, a live domain, and a polished directory profile are leads. Leads
+        flagged for an identity check stay deliberately separate rather than merged.
       </p>
     </div>
   );
@@ -217,6 +220,7 @@ function DiscoveryCard({ d }: { d: DiscoveryRecord }) {
       ) : null}
       {d.needsIdentityReview && d.identityNotes.length > 0 ? (
         <p className="mt-2 border-l-2 border-mark/60 pl-3 text-[11px] leading-relaxed text-ink-soft">
+          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-mark-deep">Identity check · </span>
           {d.identityNotes[0]}
         </p>
       ) : null}
@@ -228,11 +232,11 @@ function DiscoveryCard({ d }: { d: DiscoveryRecord }) {
         </span>
         {d.profileUrl ? (
           <a href={d.profileUrl} target="_blank" rel="noopener noreferrer" className="u-link text-data">
-            source ↗
+            Open source ↗
           </a>
         ) : d.candidateUrl ? (
           <a href={d.candidateUrl} target="_blank" rel="noopener noreferrer" className="u-link text-data">
-            candidate site ↗
+            Open website ↗
           </a>
         ) : null}
       </div>

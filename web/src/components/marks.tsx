@@ -1,29 +1,30 @@
 /**
  * The trust grammar of the atlas: every state, grade and unknown is rendered
  * through these marks so that evidence states can never be confused.
- * Color is always paired with a text label: never the sole carrier.
+ * Color is always paired with a text label, never the sole carrier.
  */
 
 const base =
   "inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] leading-none whitespace-nowrap";
 
-/* ::: Operating status ::: */
+/* Operating status: plain words, corpus value in the tooltip */
 const STATUS: Record<string, { label: string; cls: string; title: string }> = {
-  active: { label: "Active", cls: "border-pass/50 text-pass", title: "Operating, as observed" },
-  "active-public": { label: "Active · listed", cls: "border-pass/50 text-pass", title: "Operating; publicly listed" },
-  "cohort-selected": { label: "Cohort-selected", cls: "border-caution/60 text-caution", title: "Selected for a cohort; not deployment evidence" },
-  pilot: { label: "Pilot", cls: "border-caution/60 text-caution border-dashed", title: "Pilot stage, as reported" },
-  acquired: { label: "Acquired", cls: "border-data/50 text-data", title: "Acquired; see lineage" },
-  "acquired-active": { label: "Acquired · active", cls: "border-data/50 text-data", title: "Acquired; product continues" },
-  pivoted: { label: "Pivoted", cls: "border-data/50 text-data", title: "Changed model; historical identity preserved" },
-  restructured: { label: "Restructured", cls: "border-data/50 text-data", title: "Restructuring documented" },
-  inactive: { label: "Inactive", cls: "border-ink-soft/50 text-ink-soft", title: "No longer operating in prior form" },
-  stealth_unclear: { label: "Unclear", cls: "border-ink-soft/50 text-ink-soft hatch", title: "Status unclear from current sources" },
-  unknown: { label: "Not yet verified", cls: "border-ink-soft/50 text-ink-soft hatch", title: "Status not yet verified" },
+  active: { label: "Operating", cls: "border-pass/50 text-pass", title: "Operating, as observed (corpus status: active)" },
+  "active-public": { label: "Operating · listed", cls: "border-pass/50 text-pass", title: "Operating; publicly listed (corpus status: active-public)" },
+  "cohort-selected": { label: "Cohort selected", cls: "border-caution/60 text-caution", title: "Selected for a cohort; not deployment evidence (corpus status: cohort-selected)" },
+  pilot: { label: "Pilot stage", cls: "border-caution/60 text-caution border-dashed", title: "Pilot stage, as reported (corpus status: pilot)" },
+  acquired: { label: "Acquired", cls: "border-data/50 text-data", title: "Acquired; see lineage (corpus status: acquired)" },
+  "acquired-active": { label: "Acquired · continues", cls: "border-data/50 text-data", title: "Acquired; product continues (corpus status: acquired-active)" },
+  pivoted: { label: "Changed model", cls: "border-data/50 text-data", title: "Changed model; historical identity preserved (corpus status: pivoted)" },
+  restructured: { label: "Restructured", cls: "border-data/50 text-data", title: "Restructuring documented (corpus status: restructured)" },
+  inactive: { label: "No longer operating", cls: "border-ink-soft/50 text-ink-soft", title: "No longer operating in prior form (corpus status: inactive)" },
+  unclear: { label: "Unclear", cls: "border-ink-soft/50 text-ink-soft hatch", title: "Status unclear from current sources (corpus status: unclear)" },
+  unknown: { label: "Not yet verified", cls: "border-ink-soft/50 text-ink-soft hatch", title: "Status not yet verified (corpus status: unknown)" },
 };
 
 export function StatusMark({ status, conflict }: { status: string; conflict?: boolean }) {
-  const s = STATUS[status] ?? STATUS.unknown;
+  const key = status === "stealth_unclear" ? "unclear" : status;
+  const s = STATUS[key] ?? STATUS.unknown;
   return (
     <span className="inline-flex items-center gap-1">
       <span className={`${base} ${s.cls}`} title={s.title}>
@@ -38,11 +39,11 @@ export function StatusMark({ status, conflict }: { status: string; conflict?: bo
   );
 }
 
-/* ::: Record type ::: */
+/* Record type: plain words */
 const RECORD_TYPE: Record<string, { label: string; cls: string }> = {
-  organization: { label: "Organization", cls: "border-ink-2/40 text-ink-2" },
+  organization: { label: "Company", cls: "border-ink-2/40 text-ink-2" },
   product_offering: { label: "Product", cls: "border-data/50 text-data" },
-  program_ecosystem: { label: "Program / ecosystem", cls: "border-caution/60 text-caution" },
+  program_ecosystem: { label: "Program", cls: "border-caution/60 text-caution" },
   project: { label: "Project", cls: "border-ink-soft/50 text-ink-soft" },
 };
 
@@ -51,7 +52,7 @@ export function RecordTypeMark({ type }: { type: string }) {
   return <span className={`${base} ${t.cls}`}>{t.label}</span>;
 }
 
-/* ::: Relevance tier (relevance to a decision: not a quality rank) ::: */
+/* Relevance tier (relevance to a decision, not a quality rank) */
 const TIER: Record<string, { label: string; title: string }> = {
   A: { label: "A", title: "Core: directly relevant to a current decision. Relevance tier, not a quality rank." },
   B: { label: "B", title: "Strategic: important benchmark or near-term watch. Relevance tier, not a quality rank." },
@@ -83,13 +84,13 @@ export function TierMark({ tier, conflict }: { tier: string | null; conflict?: b
   );
 }
 
-/* ::: Claim attribution grade (C1–C5) ::: */
+/* Claim grades: who said it, in plain words first */
 const CLAIM_GRADE: Record<string, { label: string; cls: string; title: string }> = {
-  C1: { label: "C1 · verified", cls: "border-pass/60 text-pass", title: "Verified fact: supported by an S1 source or two independent sources" },
-  C2: { label: "C2 · corroborated", cls: "border-pass/60 text-pass", title: "Corroborated fact with a material limitation" },
-  C3: { label: "C3 · reported", cls: "border-caution/60 text-caution", title: "Clearly attributed company/customer/partner claim: not independently verified" },
-  C4: { label: "C4 · atlas interpretation", cls: "border-data/50 text-data", title: "Atlas analyst interpretation of cited facts" },
-  C5: { label: "C5 · unverified signal", cls: "border-ink-soft/50 text-ink-soft hatch", title: "Unverified signal: discovery context only" },
+  C1: { label: "Verified", cls: "border-pass/60 text-pass", title: "C1 verified fact: S1 source or two independent sources" },
+  C2: { label: "Corroborated", cls: "border-pass/60 text-pass", title: "C2 corroborated fact with a material limitation" },
+  C3: { label: "Company reported", cls: "border-caution/60 text-caution", title: "C3 company, customer, or partner claim, not independently verified" },
+  C4: { label: "Our analysis", cls: "border-data/50 text-data", title: "C4 analyst interpretation of cited facts" },
+  C5: { label: "Unverified lead", cls: "border-ink-soft/50 text-ink-soft hatch", title: "C5 unverified signal: discovery context only" },
 };
 
 export function ClaimGradeMark({ grade, className = "" }: { grade: string; className?: string }) {
@@ -101,21 +102,21 @@ export function ClaimGradeMark({ grade, className = "" }: { grade: string; class
   );
 }
 
-/* ::: Source quality grade (S1–S5) ::: */
+/* Source grades: plain words first */
 const SOURCE_GRADE: Record<string, string> = {
-  S1: "S1 · authoritative",
-  S2: "S2 · first-party",
-  S3: "S3 · independent research",
-  S4: "S4 · directory",
-  S5: "S5 · discovery signal",
+  S1: "Filing or official record",
+  S2: "Company material",
+  S3: "Independent research",
+  S4: "Directory",
+  S5: "Weak signal",
 };
 export const sourceGradeLabel = (g: string) => SOURCE_GRADE[g] ?? g;
 
-/* ::: Case evidence grade (legacy case-library convention, not mapped to S/C) ::: */
+/* Case grades: who reported it, in plain words (legacy A1/B2/B3 kept in tooltip) */
 const CASE_GRADE: Record<string, { label: string; cls: string; title: string }> = {
-  A1: { label: "A1 · filing/accounting", cls: "border-pass/60 text-pass", title: "Filing or accounting record: establishes the event/figure; not proof that technology caused it" },
-  B2: { label: "B2 · stronger customer evidence", cls: "border-pass/50 text-pass", title: "Customer/vendor evidence with comparatively stronger framing; review scope and baseline" },
-  B3: { label: "B3 · vendor/customer evidence", cls: "border-caution/60 text-caution", title: "Customer/vendor-reported evidence with a missing control, denominator, baseline or independent audit" },
+  A1: { label: "Filing grade", cls: "border-pass/60 text-pass", title: "A1 filing or accounting record: establishes the event; not proof technology caused it" },
+  B2: { label: "Stronger customer evidence", cls: "border-pass/50 text-pass", title: "B2 customer or vendor evidence with comparatively stronger framing; check scope and baseline" },
+  B3: { label: "Vendor story", cls: "border-caution/60 text-caution", title: "B3 customer or vendor reported story with a missing control, denominator, baseline, or independent audit" },
 };
 export function CaseGradeMark({ grade }: { grade: string | null }) {
   const found = grade ? CASE_GRADE[grade] : undefined;
@@ -127,7 +128,7 @@ export function CaseGradeMark({ grade }: { grade: string | null }) {
   );
 }
 
-/* ::: Typed unknowns: unknown is a meaningful state ::: */
+/* Typed unknowns: unknown is a meaningful state */
 const UNKNOWN_LABELS: Record<string, string> = {
   not_verified: "not yet verified",
   not_provided: "not provided",
@@ -145,23 +146,23 @@ export function Unknown({ kind = "not_verified", className = "" }: { kind?: keyo
   );
 }
 
-/* ::: Publication / review state ::: */
+/* Publication and review state: plain words */
 const READINESS: Record<string, { label: string; title: string }> = {
   qualified_profile_requires_claim_review: {
-    label: "claim review pending",
-    title: "Identity integrated; claim-level editorial review outstanding before full publication",
+    label: "Claims under review",
+    title: "Identity integrated; claim-level review still open before full publication",
   },
   profile_requires_editorial_review: {
-    label: "editorial review pending",
-    title: "Profile-level editorial review outstanding",
+    label: "Profile under review",
+    title: "Profile-level editorial review still open",
   },
   watchlist_profile: {
-    label: "watchlist",
+    label: "Early signal",
     title: "Early or weakly evidenced signal; uncertainty is explicit",
   },
   discovery_program: {
-    label: "program record",
-    title: "Program/ecosystem discovery record: not a vendor profile",
+    label: "Program record",
+    title: "Program discovery record, not a vendor profile",
   },
 };
 export function ReadinessNote({ value }: { value: string | null }) {
@@ -174,23 +175,23 @@ export function ReadinessNote({ value }: { value: string | null }) {
   );
 }
 
-/* ::: Evidence stage (discovery frontier) ::: */
+/* Standing of a wide search lead: plain words */
 export function StageMark({ stage, needsReview }: { stage: string; needsReview?: boolean }) {
   if (stage === "qualified_core") {
     return (
-      <span className={`${base} border-pass/50 text-pass`} title="Promoted to the evidence-qualified core; individual claims still require review">
-        qualified core
+      <span className={`${base} border-pass/50 text-pass`} title="Qualified for analysis; individual claims still under review">
+        Qualified
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1">
-      <span className={`${base} border-caution/60 text-caution`} title="Discovery-layer identity: not a proven company, deployment or outcome">
-        discovery only
+      <span className={`${base} border-caution/60 text-caution`} title="Research lead only, not a proven company, deployment, or outcome">
+        Lead only
       </span>
       {needsReview ? (
-        <span className={`${base} border-mark/60 text-mark-deep`} title="Identity or relationship under review: kept deliberately separate">
-          identity review
+        <span className={`${base} border-mark/60 text-mark-deep`} title="Identity check open: kept deliberately separate">
+          Identity check
         </span>
       ) : null}
     </span>

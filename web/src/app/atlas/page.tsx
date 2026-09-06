@@ -3,9 +3,9 @@ import { AtlasExplorer } from "@/components/atlas/AtlasExplorer";
 import { manifest } from "@/data";
 
 export const metadata: Metadata = {
-  title: "The Atlas: qualified core",
+  title: "Company records: what each one does",
   description:
-    "The evidence-qualified core of the corpus: 295 typed entities: organizations, product offerings, programs and a historical project: filterable by lifecycle, status, tier and geography. Qualified does not mean endorsed.",
+    "295 company, product, program, and project records in plain language: what each does, where it works, what evidence exists, and what remains unknown. Qualified means worth analyzing, never recommended.",
 };
 
 export default function AtlasPage() {
@@ -14,18 +14,17 @@ export default function AtlasPage() {
       <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-10">
         <header className="max-w-3xl">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">
-            The Atlas · qualified core
+            Company records · plain language
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            {manifest.counts.qualifiedEntities} evidence-qualified records
+            {manifest.counts.qualifiedEntities} records, each explained
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-2">
-            {manifest.counts.organizations} organizations, {manifest.counts.products} product
-            offerings, {manifest.counts.programs} programs/ecosystems and {manifest.counts.projects}{" "}
-            historical project. Inclusion means “worth analyzing”: never “recommended to buy.”
-            Records with unresolved tiers, missing maturity evidence or pending claim review are
-            labeled exactly that way. The wider search frontier lives in{" "}
-            <a href="/frontier" className="u-link">the discovery layer</a>.
+            {manifest.counts.organizations} companies, {manifest.counts.products} products,{" "}
+            {manifest.counts.programs} programs, and {manifest.counts.projects} historical project.
+            Every card says what the record does in one line. Being listed means worth analyzing,
+            never recommended to buy. Leads that did not qualify live in{" "}
+            <a href="/discovery" className="u-link">the wider search</a>.
           </p>
         </header>
         <div className="mt-10">

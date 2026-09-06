@@ -41,7 +41,7 @@ export function Chapter06() {
         <P>
           Technology is mediated by place: language, infrastructure, payments, land and title
           regimes, regulation, labor and climate all change what a product can be. A global
-          benchmark is never automatically a Bangladesh implementation recommendation: and
+          benchmark is never automatically a Bangladesh implementation recommendation, and
           headquarters, operating coverage, target market and verified deployment are separate facts.
         </P>
       </Prose>

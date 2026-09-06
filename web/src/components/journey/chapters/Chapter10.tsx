@@ -25,7 +25,7 @@ const DECISIONS: [string, string, string][] = [
   ["Build", "A local workflow or data asset creates strategic advantage, or no product fits", "Landowner/JV records, approved project/unit service, bilingual portals, local rules and payments"],
   ["Partner / co-develop", "Specialized data, hardware, implementation or legal integration is required", "BIM deployment, geospatial/title evidence, BMS/IoT, construction vision, bank connectors"],
   ["Paid venture-client pilot", "A startup can solve one measured problem in 8–12 weeks", "Procurement, site capture, energy, document workflow or customer-service agent"],
-  ["Invest", "Repeated operational value plus strategic distribution benefit plus separate investment merit", "Only after at least two successful deployments and full diligence: never a condition for a pilot"],
+  ["Invest", "Repeated operational value plus strategic distribution benefit plus separate investment merit", "Only after at least two successful deployments and full diligence, never a condition for a pilot"],
 ];
 
 export function Chapter10() {
@@ -85,7 +85,7 @@ export function Chapter10() {
             Each step is gated by the previous one: no energy AI before meters, BMS points and
             operators exist; no customer portal before the data behind it is reliable; no venture
             fund before ordinary pilots can scale. The sequence is less theatrical than “automate
-            everything”: and it is how a developer becomes a technology pioneer rather than merely
+            everything.” It is also the difference between becoming a technology pioneer and merely
             looking like one.
           </P>
         </Prose>

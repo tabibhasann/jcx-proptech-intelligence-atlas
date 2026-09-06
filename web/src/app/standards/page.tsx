@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import { standards, manifest } from "@/data";
 
 export const metadata: Metadata = {
-  title: "Standards & governance: the durable layer",
+  title: "Rules that outlast products",
   description:
-    "39 standards and frameworks across interoperability, information management, building controls, GIS, carbon, security, privacy and AI governance. A standard's existence is not proof of implementation.",
+    "39 standards and frameworks in plain language: what breaks without them, which project question each answers, and what they never prove on their own.",
 };
 
 const DOMAIN_ORDER: [string, string][] = [
-  ["BIM & information exchange", "BIM exchange|BIM requirements|BIM coordination|BIM process|BIM/product data|Security/BIM|Semantics/dictionaries|CDE/API"],
-  ["Enterprise, asset & facility semantics", "Enterprise real estate|Asset management|Facility management|Building semantics|Building IoT semantics|Property/building ontology|Digital twin runtime"],
-  ["Controls, GIS & sensors", "Building controls|Building/industrial controls|Residential IoT|Geospatial API|IoT/geospatial API|3D city/GIS"],
-  ["Carbon, climate & ESG", "Carbon accounting|Carbon/LCA|Climate transition risk|Investor ESG benchmark|Digital connectivity/smart building certification|Environmental management"],
-  ["Security, privacy & AI governance", "Security/privacy|Cyber risk|OT security|AI governance|AI regulation|Privacy/legal|Data governance/legal|Public-sector data/API"],
-  ["Provenance", "Provenance"],
+  ["Design and handover records", "BIM exchange|BIM requirements|BIM coordination|BIM process|BIM/product data|Security/BIM|Semantics/dictionaries|CDE/API"],
+  ["Buildings, assets, and tenants", "Enterprise real estate|Asset management|Facility management|Building semantics|Building IoT semantics|Property/building ontology|Digital twin runtime"],
+  ["Controls, maps, and sensors", "Building controls|Building/industrial controls|Residential IoT|Geospatial API|IoT/geospatial API|3D city/GIS"],
+  ["Carbon, climate, and certification", "Carbon accounting|Carbon/LCA|Climate transition risk|Investor ESG benchmark|Digital connectivity/smart building certification|Environmental management"],
+  ["Security, privacy, and AI rules", "Security/privacy|Cyber risk|OT security|AI governance|AI regulation|Privacy/legal|Data governance/legal|Public-sector data/API"],
+  ["Provenance: who said what, when", "Provenance"],
 ];
 
 export default function StandardsPage() {
@@ -29,16 +29,15 @@ export default function StandardsPage() {
       <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-10">
         <header className="max-w-3xl">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">
-            The durable layer · reference registry
+            Rules that outlast products · reference
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            {manifest.counts.standards} standards &amp; frameworks
+            {manifest.counts.standards} rules worth demanding
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-2">
-            Interoperability, information management, controls, GIS, carbon, security, privacy and
-            AI governance. These are reference records: a standard’s existence does not prove any
-            vendor implements it, and a framework does not establish compliance. Bangladesh legal
-            material is issue-spotting: not legal advice.
+            Products come and go. Shared definitions, exchange formats, and governance decide
+            whether records survive a vendor change, a handover, or an audit. Each entry answers
+            one project question. A standard existing never proves any vendor follows it.
           </p>
         </header>
 
@@ -80,45 +79,27 @@ function StandardCard({ s }: { s: (typeof standards)[number] }) {
     <li className="flex h-full flex-col border border-line bg-paper-raised p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="font-display text-lg font-semibold leading-tight">{s.name}</h3>
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">{s.id}</span>
       </div>
-      <p className="mt-1 font-mono text-[11px] text-ink-soft">
-        {s.statusOrVersion ?? "version not recorded"}
-        {s.license ? ` · ${s.license}` : ""}
-      </p>
-      {s.solves ? <p className="mt-3 text-sm leading-relaxed text-ink-2">{s.solves}</p> : null}
-      <dl className="mt-4 space-y-3 border-t border-line pt-4 text-xs leading-relaxed">
-        {s.adoption ? (
-          <div>
-            <dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-ink-soft">Adoption / maturity</dt>
-            <dd className="mt-0.5 text-ink-2">{s.adoption}</dd>
-          </div>
-        ) : null}
-        {s.jcxImplication ? (
-          <div>
-            <dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-ink-soft">
-              Implication for a developer/operator
-            </dt>
-            <dd className="mt-0.5 text-ink-2">{s.jcxImplication}</dd>
-          </div>
-        ) : null}
-        {s.caveat ? (
-          <div>
-            <dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-mark-deep">Caveat</dt>
-            <dd className="mt-0.5 border-l-2 border-mark/50 pl-3 text-ink-soft">{s.caveat}</dd>
-          </div>
-        ) : null}
-      </dl>
+      {s.jcxImplication ? (
+        <p className="mt-2 text-sm font-medium leading-relaxed text-ink-2">{s.jcxImplication}</p>
+      ) : null}
+      {s.solves ? <p className="mt-2 text-sm leading-relaxed text-ink-soft">{s.solves}</p> : null}
+      {s.caveat ? (
+        <p className="mt-3 border-l-2 border-mark/50 pl-3 text-xs leading-relaxed text-ink-soft">
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-mark-deep">Limit · </span>
+          {s.caveat}
+        </p>
+      ) : null}
       <div className="mt-auto flex items-center justify-between gap-2 pt-4">
         {s.url ? (
           <a href={s.url} target="_blank" rel="noopener noreferrer" className="u-link font-mono text-[11px] text-data">
-            official record ↗
+            Official record ↗
           </a>
         ) : (
-          <span />
+          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-soft">No link recorded</span>
         )}
         <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-soft">
-          as of {s.asOf ?? "undated"}
+          {s.statusOrVersion ?? "version not recorded"}
         </span>
       </div>
     </li>

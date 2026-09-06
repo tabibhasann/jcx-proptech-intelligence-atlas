@@ -77,7 +77,7 @@ export function Chapter03() {
 
       {/* Reported signals with evidence threads */}
       <div className="mt-16">
-        <SceneTitle>What the strongest operators disclose: and what it does not prove</SceneTitle>
+        <SceneTitle>What the strongest operators disclose, and what it does not prove</SceneTitle>
         <Prose className="mt-5">
           <P>
             These figures are company-reported signals with scope and attribution limits. They show

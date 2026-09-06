@@ -25,11 +25,11 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "PropTech Intelligence Atlas | JCX Research Edition 2026",
-    template: "%s · PropTech Intelligence Atlas",
+    default: "Built Environment Intelligence | What property technology actually delivers",
+    template: "%s · Built Environment Intelligence",
   },
   description:
-    "A dated, curated global intelligence corpus on the technology reshaping the built environment: 295 qualified entities, a 978-identity discovery frontier, 44 measured outcome and failure cases, and 39 standards. Every material claim is graded, sourced and caveated. Research cut-off 30 August 2026.",
+    "A curated research briefing on property technology for a developer in Bangladesh: five findings, thirteen worked examples, 44 measured cases with sources and limits. Research cut-off 30 August 2026.",
 };
 
 export const viewport: Viewport = {

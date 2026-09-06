@@ -41,7 +41,7 @@ export function EvidenceNote({
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const chipLabel = label ?? (claim.grade === "C3" ? "reported" : claim.grade === "C4" ? "interpretation" : claim.grade);
+  const chipLabel = label ?? (claim.grade === "C3" ? "company reported" : claim.grade === "C4" ? "our analysis" : claim.grade);
 
   return (
     <span className={compact ? "inline-block" : "block"}>
@@ -103,7 +103,7 @@ export function EvidenceNote({
           </span>
         ) : null}
         <span className="mt-3 block font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft on-dark:text-[#a8a294]">
-          Company/customer-reported unless graded otherwise · not a JCX forecast · claim-level review pending
+          Company or customer reported unless graded otherwise · not a forecast · claim review open
         </span>
       </span>
     </span>

@@ -5,7 +5,7 @@ import { Reveal } from "@/components/motion/Reveal";
 
 const OS_PARTS: [string, string, string][] = [
   ["01", "Authoritative records", "land, project, unit, customer, contract, cost, asset and service records with named owners"],
-  ["02", "Workflow systems", "accountable work moving across the lifecycle: not disconnected apps"],
+  ["02", "Workflow systems", "accountable work moving across the lifecycle, not disconnected apps"],
   ["03", "Physical evidence", "BIM, field capture, sensors and controls tied to decisions"],
   ["04", "Working interfaces", "customer, landowner, contractor, investor and operator interfaces that complete real tasks"],
   ["05", "Bounded intelligence", "analytics and AI acting over governed data: with permissions"],
@@ -16,7 +16,7 @@ const OS_PARTS: [string, string, string][] = [
 const LAYERS: [string, string, string][] = [
   ["295", "qualified entities", "274 organizations, 12 programs/ecosystems, 8 product offerings and 1 historical project: typed analytical records, not “recommended vendors”"],
   ["978", "discovery identities", "the conservatively resolved search frontier joining the qualified core, the full YC snapshot and official ecosystems"],
-  ["683", "discovery-only identities", "candidates not promoted to the qualified core: not proven companies"],
+  ["683", "discovery-only identities", "candidates not promoted to the qualified core, not proven companies"],
   ["128", "YC directory profiles", "a complete dated capture of the official YC Real Estate & Construction directory: 100 Active, 27 Acquired, 1 Public as displayed"],
   ["683", "ecosystem pairs", "company–ecosystem memberships across 11 specialist families and 20 named program labels: memberships, not companies"],
   ["834", "claims & interpretations", "atomic claims with provisional C1–C5 attribution; all pending claim-level editorial review"],
@@ -42,7 +42,7 @@ export function Chapter01() {
             workflow.
           </P>
           <P>
-            That is this atlas’s interpretation of the evidence: not a settled industry definition.
+            That is this atlas’s interpretation of the evidence, not a settled industry definition.
             What the research shows repeatedly is narrower and more demanding: the highest-value
             pattern is{" "}
             <strong>

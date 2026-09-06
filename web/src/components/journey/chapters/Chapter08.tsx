@@ -31,7 +31,7 @@ const TIMELINE: {
     year: "2021",
     entityId: "org-katerra-0503c58",
     event:
-      "Katerra combined design, procurement, factories, technology and project delivery: then filed Chapter 11 in 2021. Vertical integration multiplied execution risk instead of cancelling it.",
+      "Katerra combined design, procurement, factories, technology and project delivery, then filed Chapter 11 in 2021. Vertical integration multiplied execution risk instead of cancelling it.",
     lesson: "Factories and projects do not have software margins.",
     control:
       "Do not apply SaaS growth assumptions to factories and projects. Track utilization, working capital, bonding, supply chain, quality, project margin and governance at each layer.",
@@ -70,7 +70,7 @@ const TIMELINE: {
     year: "2023",
     entityId: "org-veev-by-lennar-844d2b1",
     event:
-      "Veev’s independent structure did not continue: but Lennar retained the capability and markets the product as “Veev by Lennar.” Company survival and technology survival are different events.",
+      "Veev’s independent structure did not continue, but Lennar retained the capability and markets the product as “Veev by Lennar.” Company survival and technology survival are different events.",
     lesson: "Strategic absorption can preserve useful technology.",
     control:
       "Store “acquired,” “assets absorbed,” “product continuing,” “brand retired” and “inactive” as different states. A startup outcome does not settle whether its technology is useful.",
@@ -78,7 +78,7 @@ const TIMELINE: {
   },
   {
     year: "2024",
-    entityId: "org-view-inc",
+    entityId: "__historical-view-inc",
     event:
       "Smart-glass company View entered a prepackaged Chapter 11 process and emerged privately in 2024; the SEC filing records cancellation of existing equity interests.",
     lesson: "Building hardware has commercialization physics.",
@@ -165,7 +165,7 @@ export function Chapter08() {
           })}
         </ol>
         <p className="max-w-2xl font-mono text-[10px] uppercase leading-relaxed tracking-[0.1em] text-[#8d8779]">
-          Accounting and restructuring evidence establishes events and losses: not that software
+          Accounting and restructuring evidence establishes events and losses, not that software
           alone caused them. Acquired, inactive, pivoted and absorbed are different states.
         </p>
       </div>

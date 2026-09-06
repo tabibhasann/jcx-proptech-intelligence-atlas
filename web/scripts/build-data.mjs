@@ -41,6 +41,47 @@ const str = (v) => (v === "" || v === undefined || v === null ? null : String(v)
 const bool = (v) => v === "true" || v === true;
 const num = (v) => (v === "" || v === undefined || v === null ? null : Number(v));
 
+/* One-line plain description derived verbatim from corpus fields (no new
+   wording invented): first category label, else lifecycle placement.
+   Analyst jcx_relevance notes are NOT used: most carry review_required
+   claim status and must stay out of the public bundle until reviewed.
+   Records in the 44-profile launch set without a category fall back to
+   their launch-selection reason (already public in launch.json). */
+const humanize = (s) =>
+  String(s).replace(/[_]+/g, " ").replace(/[-–—]+/g, " ").replace(/\s+/g, " ").trim();
+
+/* Directory snapshots carry scraped page chrome and a repeated display name in
+   the description column. Removing that chrome is normalization only: no
+   wording is added, reordered or paraphrased, so the surviving sentence stays
+   exactly as the source published it. */
+const SCRAPE_CHROME =
+  /\s*(?:·|\||-|–)?\s*\b(?:view\s*website|visit\s*website|view\s*profile|view\s*company|learn\s*more|read\s*more|see\s*more|website)\b\s*\.?\s*$/gi;
+/* Portfolio tables flatten filter widgets into the same cell, e.g.
+   "... Year of investment 2022 Stage at Investment All Seed Real Estate Focus All Other". */
+const SCRAPE_TABLE =
+  /\s*\b(?:Year of investment|Stage at Investment|Real Estate Focus|Sector Focus|Region Focus)\b.*$/i;
+
+function cleanDescription(raw, name) {
+  if (!raw) return null;
+  let s = String(raw).replace(/\s+/g, " ").trim();
+  s = s.replace(SCRAPE_TABLE, "").trim();
+  let prev;
+  do {
+    prev = s;
+    s = s.replace(SCRAPE_CHROME, "").trim();
+  } while (s !== prev);
+  // Collapse a leading name echo: "Acme Acme builds X" -> "Acme builds X".
+  if (name) {
+    const n = name.trim();
+    if (n) {
+      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      s = s.replace(new RegExp(`^(?:${esc})[\\s,:–-]+(?=(?:${esc})\\b)`, "i"), "").trim();
+    }
+  }
+  s = s.replace(/\s+([.,;:!?])/g, "$1").replace(/\s*\.\s*\.\s*$/, ".").trim();
+  return s === "" ? null : s;
+}
+
 /* ------------------------------------------------------------------ */
 /* Load corpus                                                         */
 /* ------------------------------------------------------------------ */
@@ -86,9 +127,63 @@ if (mismatches.length) {
 console.log(`counts verified against atlas_manifest.json (${expect.length} layers)`);
 
 /* ------------------------------------------------------------------ */
+/* Plain descriptions: corpus wording only, no invented claims         */
+/* ------------------------------------------------------------------ */
+const LIFECYCLE_SHORT = {
+  L1: "land and origination",
+  L2: "feasibility and development strategy",
+  L3: "capital, finance, and transactions",
+  L4: "design, BIM, and preconstruction",
+  L5: "construction delivery",
+  L6: "marketing, sales, leasing, and distribution",
+  L7: "occupancy and customer experience",
+  L8: "property and facility operations",
+  L9: "asset, portfolio, and investment management",
+  L10: "ESG, climate, resilience, and health",
+  L11: "handover, warranty, and end of life",
+  L12: "cross lifecycle data and trust",
+};
+const describeEntity = (e, launchWhy) => {
+  const cats = J(e.category_labels_json).map(humanize).filter(Boolean);
+  if (cats[0]) {
+    // Sentence-case the label without altering its words.
+    const c = cats[0];
+    return { text: c.charAt(0).toUpperCase() + c.slice(1), basis: "category" };
+  }
+  if (launchWhy) return { text: launchWhy, basis: "launch" };
+  const codes = J(e.lifecycle_codes_json);
+  if (codes.length) {
+    const areas = [...new Set(codes.map((c) => LIFECYCLE_SHORT[c]).filter(Boolean))];
+    if (areas.length) return { text: `Active in ${areas.slice(0, 2).join(" and ")}`, basis: "lifecycle" };
+  }
+  return { text: null, basis: "none" };
+};
+
+/* ------------------------------------------------------------------ */
 /* Normalize entities                                                  */
 /* ------------------------------------------------------------------ */
-const entities = entitiesRaw.map((e) => ({
+/* gateNotes (claims-gate section below) filters analyst notes to gated
+   wording only; entities are normalized after it via normalizeEntities.
+   launchWhyById is built from the editorial selection (public by design)
+   before normalization so category-less launch records get real wording. */
+const launchWhyById = new Map();
+for (const line of selectionMd.split("\n")) {
+  if (!line.startsWith("|")) continue;
+  const cells = line
+    .split("|")
+    .map((s) => s.trim().replace(/^`|`$/g, ""))
+    .filter((s) => s !== "");
+  if (cells.length !== 6) continue;
+  const [numCell, , stableId, , why] = cells;
+  if (numCell === "#" || numCell.startsWith("---") || !stableId.startsWith("org-")) continue;
+  if (!launchWhyById.has(stableId)) launchWhyById.set(stableId, why);
+}
+const normalizeEntities = (gate) => entitiesRaw.map((e) => {
+  const lifecycleCodes = J(e.lifecycle_codes_json).sort();
+  const categoryLabels = J(e.category_labels_json);
+  const { text: description, basis: descriptionBasis } = describeEntity(e, launchWhyById.get(e.entity_id));
+  const { kept: gatedNotes, withheld: withheldNotes } = gate(e.entity_id, J(e.jcx_relevance_notes_json));
+  return {
   id: e.entity_id,
   name: e.display_name,
   aliases: J(e.aliases_json),
@@ -111,16 +206,19 @@ const entities = entitiesRaw.map((e) => ({
   foundingYearNote: str(e.founding_year_note),
   businessModels: J(e.business_models_json),
   ecosystemMemberships: J(e.ecosystem_memberships_json),
-  lifecycleCodes: J(e.lifecycle_codes_json).sort(),
+  lifecycleCodes,
   lifecycleMappingMethods: J(e.lifecycle_mapping_methods_json),
   lifecycleUnmappedLabels: J(e.lifecycle_unmapped_labels_json),
-  categoryLabels: J(e.category_labels_json),
+  categoryLabels,
+  description,
+  descriptionBasis,
   maturityBand: str(e.maturity_band_provisional),
   mrl: str(e.mrl),
   mrlNote: str(e.mrl_note),
   tier: str(e.reviewed_relevance_tier),
   tierConflict: bool(e.relevance_tier_conflict),
-  jcxRelevanceNotes: J(e.jcx_relevance_notes_json),
+  jcxRelevanceNotes: gatedNotes,
+  jcxNotesWithheld: withheldNotes,
   sourceGradesProvisional: J(e.source_quality_grades_provisional_json),
   sourceCount: num(e.source_count) ?? 0,
   sourceUrls: J(e.source_urls_json),
@@ -128,18 +226,29 @@ const entities = entitiesRaw.map((e) => ({
   mergedRecordCount: num(e.merged_record_count) ?? 1,
   publicationReadiness: str(e.publication_readiness),
   reviewFlags: J(e.review_flags_json),
-}));
-
-const entityById = new Map(entities.map((e) => [e.id, e]));
-if (entityById.size !== entities.length) {
-  console.error("duplicate entity_id detected");
-  process.exit(1);
-}
+  };
+});
 
 /* ------------------------------------------------------------------ */
 /* Claims — public gate                                                */
 /* ------------------------------------------------------------------ */
 const PUBLIC_CLAIM_USE = "attributed_only";
+/* Analyst jcx_relevance notes are pre-publication wording: emit a note
+   only when its exact text matches an attributed_only claim for the same
+   entity. Everything else stays out of the public bundle; the interface
+   reports the gap as an explicit unknown. */
+const attributedTextByEntity = new Map();
+for (const c of claimsRaw) {
+  if (c.public_use === PUBLIC_CLAIM_USE && c.claim_text) {
+    if (!attributedTextByEntity.has(c.entity_id)) attributedTextByEntity.set(c.entity_id, new Set());
+    attributedTextByEntity.get(c.entity_id).add(c.claim_text);
+  }
+}
+const gateNotes = (entityId, notes) => {
+  const allowed = attributedTextByEntity.get(entityId);
+  const kept = (notes ?? []).filter((n) => allowed?.has(n));
+  return { kept, withheld: (notes ?? []).length - kept.length };
+};
 let emittedClaims = 0;
 let withheldClaims = 0;
 const claimsByEntity = {};
@@ -171,6 +280,20 @@ if (emittedClaims + withheldClaims !== claimsRaw.length) {
   process.exit(1);
 }
 console.log(`claims: ${emittedClaims} attributed-only emitted, ${withheldClaims} withheld (review/context gates)`);
+
+const entities = normalizeEntities(gateNotes);
+const entityById = new Map(entities.map((e) => [e.id, e]));
+if (entityById.size !== entities.length) {
+  console.error("duplicate entity_id detected");
+  process.exit(1);
+}
+let gatedKept = 0;
+let gatedWithheld = 0;
+for (const e of entities) {
+  gatedKept += (e.jcxRelevanceNotes ?? []).length;
+  gatedWithheld += e.jcxNotesWithheld ?? 0;
+}
+console.log(`analyst notes: ${gatedKept} gated wording emitted, ${gatedWithheld} withheld pending review`);
 
 /* ------------------------------------------------------------------ */
 /* Launch editorial selection — parse the markdown tables              */
@@ -240,6 +363,13 @@ const slim = (e) => ({
   canonicalUrl: e.canonicalUrl,
   maturityBand: e.maturityBand,
   mrl: e.mrl,
+  /* One-line plain description, corpus wording only: category label, else
+     launch-selection reason for the 44 editorial records, else lifecycle
+     placement. descriptionBasis says which. Three records without lifecycle
+     codes report an explicit unknown. */
+  description: e.description,
+  descriptionBasis: e.descriptionBasis,
+  category: e.categoryLabels?.[0] ?? null,
   launch: launchById.get(e.id)?.group ?? null,
   launchOrder: launchById.get(e.id)?.order ?? null,
 });
@@ -350,7 +480,9 @@ const discovery = discoveryRaw.map((d) => ({
   regionSignals: J(d.region_signals_json),
   countrySignals: J(d.country_signals_json),
   locationSignals: J(d.location_signals_json),
-  descriptionSignals: J(d.description_signals_json),
+  descriptionSignals: J(d.description_signals_json)
+    .map((s) => cleanDescription(s, d.display_name))
+    .filter(Boolean),
   sourceUrlCount: num(d.source_url_count) ?? 0,
   needsIdentityReview: bool(d.needs_identity_review),
   identityNotes: J(d.identity_notes_json),
@@ -370,8 +502,8 @@ const yc = ycRaw.map((y) => ({
   employeesShown: str(y.employee_count_shown),
   location: str(y.location_shown),
   countryCode: str(y.country_code_shown),
-  oneLiner: str(y.official_one_liner),
-  description: str(y.official_description_concise),
+  oneLiner: cleanDescription(y.official_one_liner, y.name),
+  description: cleanDescription(y.official_description_concise, y.name),
   tags: str(y.visible_tags),
   inferredLifecycle: str(y.inferred_lifecycle),
   inferredCategory: str(y.inferred_category),

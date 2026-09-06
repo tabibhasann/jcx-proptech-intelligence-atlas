@@ -60,6 +60,18 @@ export const getLaunchProfile = (id: string) => launchProfiles.find((l) => l.ent
 
 export const taxonomyLabel = (code: string) => taxonomy.find((t) => t.code === code)?.label ?? code;
 
+/** ISO date to prose, e.g. "2026-08-30" to "30 August 2026". */
+export const longDate = (iso: string | null | undefined) => {
+  if (!iso) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+  return `${Number(m[3])} ${months[Number(m[2]) - 1]} ${m[1]}`;
+};
+
 /** Technology layer taxonomy T1–T7 (atlas methodology §3.2, editorial labels). */
 export const TECH_LAYERS = [
   { code: "T1", label: "Systems of record", short: "Record" },

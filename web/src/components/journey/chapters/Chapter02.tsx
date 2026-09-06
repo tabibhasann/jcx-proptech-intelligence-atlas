@@ -34,7 +34,7 @@ export function Chapter02() {
           <P>
             Two axes organize everything in this atlas: <strong>where in the lifecycle</strong> a
             technology acts: from land origination (L1) to handover and end-of-life (L11), with
-            data and trust (L12) crossing every phase: and <strong>which technology layer</strong>{" "}
+            data and trust (L12) crossing every phase, and <strong>which technology layer</strong>{" "}
             it belongs to.
           </P>
           <P>

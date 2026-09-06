@@ -1,14 +1,16 @@
 #!/usr/bin/env node
-/** Screenshot + console-error probe using the local Playwright browser cache. */
+/** Screenshot + console-error probe using the local Playwright browser cache.
+ *  usage: shot.mjs <url> <out.png> [width] [height] [full] [scrollY] */
 import { chromium } from "playwright-core";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-const [, , url = "http://localhost:4173/", out = "/tmp/atlas-shot.png", width = "1440", height = "900", full = "false"] = process.argv;
+const [, , url = "http://localhost:3000/", out = "/tmp/shot.png", width = "1440", height = "900", full = "false", scrollY = "0"] =
+  process.argv;
 
 const exe = join(
   homedir(),
-  "Library/Caches/ms-playwright/chromium_headless_shell-1237/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell",
 );
 
 const browser = await chromium.launch({ executablePath: exe });
@@ -19,7 +21,11 @@ page.on("console", (m) => {
 });
 page.on("pageerror", (e) => errors.push(String(e)));
 await page.goto(url, { waitUntil: "networkidle" });
-await page.waitForTimeout(800);
+if (Number(scrollY) > 0) {
+  await page.evaluate((y) => window.scrollTo(0, y), Number(scrollY));
+  await page.waitForTimeout(900);
+}
+await page.waitForTimeout(700);
 await page.screenshot({ path: out, fullPage: full === "true" });
-console.log(JSON.stringify({ url, out, errors }, null, 1));
+console.log(JSON.stringify({ url, out, scrollY, errors }, null, 1));
 await browser.close();

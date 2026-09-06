@@ -25,7 +25,36 @@ const fail = (msg) => {
   failures++;
 };
 
+/* 0 — editoral fail-closed rule: authored synopses must never restate an
+   UNGATED corpus note ----------------------------------------------- */
+const featuredBlob = (() => {
+  try {
+    return readFileSync(join(root, "src", "content", "featured.ts"), "utf8");
+  } catch {
+    return "";
+  }
+})();
+const entitiesForGate = read(gen, "entities.json");
+
+/* The public bundle emits jcxRelevanceNotes verbatim (gated at the note
+   level by the claim bridge below), so an authored synopsis that restates a
+   withheld jcx_relevance claim would launder ungated wording into public
+   copy. Fail closed on any 6+ word overlap between featured.ts and a
+   withheld jcx_relevance claim from the same entity. */
+const synNormWords = (s) =>
+  String(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w && !new Set(["for", "and", "the", "with", "from", "into", "that", "this"]).has(w));
+const synNgrams = (words, n) => {
+  const out = new Set();
+  for (let i = 0; i + n <= words.length; i++) out.add(words.slice(i, i + n).join(" "));
+  return out;
+};
+
 /* 1 — claim gate audit: replay against the raw registry --------------- */
+const PUBLIC_CLAIM_USE = "attributed_only";
 const registry = read(corpus, "claims_registry.json");
 const withheldText = new Map(
   registry.filter((c) => c.public_use !== "attributed_only").map((c) => [c.claim_id, c.claim_text]),
@@ -47,7 +76,10 @@ if (leakCount > 5) fail(`${leakCount} total withheld-claim leaks`);
 console.log(`claim gate: ${withheldText.size} withheld claims scanned against public bundle`);
 
 /* 2 — private-content markers ----------------------------------------- */
-// Strings that only exist in jcx_private / internal_only material.
+/* Client-private markers are about JCX the company (site, systems, meeting
+   strategy), not the generic developer context used throughout the public
+   transferability analysis ("for a developer here", "for JCX early site
+   screening" style case guidance is public case-library content). */
 const PRIVATE_MARKERS = [
   "JCX_Meeting_Dossier",
   "JCX_Meeting_Cheat_Sheet",
@@ -61,10 +93,11 @@ const PRIVATE_MARKERS = [
   "talk track",
   "meeting script",
 ];
-const journeyContentPaths = ["src/content/journey.ts"];
+const journeyContentPaths = ["src/content/journey.ts", "src/content/featured.ts", "src/content/findings.ts"];
 const blobsToScan = [
   ["story.json", storyBlob],
   ["entities.json", JSON.stringify(read(gen, "entities.json"))],
+  ["entities.slim.json", JSON.stringify(read(gen, "entities.slim.json"))],
   ["discovery.slim.json", JSON.stringify(read(gen, "discovery.slim.json"))],
   ["cases.json", JSON.stringify(read(gen, "cases.json"))],
   ["launch.json", JSON.stringify(read(gen, "launch.json"))],
@@ -73,9 +106,53 @@ for (const p of journeyContentPaths) {
   try {
     blobsToScan.push([p, readFileSync(join(root, p), "utf8")]);
   } catch {
-    console.log(`  (journey content not yet authored: ${p} — skipped)`);
+    console.log(`  (editorial content not found: ${p} — skipped)`);
   }
 }
+/* Claim gate covers generated bundles AND authored editorial copy. */
+const editorialBlob = blobsToScan
+  .filter(([name]) => name.startsWith("src/content/"))
+  .map(([, blob]) => blob)
+  .join("\n");
+let editorialLeaks = 0;
+for (const [id, text] of withheldText) {
+  if (text && text.length >= 30 && editorialBlob.includes(text)) {
+    editorialLeaks++;
+    if (editorialLeaks <= 5) fail(`withheld claim ${id} text appears in authored editorial copy`);
+  }
+}
+if (leakCount > 5) fail(`${leakCount} total withheld-claim leaks`);
+if (editorialLeaks > 5) fail(`${editorialLeaks} total editorial-copy leaks`);
+
+/* 1b — synopsis laundering check: featured.ts must not restate a withheld
+   jcx_relevance note in different words (6+ content-word overlap, same
+   entity block). The bundle emits jcxRelevanceNotes verbatim under their
+   own gate; authored copy must not launder ungated wording into public. */
+const withheldJcxByEntity = new Map();
+for (const c of registry) {
+  if (c.public_use !== PUBLIC_CLAIM_USE && c.claim_field === "jcx_relevance" && c.claim_text) {
+    if (!withheldJcxByEntity.has(c.entity_id)) withheldJcxByEntity.set(c.entity_id, []);
+    withheldJcxByEntity.get(c.entity_id).push(c);
+  }
+}
+const featLower = editorialBlob.toLowerCase();
+let laundered = 0;
+for (const [entityId, claims] of withheldJcxByEntity) {
+  const block = featLower.split(entityId)[1]?.slice(0, 6000) ?? "";
+  if (!block) continue;
+  const blockGrams = synNgrams(synNormWords(block), 6);
+  for (const c of claims) {
+    for (const g of synNgrams(synNormWords(c.claim_text ?? ""), 6)) {
+      if (blockGrams.has(g)) {
+        laundered++;
+        if (laundered <= 5) fail(`featured synopsis for ${entityId} restates withheld note (${c.claim_id}): "${g}"`);
+        break;
+      }
+    }
+  }
+}
+if (laundered > 5) fail(`${laundered} total synopsis-laundering overlaps`);
+console.log(`synopsis gate: ${withheldJcxByEntity.size} entities with withheld analyst notes scanned against featured.ts`);
 for (const [name, blob] of blobsToScan) {
   for (const marker of PRIVATE_MARKERS) {
     if (blob.includes(marker)) fail(`private marker "${marker}" found in ${name}`);

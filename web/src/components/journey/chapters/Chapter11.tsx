@@ -125,7 +125,7 @@ export function Chapter11() {
           <SceneTitle>Corrections are part of the record</SceneTitle>
           <Prose className="mt-6">
             <P>
-              A correction should create a new review event: never erase what the atlas previously
+              A correction should create a new review event, never erase what the atlas previously
               stated. Every profile carries its sources, dates, review state and a correction path;
               the full register of {manifest.counts.sources.toLocaleString("en-US")} normalized
               sources is browsable, with provisional domain-level grades labeled as such.

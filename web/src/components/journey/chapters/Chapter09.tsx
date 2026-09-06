@@ -23,7 +23,7 @@ export function Chapter09() {
           Applications will change; identifiers, definitions, history and evidence must survive
           them. The strategic mistake is to postpone interoperability until after vendor selection.
           The {manifest.counts.standards} standards and frameworks in this registry are the layer
-          that outlives products: and a standard’s existence is never proof of implementation.
+          that outlives products, and a standard’s existence is never proof of implementation.
         </P>
       </Prose>
 

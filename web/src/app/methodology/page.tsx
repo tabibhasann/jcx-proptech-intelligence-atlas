@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { manifest } from "@/data";
+import { longDate, manifest } from "@/data";
 import { SourceRegister } from "@/components/methodology/SourceRegister";
 
 export const metadata: Metadata = {
-  title: "Methodology, evidence & corrections",
+  title: "Method: how claims are graded",
   description:
-    "How the atlas grades sources and claims, keeps unknowns visible, handles identity and status, refreshes records, separates public from private: and how to file a correction.",
+    "How this research grades sources and claims, keeps unknowns visible, handles identity and status, and how to file a correction.",
 };
 
 const STATUS_DEFS: [string, string][] = [
   ["active", "Operating, as observed at the recorded date"],
-  ["cohort-selected", "Selected for a cohort: not deployment evidence"],
+  ["cohort-selected", "Selected for a cohort, not deployment evidence"],
   ["pilot", "Pilot stage, as reported"],
   ["acquired", "Acquired; lineage preserved"],
   ["acquired-active", "Acquired; the product continues"],
@@ -28,32 +28,31 @@ export default function MethodologyPage() {
       <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-10">
         <header className="max-w-3xl">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">
-            Method · evidence · corrections
+            Method · how to read every number
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            How to trust, question and update this atlas
+            How to trust, question, and correct this research
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-2">
-            Generated {m.generatedAt} · research cut-off {m.researchCutoff}. The atlas answers four
-            questions without mixing their evidence: what exists, what each entity actually does, how
-            credible and ready it is, and what a developer should do next. It is an intelligence
-            product: not a vendor directory, investment recommendation or certification.
+            Published {longDate(m.generatedAt)} · research cut-off {longDate(m.researchCutoff)}. Four
+            questions stay separate throughout: what exists, what each record does, how solid the
+            evidence is, and what to do next. Research, not a vendor directory or investment advice.
           </p>
         </header>
 
         {/* Editorial principles */}
         <section aria-labelledby="principles" className="mt-14">
           <h2 id="principles" className="font-display text-2xl font-semibold tracking-tight">
-            Editorial principles
+            Six rules the whole site follows
           </h2>
           <ul className="mt-5 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {[
-              ["Evidence before narrative", "Every material statement carries a source, a date and a claim type."],
-              ["Facts, claims, interpretation, recommendation stay separate", "You can always tell which sentence came from a company and which is the atlas team’s judgment."],
-              ["Lifecycle first; technology second", "A technology label alone does not explain where value is created or who must change behavior."],
-              ["Context is part of the product", "A US office case study, a Bangladesh residential developer and a global standard are not directly comparable."],
-              ["Uncertainty is visible", "Unknown is a valid value: never a low score disguised as precision."],
-              ["No pay-to-rank", "Sponsorship, advertising, introductions or access never alter inclusion, tier, score or wording."],
+              ["Evidence before narrative", "Every figure carries its source, its date, and who reported it."],
+              ["Reporters and analysts stay separate", "Company words and our conclusions never share a badge."],
+              ["Place first, technology second", "A tool label alone never explains who changes behavior or what it costs."],
+              ["Context travels with the number", "A US office case, a Dhaka developer, and a global standard are not directly comparable."],
+              ["Unknown is a real answer", "Not yet verified is never a zero, a low score, or a quiet guess."],
+              ["No pay to rank", "Money, access, or introductions never change inclusion or wording."],
             ].map(([t, d]) => (
               <div key={t} className="bg-paper-raised p-5">
                 <p className="font-display text-base font-semibold leading-tight">{t}</p>
@@ -67,16 +66,16 @@ export default function MethodologyPage() {
         <section aria-labelledby="evidence-model" className="mt-14 grid gap-10 lg:grid-cols-2">
           <div>
             <h2 id="evidence-model" className="font-display text-2xl font-semibold tracking-tight">
-              Source quality (S1–S5)
+              How solid is the source (S1 to S5)
             </h2>
             <table className="mt-5 w-full border-collapse border border-line text-left text-sm">
               <tbody>
                 {[
-                  ["S1", "Filing, regulator, standard, signed procurement/customer evidence or authoritative documentation"],
-                  ["S2", "Company site, press release, vendor/customer case study or accelerator profile"],
-                  ["S3", "Reputable independent research or reporting with a clear method"],
-                  ["S4", "Structured directory or ecosystem source requiring verification"],
-                  ["S5", "Weak discovery signal such as social, listicle or review"],
+                  ["S1", "Filing, regulator, standard, signed evidence, or official technical document"],
+                  ["S2", "Company site, press release, vendor case study, or program profile"],
+                  ["S3", "Independent research or reporting with a clear method"],
+                  ["S4", "Directory or database that still needs verification"],
+                  ["S5", "Weak signal such as social posts or listicles: leads only"],
                 ].map(([g, d]) => (
                   <tr key={g} className="border-b border-line last:border-0">
                     <th scope="row" className="data w-14 px-4 py-3 font-semibold">{g}</th>
@@ -87,7 +86,7 @@ export default function MethodologyPage() {
             </table>
           </div>
           <div>
-            <h2 className="font-display text-2xl font-semibold tracking-tight">Claim attribution (C1–C5)</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-tight">Who said it (C1 to C5)</h2>
             <table className="mt-5 w-full border-collapse border border-line text-left text-sm">
               <tbody>
                 {[
@@ -106,11 +105,11 @@ export default function MethodologyPage() {
             </table>
             <p className="mt-4 text-xs leading-relaxed text-ink-soft">
               In this release all {m.counts.claims} claims carry provisional grades and pending
-              claim-level review: {m.claimGradeCounts["C4"] ?? 0} C4 interpretations,{" "}
-              {m.claimGradeCounts["C3"] ?? 0} C3 reported claims, {m.claimGradeCounts["C5"] ?? 0} C5
-              signals, {m.claimGradeCounts["C2"] ?? 0} C2 and {m.claimGradeCounts["C1"] ?? 0} C1.
-              This site displays only attributed (C3-class) claims with their caveats; everything
-              else is visibly withheld.
+              claim-level review: {m.claimGradeCounts["C4"] ?? 0} analyst interpretations,{" "}
+              {m.claimGradeCounts["C3"] ?? 0} company reported claims, {m.claimGradeCounts["C5"] ?? 0}{" "}
+              weak signals, {m.claimGradeCounts["C2"] ?? 0} corroborated, and{" "}
+              {m.claimGradeCounts["C1"] ?? 0} verified. Public pages show attributed company reported
+              claims with their limits; everything else stays visibly withheld.
             </p>
           </div>
         </section>
@@ -119,7 +118,7 @@ export default function MethodologyPage() {
         <section aria-labelledby="status-defs" className="mt-14 grid gap-10 lg:grid-cols-2">
           <div>
             <h2 id="status-defs" className="font-display text-2xl font-semibold tracking-tight">
-              Status vocabulary
+              What each status word means
             </h2>
             <ul className="mt-5 divide-y divide-line border border-line bg-paper-raised">
               {STATUS_DEFS.map(([s, d]) => (
@@ -131,12 +130,12 @@ export default function MethodologyPage() {
             </ul>
           </div>
           <div>
-            <h2 className="font-display text-2xl font-semibold tracking-tight">Identity discipline</h2>
+            <h2 className="font-display text-2xl font-semibold tracking-tight">Why similar names stay separate</h2>
             <ul className="mt-5 space-y-3 text-sm leading-relaxed text-ink-2">
-              <li>· Legal entity, brand, product and program are stored separately.</li>
-              <li>· Aliases, former names and acquisition lineage are preserved: PlanGrid should reveal Autodesk lineage; Veev shows Lennar continuation.</li>
-              <li>· A shared domain never proves identity: 26 discovery identities sit in a relationship-review queue rather than being force-merged.</li>
-              <li>· “Acquired,” “inactive,” “failed,” “product survives” and “parent absorbed it” are different states.</li>
+              <li>· Company, brand, product, and program are stored as different records.</li>
+              <li>· Old names and buyouts stay linked: PlanGrid shows its Autodesk line, Veev shows Lennar continuation.</li>
+              <li>· A shared web domain never proves sameness: 26 leads sit in review rather than being force merged.</li>
+              <li>· Bought, closed, failed, product survives, and absorbed are five different states.</li>
               <li>· Conflicting source values stay visible as conflicts until a reviewer resolves them.</li>
             </ul>
           </div>
@@ -148,19 +147,17 @@ export default function MethodologyPage() {
             Unknown is not zero
           </h2>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-2">
-            A blank value can mean not provided, unknown, unreviewed, not applicable, withheld or
-            absent from the source schema. This site renders those as explicit states: “not yet
-            verified,” “not provided,” “under editorial review”: and never as zero, “none” or a
-            middle score. Product-level maturity stays unassigned where deployment evidence is
-            missing; {m.reviewQueue.entities_with_tier_conflicts} entities carry unresolved legacy
-            tier conflicts and are shown exactly that way.
+            A blank can mean not provided, unknown, unreviewed, not applicable, or withheld. This
+            site writes those states out: not yet verified, not provided, under review. Never a
+            zero, never a middle score. {m.reviewQueue.entities_with_tier_conflicts} records carry
+            unresolved tier conflicts and show exactly that.
           </p>
         </section>
 
         {/* Refresh cadence */}
         <section aria-labelledby="freshness" className="mt-14">
           <h2 id="freshness" className="font-display text-2xl font-semibold tracking-tight">
-            Freshness &amp; review cadence
+            How records stay fresh
           </h2>
           <div className="mt-5 grid gap-px border border-line bg-line sm:grid-cols-3">
             {[
@@ -184,13 +181,13 @@ export default function MethodologyPage() {
         {/* Visibility policy */}
         <section aria-labelledby="visibility" className="mt-14">
           <h2 id="visibility" className="font-display text-2xl font-semibold tracking-tight">
-            Three visibility layers
+            What lives here and what stays private
           </h2>
           <div className="mt-5 grid gap-px border border-line bg-line lg:grid-cols-3">
             {[
-              ["Public global atlas", "This experience: reviewed or explicitly attributed global analysis, qualified records with gates visible, labeled discovery cards, dated cases, standards, regional analysis, methodology and corrections.", "What you are reading"],
-              ["Client-private chapter", "Operator-specific opportunity hypotheses, current-site observations, pilot canvases, scoring, vendor comparisons and meeting decisions: permissioned, and absent here by design.", "Not in this experience"],
-              ["Internal diligence", "Raw notes, unresolved identity/status conflicts, security concerns, contacts, unpublished sources and the correction queue.", "Never exposed"],
+              ["This site", "Reviewed global analysis, labeled company records, dated cases, standards, and method. What you are reading.", "What you are reading"],
+              ["Private meeting material", "Company specific observations, pilot designs, owners, and vendor strategy. Permissioned, and absent here by design.", "Not on this site"],
+              ["Working notes", "Raw notes, unresolved conflicts, contacts, and unpublished sources.", "Never published"],
             ].map(([t, d, tag]) => (
               <div key={t} className="bg-paper-raised p-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-mark-deep">{tag}</p>
@@ -200,8 +197,8 @@ export default function MethodologyPage() {
             ))}
           </div>
           <p className="mt-4 max-w-3xl text-xs leading-relaxed text-ink-soft">
-            Promotion between layers requires a named reviewer and an auditable reason; on any
-            conflict, the more restrictive state wins.
+            Moving anything from private to public needs a named reviewer and a written reason. On
+            any conflict, the more restrictive state wins.
           </p>
         </section>
 
@@ -211,12 +208,10 @@ export default function MethodologyPage() {
             Report a factual issue
           </h2>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-2">
-            Every profile and case carries its sources and dates. A correction request should name
-            the record’s stable ID (shown in monospace on every page), the statement in question and
-            the supporting evidence. Material corrections are logged as new review events with the
-            original statement preserved and marked superseded: never silently overwritten. Negative
-            information is not removed because an organization objects; it is corrected when evidence
-            supports correction.
+            Every profile and case shows its stable ID in monospace. A correction should name that
+            ID, the sentence in question, and the supporting evidence. Material corrections become
+            new review events with the earlier statement preserved and marked replaced, never
+            quietly overwritten.
           </p>
         </section>
 
@@ -226,10 +221,10 @@ export default function MethodologyPage() {
             The source register
           </h2>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-2">
-            {m.counts.sources.toLocaleString("en-US")} normalized source identities (
-            {m.counts.observedSourceVariants.toLocaleString("en-US")} exact observed URL variants)
-            back this release. Grades are provisional and domain-level: they describe the source,
-            not the truth of any specific claim.
+            {m.counts.sources.toLocaleString("en-US")} source identities (
+            {m.counts.observedSourceVariants.toLocaleString("en-US")} exact web addresses observed)
+            stand behind this release. Grades are provisional and describe the source kind, not
+            whether any single claim is true.
           </p>
           <div className="mt-6">
             <SourceRegister />

@@ -27,8 +27,7 @@ export function Chapter05() {
         <P>
           What separates a pilot announcement from value is a bounded measurement: a named customer,
           a baseline, a period, a denominator and an honest caveat. This corpus holds{" "}
-          {total} such cases: positive, negative and restructured: and their grade distribution is
-          itself a finding.
+          {total} such cases, positive and negative alike. How they grade out is itself a finding.
         </P>
       </Prose>
 

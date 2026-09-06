@@ -71,12 +71,15 @@ export interface Entity {
   lifecycleMappingMethods: string[];
   lifecycleUnmappedLabels: string[];
   categoryLabels: string[];
+  description: string | null;
+  descriptionBasis: "category" | "launch" | "lifecycle" | "none";
   maturityBand: string | null;
   mrl: string | null;
   mrlNote: string | null;
   tier: string | null;
   tierConflict: boolean;
   jcxRelevanceNotes: string[];
+  jcxNotesWithheld: number;
   sourceGradesProvisional: string[];
   sourceCount: number;
   sourceUrls: string[];
@@ -104,6 +107,9 @@ export interface EntitySlim {
   canonicalUrl: string | null;
   maturityBand: string | null;
   mrl: string | null;
+  description: string | null;
+  descriptionBasis?: "category" | "launch" | "lifecycle" | "none" | null;
+  category: string | null;
   launch?: string | null;
   launchOrder?: number | null;
 }
