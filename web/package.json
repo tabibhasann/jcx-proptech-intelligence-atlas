@@ -12,6 +12,7 @@
     "verify:output": "node scripts/verify-output-privacy.mjs",
     "verify:executive": "node scripts/verify-executive.mjs",
     "verify:navigation": "node scripts/verify-navigation.mjs",
+    "verify:companies": "node scripts/verify-company-summary.mjs",
     "verify:corpus": "python ../scripts/validate_proptech_corpus.py",
     "release:check": "node scripts/release-check.mjs",
     "prebuild": "npm run build:data && npm run verify",

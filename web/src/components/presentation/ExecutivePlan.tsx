@@ -85,6 +85,7 @@ export function ExecutivePlan() {
               Propty could help people find, check and complete a property transaction, then add services where demand is proven. Start with one customer group, measure the improvement and decide what deserves a larger investment.
             </p>
             <div className="xp-hero-actions">
+              <Link href="/companies#propty-features">See features mapped to company examples <span aria-hidden="true">↗</span></Link>
               <a href="#routes">See the three routes <span aria-hidden="true">↓</span></a>
               <Link href="/comparison?lens=managed-distribution#jcx-comparative">Inspect the company comparisons <span aria-hidden="true">↗</span></Link>
             </div>
