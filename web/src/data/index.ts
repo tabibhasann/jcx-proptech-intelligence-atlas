@@ -1,5 +1,6 @@
 import type {
   CaseRecord,
+  ComparativeChapter,
   DiscoveryRecord,
   EcosystemRollup,
   Entity,
@@ -28,6 +29,7 @@ import relationshipsJson from "./generated/relationships.public.json";
 import ycJson from "./generated/yc.json";
 import ecosystemsJson from "./generated/ecosystems.json";
 import storyJson from "./generated/story.json";
+import comparativeJson from "./generated/comparative-gap.json";
 
 export const manifest = manifestJson as unknown as SiteManifest;
 export const entities = entitiesJson as unknown as Entity[];
@@ -45,11 +47,20 @@ export const relationshipsBySubject = relationshipsJson as unknown as Record<str
 export const ycProfiles = ycJson as unknown as YcProfile[];
 export const ecosystems = ecosystemsJson as unknown as EcosystemRollup[];
 export const story = storyJson as unknown as Story;
+export const comparativeChapter = comparativeJson as unknown as ComparativeChapter;
 
 /* Heavy explorer datasets (discovery universe, source register) are served
    from /data/*.json and lazy-fetched by client surfaces with explicit
    loading/error/empty states. See useDataset hook. */
-export type { DiscoveryRecord, SourceSlim };
+export type {
+  ComparativeCase,
+  ComparativeEvidenceLabel,
+  ComparativeFieldBinding,
+  ComparativeLens,
+  ComparativeMetric,
+  DiscoveryRecord,
+  SourceSlim,
+} from "./types";
 
 const entityMap = new Map(entities.map((e) => [e.id, e]));
 export const getEntity = (id: string) => entityMap.get(id);

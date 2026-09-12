@@ -127,8 +127,9 @@ export function Chapter11() {
             <P>
               A correction should create a new review event, never erase what the atlas previously
               stated. Every profile carries its sources, dates, review state and a correction path;
-              the full register of {manifest.counts.sources.toLocaleString("en-US")} normalized
-              sources is browsable, with provisional domain-level grades labeled as such.
+              the public register of {manifest.counts.sources.toLocaleString("en-US")} normalized
+              source identities is browsable. Internal-only client and system references are
+              withheld, and provisional domain-level grades are labeled as such.
             </P>
             <P>
               High-volatility fields: funding, valuation, customer count, employee count, status and

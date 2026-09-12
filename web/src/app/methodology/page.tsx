@@ -39,6 +39,7 @@ export default function MethodologyPage() {
             evidence is, and what to do next. Research, not a vendor directory or investment advice.
           </p>
         </header>
+        <nav className="learn-jump" aria-label="Methodology sections"><a href="#principles">Research rules</a><a href="#evidence-model">Evidence labels</a><a href="#status-defs">Company status</a><a href="#freshness">Research dates</a><a href="#corrections">Corrections</a><a href="#sources">Source register</a></nav>
 
         {/* Editorial principles */}
         <section aria-labelledby="principles" className="mt-14">
@@ -54,10 +55,10 @@ export default function MethodologyPage() {
               ["Unknown is a real answer", "Not yet verified is never a zero, a low score, or a quiet guess."],
               ["No pay to rank", "Money, access, or introductions never change inclusion or wording."],
             ].map(([t, d]) => (
-              <div key={t} className="bg-paper-raised p-5">
+              <li key={t} className="bg-paper-raised p-5">
                 <p className="font-display text-base font-semibold leading-tight">{t}</p>
                 <p className="mt-2 text-xs leading-relaxed text-ink-soft">{d}</p>
-              </div>
+              </li>
             ))}
           </ul>
         </section>
@@ -216,15 +217,16 @@ export default function MethodologyPage() {
         </section>
 
         {/* Source register */}
-        <section aria-labelledby="sources" id="sources" className="mt-14 scroll-mt-20">
+        <section aria-labelledby="sources" className="mt-14 scroll-mt-20">
           <h2 id="sources" className="font-display text-2xl font-semibold tracking-tight">
             The source register
           </h2>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-2">
-            {m.counts.sources.toLocaleString("en-US")} source identities (
+            {m.counts.sources.toLocaleString("en-US")} public source identities (
             {m.counts.observedSourceVariants.toLocaleString("en-US")} exact web addresses observed)
-            stand behind this release. Grades are provisional and describe the source kind, not
-            whether any single claim is true.
+            stand behind this release; internal-only client and system references are withheld.
+            Grades are provisional and describe the source kind, not whether any single claim is
+            true.
           </p>
           <div className="mt-6">
             <SourceRegister />

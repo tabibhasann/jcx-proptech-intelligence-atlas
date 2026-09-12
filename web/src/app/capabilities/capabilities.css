@@ -1,0 +1,370 @@
+.cm-page {
+  background: #f5f3ed;
+  color: #182c29;
+}
+.cm-wrap {
+  width: min(1320px, calc(100% - 80px));
+  margin-inline: auto;
+}
+.cm-hero {
+  padding: 45px 0 50px;
+}
+.cm-hero > a {
+  font-size: 11px;
+  color: #636d60;
+}
+.cm-eyebrow {
+  font:
+    10px var(--font-mono),
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+}
+.cm-hero > .cm-eyebrow {
+  margin-top: 45px;
+  color: #b44325;
+}
+.cm-page h1,
+.cm-page h2,
+.cm-page h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+.cm-page h1 {
+  font-size: clamp(46px, 6vw, 82px);
+  line-height: 1.04;
+  margin: 20px 0;
+}
+.cm-page h1 em {
+  color: #b44325;
+}
+.cm-intro {
+  font-size: 15px;
+  line-height: 1.8;
+  max-width: 680px;
+  color: #626d60;
+}
+.cm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
+  font-size: 10px;
+}
+.cm-legend span {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.cm-legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4c754c;
+}
+.cm-legend i.cm-unknown {
+  background: transparent;
+  border: 1px solid #777;
+}
+.cm-table-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+.cm-table-top h2 {
+  font-size: 28px;
+}
+.cm-table-top p {
+  font-size: 10px;
+  max-width: 400px;
+  color: #5e6959;
+}
+.cm-scroll {
+  overflow-x: auto;
+  border: 1px solid #c9d0c2;
+}
+.cm-page table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 1080px;
+  text-align: left;
+  table-layout: fixed;
+}
+.cm-page th,
+.cm-page td {
+  padding: 23px 20px;
+  vertical-align: top;
+  border-bottom: 1px solid #d0d6c9;
+  border-right: 1px solid #d0d6c9;
+}
+.cm-page thead {
+  background: #182c29;
+  color: #f5f3ed;
+}
+.cm-page thead th {
+  font-weight: 400;
+  border-color: #3d5049;
+}
+.cm-page thead th:first-child {
+  width: 170px;
+  font:
+    10px var(--font-mono),
+    monospace;
+  text-transform: uppercase;
+}
+.cm-page thead strong {
+  display: block;
+  font:
+    25px var(--font-display),
+    Georgia,
+    serif;
+}
+.cm-page thead span {
+  display: block;
+  font:
+    9px var(--font-mono),
+    monospace;
+  color: #bdc9b7;
+  margin: 8px 0;
+}
+.cm-page thead small {
+  font-size: 10px;
+  color: #cfdbca;
+  line-height: 1.6;
+  display: block;
+}
+.cm-page tbody th {
+  font-size: 13px;
+  font-weight: 500;
+  background: #e9ece2;
+}
+.cm-cell-status {
+  font:
+    8px var(--font-mono),
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #3d6740;
+}
+.cm-page td p {
+  font-size: 12px;
+  line-height: 1.75;
+  margin: 10px 0 16px;
+}
+.cm-page td a {
+  font:
+    9px var(--font-mono),
+    monospace;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cm-unassessed {
+  background: #eeeee7;
+  color: #677061;
+}
+.cm-unassessed .cm-cell-status {
+  color: #677061;
+}
+.cm-observed {
+  background: #f9faf2;
+}
+.cm-lessons {
+  padding-block: 70px;
+}
+.cm-lessons > .cm-eyebrow {
+  color: #b44325;
+}
+.cm-page h2 {
+  font-size: clamp(29px, 3vw, 42px);
+  line-height: 1.15;
+  margin: 15px 0 30px;
+}
+.cm-finding {
+  display: grid;
+  grid-template-columns: 40px 1.3fr 1fr;
+  gap: 30px;
+  border-top: 1px solid #c9d0c2;
+  padding: 28px 0;
+}
+.cm-number {
+  font:
+    11px var(--font-mono),
+    monospace;
+  color: #b44325;
+}
+.cm-finding h3 {
+  font-size: 25px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.cm-finding p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #56634f;
+  max-width: 560px;
+}
+.cm-finding a {
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  display: inline-block;
+  margin-top: 15px;
+}
+.cm-finding aside {
+  background: #e6eade;
+  padding: 22px;
+}
+.cm-finding aside p {
+  font-size: 12px;
+  margin-top: 12px;
+}
+.cm-finding aside .cm-eyebrow {
+  font-size: 8px;
+  color: #64745a;
+}
+.cm-metric-section {
+  background: #182c29;
+  color: #f5f3ed;
+  padding: 65px 0;
+}
+.cm-metric-section > .cm-wrap > .cm-eyebrow {
+  color: #f2a178;
+}
+.cm-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+}
+.cm-metrics article {
+  border-top: 1px solid #50644f;
+  padding-top: 20px;
+}
+.cm-metrics strong {
+  display: block;
+  font:
+    clamp(28px, 3.4vw, 47px) var(--font-display),
+    Georgia,
+    serif;
+  color: #f2b58d;
+  margin: 20px 0;
+}
+.cm-metrics h3 {
+  font-size: 22px;
+  line-height: 1.3;
+}
+.cm-metrics p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 18px 0;
+  color: #c4d1bd;
+}
+.cm-metrics .cm-limit {
+  border-left: 2px solid #b7cbaa;
+  padding-left: 15px;
+}
+.cm-metrics a {
+  font-size: 10px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.cm-next {
+  padding-block: 70px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 60px;
+}
+.cm-next p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #65705f;
+  max-width: 620px;
+}
+.cm-next nav {
+  align-self: center;
+  display: grid;
+  gap: 20px;
+  font-size: 12px;
+}
+.cm-next nav a {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #c9d0c2;
+}
+.cm-page a:focus-visible,
+.cm-scroll:focus-visible {
+  outline: 2px solid #b44325;
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .cm-wrap {
+    width: calc(100% - 40px);
+  }
+  .cm-hero {
+    padding-top: 28px;
+  }
+  .cm-hero > .cm-eyebrow {
+    margin-top: 32px;
+  }
+  .cm-intro {
+    font-size: 13px;
+  }
+  .cm-table-top {
+    display: block;
+  }
+  .cm-table-top h2 {
+    margin-bottom: 12px;
+  }
+  .cm-table-top p {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .cm-legend {
+    font-size: 9px;
+    gap: 14px;
+  }
+  .cm-page table {
+    min-width: 1050px;
+  }
+  .cm-page tbody th,
+  .cm-page thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: 140px;
+  }
+  .cm-page thead th:first-child {
+    background: #182c29;
+  }
+  .cm-finding {
+    grid-template-columns: 25px 1fr;
+    gap: 15px;
+  }
+  .cm-finding aside {
+    grid-column: 2;
+    padding: 18px;
+  }
+  .cm-finding h3 {
+    font-size: 24px;
+  }
+  .cm-finding p {
+    font-size: 12px;
+  }
+  .cm-lessons,
+  .cm-next {
+    padding-block: 45px;
+  }
+  .cm-metric-section {
+    padding-block: 45px;
+  }
+  .cm-metrics,
+  .cm-next {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .cm-metrics strong {
+    font-size: 38px;
+  }
+}

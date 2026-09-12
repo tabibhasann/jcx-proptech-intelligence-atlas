@@ -92,6 +92,7 @@ export function SourceRegister() {
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft" role="status">
           {result?.length ?? 0} of {state.data.length} sources
         </p>
+        {(query || klass || grade) && <button type="button" className="border border-line-strong px-3 py-2 text-sm" onClick={() => {setQuery("");setKlass(null);setGrade(null);setShown(PAGE);}}>Clear source filters</button>}
       </div>
 
       {result && result.length === 0 ? (

@@ -15,6 +15,7 @@ const DOMAIN_ORDER: [string, string][] = [
   ["Security, privacy, and AI rules", "Security/privacy|Cyber risk|OT security|AI governance|AI regulation|Privacy/legal|Data governance/legal|Public-sector data/API"],
   ["Provenance: who said what, when", "Provenance"],
 ];
+const sectionId = (title: string) => `std-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}`;
 
 export default function StandardsPage() {
   const grouped = DOMAIN_ORDER.map(([title, pattern]) => ({
@@ -32,7 +33,7 @@ export default function StandardsPage() {
             Rules that outlast products · reference
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            {manifest.counts.standards} rules worth demanding
+            A technology checklist for the next stage.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-2">
             Products come and go. Shared definitions, exchange formats, and governance decide
@@ -40,12 +41,13 @@ export default function StandardsPage() {
             one project question. A standard existing never proves any vendor follows it.
           </p>
         </header>
+        <nav className="learn-jump" aria-label="Technology checklist topics">{grouped.filter(g => g.items.length).map(g => <a key={g.title} href={`#${sectionId(g.title)}`}>{g.title}</a>)}</nav>
 
         <div className="mt-12 space-y-14">
           {grouped.map((g) =>
             g.items.length ? (
-              <section key={g.title} aria-labelledby={`std-${g.title}`}>
-                <h2 id={`std-${g.title}`} className="font-display text-2xl font-semibold tracking-tight">
+              <section key={g.title} aria-labelledby={sectionId(g.title)} className="scroll-mt-24">
+                <h2 id={sectionId(g.title)} className="font-display text-2xl font-semibold tracking-tight">
                   {g.title}
                 </h2>
                 <ul className="mt-5 grid gap-4 lg:grid-cols-2">

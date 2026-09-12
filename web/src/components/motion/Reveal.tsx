@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-type Tag = "div" | "section" | "li" | "span" | "figure" | "aside" | "ol" | "ul";
+type Tag = "div" | "section" | "article" | "li" | "span" | "figure" | "aside" | "ol" | "ul";
 
 /**
  * Scroll reveal. The resting state is fully visible; motion is layered on only

@@ -2,42 +2,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { manifest } from "@/data";
+import { useEffect, useRef, useState } from "react";
 
 const NAV: { href: string; label: string; blurb: string }[] = [
-  { href: "/", label: "Brief", blurb: "Five findings in about a minute" },
-  { href: "/story", label: "Story", blurb: "The full argument, thirteen examples" },
-  { href: "/atlas", label: "Companies", blurb: `${manifest.counts.qualifiedEntities} records, plain language` },
-  { href: "/evidence", label: "Cases", blurb: `${manifest.counts.cases} measured outcomes` },
-  { href: "/discovery", label: "Search", blurb: `${manifest.counts.discoveryIdentities} leads, honestly staged` },
-  { href: "/standards", label: "Rules", blurb: `${manifest.counts.standards} standards that outlast products` },
-  { href: "/methodology", label: "Method", blurb: "How every claim is graded" },
+  { href: "/", label: "Overview", blurb: "The opportunity in two minutes" },
+  { href: "/capabilities", label: "Compare", blurb: "Company capabilities, sources and lessons" },
+  { href: "/plan", label: "Roadmap", blurb: "What to test, in what order" },
+  { href: "/research", label: "Research", blurb: "Find cases, countries, startups and sources" },
+  { href: "/guide", label: "Start here", blurb: "New to property technology? Learn the basics" },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setLifted(window.scrollY > 8);
+    const onScroll = () => {
+      setLifted(window.scrollY > 8);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [pathname]);
 
   // Close the mobile sheet on navigation and on Escape.
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setOpen(false); menuButton.current?.focus(); }
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isCurrent = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isCurrent = (href: string) => {
+    if (href === "/research") return ["/research", "/comparison", "/evidence", "/atlas", "/discovery", "/frontier", "/startups", "/standards", "/methodology", "/story", "/brief"].some(p => pathname === p || pathname.startsWith(p + "/"));
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   return (
     <header
@@ -49,13 +55,12 @@ export function SiteHeader() {
         <Link
           href="/"
           className="group flex items-baseline gap-2.5"
-          aria-label="Built Environment Intelligence, home"
+          aria-label="Propty research, home"
         >
-          <span className="font-display text-lg font-semibold tracking-tight">
-            Built Environment Intelligence
-          </span>
+          <span className="inline-grid h-7 w-7 place-items-center bg-mark-deep font-display text-lg text-paper-raised" aria-hidden="true">p.</span>
+          <span className="font-display text-lg font-semibold tracking-tight">Propty</span>
           <span className="hidden font-mono text-[9px] uppercase tracking-[0.18em] text-ink-soft transition-colors duration-300 group-hover:text-mark-deep sm:inline">
-            Research briefing · Aug 2026
+            Research & strategy
           </span>
         </Link>
 
@@ -65,7 +70,8 @@ export function SiteHeader() {
               key={n.href}
               href={n.href}
               title={n.blurb}
-              aria-current={isCurrent(n.href) ? "page" : undefined}
+              onClick={() => setOpen(false)}
+              aria-current={pathname === n.href ? "page" : isCurrent(n.href) ? "true" : undefined}
               className={`slide-link relative px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-300 ${
                 isCurrent(n.href) ? "text-mark-deep" : "text-ink-2 hover:text-mark-deep"
               }`}
@@ -76,6 +82,7 @@ export function SiteHeader() {
         </nav>
 
         <button
+          ref={menuButton}
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
@@ -98,7 +105,8 @@ export function SiteHeader() {
             <li key={n.href}>
               <Link
                 href={n.href}
-                aria-current={isCurrent(n.href) ? "page" : undefined}
+                onClick={() => setOpen(false)}
+                aria-current={pathname === n.href ? "page" : isCurrent(n.href) ? "true" : undefined}
                 className="flex items-baseline justify-between gap-4 border-b border-line px-4 py-3.5 last:border-0"
               >
                 <span

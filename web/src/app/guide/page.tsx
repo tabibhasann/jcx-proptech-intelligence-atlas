@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = { title: "Start here: property technology explained", description: "Understand the business models, evidence and proposed Propty direction without needing a property background." };
+const models = [
+  ["A property portal", "Helps people find properties and contact sellers or agents.", "Usually charges for listings, advertising or enquiries.", "More enquiries do not necessarily mean more completed sales."],
+  ["A managed transaction service", "Helps the customer move from a search to visits, an offer and completion.", "Can earn a fee for a completed sale or rental.", "People, follow-up and delivery costs matter as much as software."],
+  ["Property management", "Looks after an occupied property: rent, repairs and owner updates.", "Can charge owners an ongoing management fee.", "Recurring income also means recurring service responsibilities."],
+  ["Property data & verification", "Organises records so people can check a property or make a decision.", "Can charge for reports, checks or access to data.", "A checked listing is not the same as legally verified ownership."],
+  ["Developer software", "Helps a developer manage customers, construction, handover and service.", "Can be an internal tool or a subscription sold to other businesses.", "An internal efficiency improvement is not automatically a separate startup."],
+  ["Property finance", "Helps fund a purchase or connect customers with financing.", "May earn referral, service or financing income, depending on the model.", "Local permissions, consumer protection and financial risk need specialist review."],
+];
+const terms = [
+  ["Proptech", "Property technology: software, data and services that improve how property is found, built, bought or managed."],
+  ["Lead → visit → closing", "An enquiry, then a property viewing, then a completed transaction. These are different stages, not interchangeable sales numbers."],
+  ["Conversion", "The share of a defined starting group that reaches the next step. Always ask: conversion from what, to what, over which period?"],
+  ["Revenue vs transaction value", "Revenue is the company’s income. The total value of properties traded through it is much larger and is not its revenue."],
+  ["Unit economics", "What one customer or transaction earns after the costs of acquiring and serving it. State which costs are included."],
+  ["Baseline", "How the business performs before a change. Without it, we cannot judge whether new technology helped."],
+  ["Pilot", "A small, time-limited test with a named owner and agreed success criteria, before committing to a larger rollout."],
+  ["CRM / ERP / API", "CRM tracks customers and follow-ups. ERP coordinates business operations. An API lets software systems exchange information."],
+  ["Billings / operating PBT", "Billings are amounts billed, which can differ from recognised revenue. Operating PBT is an operating profit-before-tax measure; use the reporting company’s definition."],
+  ["YC", "Y Combinator, a startup accelerator. Its directory helps find companies; membership does not prove profitability or suitability for Bangladesh."],
+];
+export default function GuidePage() {
+  return <article className="learn-page">
+    <header className="learn-hero"><p className="reading-kicker">A short introduction</p><h1>Property is familiar.<br />The business models may not be.</h1><p>Start with one question: what part of the property journey are we improving, and who will pay for that improvement?</p></header>
+    <nav className="learn-jump" aria-label="Guide sections"><a href="#business-models">Business models</a><a href="#propty-direction">Propty’s direction</a><a href="#reading-evidence">How to read the evidence</a><a href="#terms">Plain-language glossary</a></nav>
+    <section className="learn-section" id="business-models"><h2>One industry. Different businesses.</h2><p>A single venture can combine these models. Each still needs its own customer, economics and delivery capability.</p><div className="learn-grid">{models.map(([name,does,payer,caution],i)=><div className="learn-card" key={name}><span className="learn-number">0{i+1}</span><h3>{name}</h3><p>{does}</p><p><strong>How it earns:</strong> {payer}</p><details><summary>What to watch</summary><p>{caution}</p></details></div>)}</div></section>
+    <section className="learn-section" id="propty-direction"><h2>What this means for Propty.</h2><p>The ambition is one connected property business, not just a new website. Our proposal is to improve one real customer journey first, measure the value, then decide which additional services deserve investment.</p><ol className="learn-path"><li><span className="learn-number">01 / Find</span><strong>Useful choices</strong><p>Accurate, available properties that match the customer.</p></li><li><span className="learn-number">02 / Check</span><strong>Clear evidence</strong><p>Show what was checked, by whom, when, and what remains unknown.</p></li><li><span className="learn-number">03 / Visit</span><strong>Reliable follow-up</strong><p>A named person coordinates the viewing and next action.</p></li><li><span className="learn-number">04 / Complete</span><strong>Visible progress</strong><p>Track documents, decisions and blockers through completion.</p></li></ol><div className="learn-note"><strong>A starting hypothesis, not the only possible business.</strong>Rentals, management, data services and a wider marketplace remain options. Choose the first test using actual demand, access to supply, delivery cost and willingness to pay.</div><Link className="u-link" href="/plan">See the proposed sequence and alternatives →</Link></section>
+    <section className="learn-section" id="reading-evidence"><h2>Three things that should never be confused.</h2><div className="learn-grid"><div className="learn-card"><span className="learn-number">Observed offering</span><h3>“They provide this.”</h3><p>A product page or company profile describes a feature. It does not show whether customers benefit or the company makes money.</p></div><div className="learn-card"><span className="learn-number">Reported result</span><h3>“This changed.”</h3><p>A filing or case study reports a number. Check the period, definition, source and whether other factors could explain it.</p></div><div className="learn-card"><span className="learn-number">Our interpretation</span><h3>“We could test this.”</h3><p>A reasoned proposal for Bangladesh. It is not a locally proven result or a promise of increased sales.</p></div></div></section>
+    <section className="learn-section" id="terms"><h2>A few words, made simple.</h2><dl className="learn-glossary">{terms.map(([term,definition])=><div key={term}><dt>{term}</dt><dd>{definition}</dd></div>)}</dl></section>
+  </article>;
+}

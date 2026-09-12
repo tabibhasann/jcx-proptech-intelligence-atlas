@@ -1,0 +1,47 @@
+{
+  "version": 3,
+  "updated": "2026-09-11",
+  "nodes": [
+    {"id": "scene-01", "type": "scene", "file": "01_journey.md", "title": "One label, several businesses", "sources": ["S01", "S04", "S08", "S09"]},
+    {"id": "scene-02", "type": "scene", "file": "01_journey.md", "title": "Who pays, and when", "sources": ["S01", "S02", "S03", "S04"]},
+    {"id": "scene-03", "type": "scene", "file": "01_journey.md", "title": "Durable operations", "sources": ["S02", "S03", "S09", "S10", "S25", "S28", "S33"]},
+    {"id": "scene-04", "type": "scene", "file": "01_journey.md", "title": "Failure and risk", "sources": ["S04", "S06", "S08", "S11"]},
+    {"id": "scene-05", "type": "scene", "file": "01_journey.md", "title": "Country transfer test", "sources": ["S12", "S13", "S14", "S15", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32"]},
+    {"id": "scene-06", "type": "scene", "file": "01_journey.md", "title": "Bangladesh today", "sources": ["S16", "S17", "S18", "S19", "S20", "S21"]},
+    {"id": "scene-07", "type": "scene", "file": "01_journey.md", "title": "A conditional starting shape", "sources": ["S04", "S09", "S10", "S12", "S17", "S18", "S25", "S28"]},
+    {"id": "scene-08", "type": "scene", "file": "01_journey.md", "title": "Inside the developer", "sources": ["S22", "S23", "S24"]},
+    {"id": "scene-09", "type": "scene", "file": "01_journey.md", "title": "The evidence boundary", "sources": []},
+    {"id": "cases", "type": "support", "file": "02_company_cases.md", "title": "Company cases", "sources": ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11", "S22", "S23", "S24", "S25", "S28", "S33"]},
+    {"id": "transfer", "type": "support", "file": "03_country_transfer.md", "title": "Country transfer test", "sources": ["S01", "S03", "S09", "S12", "S13", "S14", "S15", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32"]},
+    {"id": "bangladesh", "type": "support", "file": "04_bangladesh.md", "title": "Bangladesh application", "sources": ["S12", "S13", "S14", "S16", "S17", "S18", "S19", "S20", "S21"]},
+    {"id": "jcx-internal", "type": "support", "file": "05_jcx_internal.md", "title": "Technology inside a developer", "sources": ["S22", "S23", "S24"]},
+    {"id": "sources", "type": "reference", "file": "06_sources_and_definitions.md", "title": "Sources and definitions", "sources": ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33"]},
+    {"id": "brief", "type": "route", "file": "IMPLEMENTATION_HANDOFF.md", "title": "Five-minute briefing contract", "sources": ["S01", "S02", "S03", "S04", "S08", "S11", "S12", "S13", "S14", "S22", "S23", "S24"]},
+    {"id": "evidence-current", "type": "route", "file": "IMPLEMENTATION_HANDOFF.md", "title": "Current reviewed case set", "sources": ["S01", "S03", "S08", "S11", "S22", "S23", "S25", "S28", "S33"]}
+    ,{"id": "flagship-chapter", "type": "chapter", "file": "../research_v2/12_comparative_completion/flagship_chapter.md", "title": "Four property businesses, four ways to make money", "sources": ["S01", "S03", "S11", "S28", "S12", "S14", "S24"], "publicData": "../research_v2/02_evidence_library/flagship_chapter_public.json"}
+    ,{"id": "comparative-chapter", "type": "chapter", "file": "07_comparative_mechanisms.md", "title": "The useful unit is a mechanism, not a logo", "sources": ["MB-S01", "MB-S03", "RPS-S01", "VI-S01", "D01", "Y04", "C01", "C12"], "publicData": "public_comparative_chapter.json", "route": "/comparison#jcx-comparative"}
+  ],
+  "edges": [
+    {"from": "scene-01", "to": "scene-02", "relation": "narrows_to"},
+    {"from": "scene-02", "to": "scene-03", "relation": "asks_for_operating_examples"},
+    {"from": "scene-03", "to": "scene-04", "relation": "contrasts_with_risk"},
+    {"from": "scene-04", "to": "scene-05", "relation": "requires_transfer_test"},
+    {"from": "scene-05", "to": "scene-06", "relation": "localizes"},
+    {"from": "scene-06", "to": "scene-07", "relation": "frames_conditional_option"},
+    {"from": "scene-07", "to": "scene-08", "relation": "depends_on_parent_foundation"},
+    {"from": "scene-08", "to": "scene-09", "relation": "sets_evidence_boundary"},
+    {"from": "scene-02", "to": "cases", "relation": "opens_support"},
+    {"from": "scene-05", "to": "transfer", "relation": "opens_support"},
+    {"from": "scene-06", "to": "bangladesh", "relation": "opens_support"},
+    {"from": "scene-08", "to": "jcx-internal", "relation": "opens_support"},
+    {"from": "scene-09", "to": "sources", "relation": "opens_support"}
+    ,{"from": "scene-01", "to": "brief", "relation": "compresses_to"}
+    ,{"from": "scene-09", "to": "evidence-current", "relation": "opens_current_cases"}
+    ,{"from": "scene-03", "to": "flagship-chapter", "relation": "opens_current_comparison"}
+    ,{"from": "scene-03", "to": "comparative-chapter", "relation": "widens_to_mechanisms"}
+    ,{"from": "flagship-chapter", "to": "transfer", "relation": "tests_local_conditions"}
+    ,{"from": "flagship-chapter", "to": "jcx-internal", "relation": "keeps_internal_track_visible"}
+    ,{"from": "comparative-chapter", "to": "transfer", "relation": "tests_local_conditions"}
+    ,{"from": "comparative-chapter", "to": "jcx-internal", "relation": "keeps_internal_track_visible"}
+  ]
+}

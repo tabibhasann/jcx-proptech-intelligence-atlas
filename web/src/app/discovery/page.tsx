@@ -17,18 +17,12 @@ export default function DiscoveryPage() {
             Wider search · research leads
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            {manifest.counts.discoveryIdentities} leads, staged honestly
+            Explore the research leads.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-2">
-            Everything found while building the research, including what was not promoted.{" "}
-            {manifest.counts.qualifiedEntities} records reached the qualified core.{" "}
-            <strong>{manifest.counts.discoveryOnly} stayed as leads</strong>: names worth tracking,
-            not companies proven. {manifest.counts.ycProfiles} come from the dated YC snapshot of 30
-            August 2026, and {manifest.counts.ecosystemPairs} are company to program memberships.
-            A shared web domain never merges two names by itself, and{" "}
-            {manifest.reviewQueue.discovery_identities_requiring_resolution} leads carry open
-            identity review flags.
+            Search names, countries and accelerator programmes. These are starting points for research, not evidence of success. For a short introduction, begin with the <a href="/startups" className="u-link">YC startup shortlist</a>.
           </p>
+          <details className="mt-5 text-sm leading-relaxed text-ink-soft"><summary className="cursor-pointer">What is included in this archive?</summary><p className="mt-3">{manifest.counts.discoveryIdentities} identities: {manifest.counts.qualifiedEntities} qualified records and {manifest.counts.discoveryOnly} research leads. The 30 August 2026 snapshot includes {manifest.counts.ycProfiles} YC profiles and {manifest.counts.ecosystemPairs} company-to-programme memberships. These categories overlap. {manifest.reviewQueue.discovery_identities_requiring_resolution} identities still need review. A shared domain alone is not treated as the same company.</p></details>
         </header>
         <div className="mt-10">
           <FrontierExplorer />

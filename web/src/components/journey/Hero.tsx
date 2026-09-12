@@ -45,7 +45,7 @@ export function Hero() {
             <p className="flex flex-wrap items-center gap-x-3 gap-y-2">
               <span className="eyebrow">The JCX Atlas</span>
               <span aria-hidden="true" className="h-3 w-px bg-line-strong" />
-              <span className="eyebrow">Research edition · 30 August 2026</span>
+              <span className="eyebrow">Corpus cut-off · 30 August 2026</span>
             </p>
           </Reveal>
 

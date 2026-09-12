@@ -4,12 +4,17 @@
   "private": true,
   "description": "JCX Global PropTech Intelligence Atlas — public analysis experience built from the 2026-08-30 research corpus.",
   "engines": {
-    "node": ">=20 <23"
+    "node": ">=20.9 <25"
   },
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
-    "verify": "node scripts/verify-content.mjs",
-    "prebuild": "node scripts/build-data.mjs && node scripts/verify-content.mjs",
+    "verify": "node scripts/verify-content.mjs && node scripts/flagship-negative-tests.mjs && node scripts/comparative-negative-tests.mjs",
+    "verify:output": "node scripts/verify-output-privacy.mjs",
+    "verify:executive": "node scripts/verify-executive.mjs",
+    "verify:navigation": "node scripts/verify-navigation.mjs",
+    "verify:corpus": "python ../scripts/validate_proptech_corpus.py",
+    "release:check": "node scripts/release-check.mjs",
+    "prebuild": "npm run build:data && npm run verify",
     "dev": "npm run build:data && next dev",
     "build": "next build",
     "start": "next start",

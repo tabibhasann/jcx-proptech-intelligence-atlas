@@ -20,6 +20,33 @@ DATA = ROOT / "data"
 RESEARCH = ROOT / "research"
 ERRORS: list[str] = []
 
+# This validator protects the normalized research corpus. It is deliberately
+# scoped away from application dependencies and derived website artefacts;
+# those have their own web release gate. Scanning `node_modules`, `.next` or
+# the static export produced thousands of irrelevant citation/link failures
+# and obscured the identity checks this script is meant to enforce.
+EXCLUDED_DIR_NAMES = {
+    ".git",
+    "node_modules",
+    ".next",
+    "out",
+    "dist",
+    "build",
+    "__pycache__",
+    ".cache",
+    ".turbo",
+    "generated",
+}
+EXCLUDED_ROOTS = {"web", "output", "research_v2"}
+
+
+def is_excluded(path: Path) -> bool:
+    relative = path.relative_to(ROOT)
+    return bool(relative.parts) and (
+        relative.parts[0] in EXCLUDED_ROOTS
+        or any(part in EXCLUDED_DIR_NAMES for part in relative.parts)
+    )
+
 
 def require(condition: bool, message: str) -> None:
     if not condition:
@@ -57,11 +84,14 @@ def check_local_markdown_links() -> int:
     checked = 0
     pattern = re.compile(r"\[[^\]]*\]\((?!https?://|mailto:|#)([^)]+)\)")
     for path in ROOT.rglob("*.md"):
-        if ".git" in path.parts:
+        if is_excluded(path):
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         for raw in pattern.findall(text):
             target = raw.strip().strip("<>").split("#", 1)[0]
+            # Human-facing citations often use `file.md:line` locators. The
+            # line is metadata, not part of the filesystem path.
+            target = re.sub(r":\d+(?:-\d+)?$", "", target)
             if not target:
                 continue
             target_path = Path(unquote(target))
@@ -297,7 +327,7 @@ def main() -> int:
     scanned_files = 0
     for suffix in ("*.md", "*.csv", "*.json"):
         for path in ROOT.rglob(suffix):
-            if ".git" in path.parts:
+            if is_excluded(path):
                 continue
             scanned_files += 1
             text = path.read_text(encoding="utf-8", errors="replace")

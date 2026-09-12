@@ -1,0 +1,82 @@
+{
+  "version": "2026-09-12",
+  "comparative_lens_ids": [
+    "managed-distribution",
+    "rentals-services",
+    "verification-infrastructure",
+    "developer-adoption",
+    "accelerator-wedges",
+    "country-transfer"
+  ],
+  "comparative_case_ids": [
+    "case-beike-acn",
+    "case-compass",
+    "case-quinto-distribution",
+    "case-nobroker-assist",
+    "case-square-yards",
+    "case-proptiger-reset",
+    "case-quinto-managed-rentals",
+    "case-houm",
+    "case-appfolio",
+    "case-urban-company",
+    "case-sheba",
+    "case-hmlr",
+    "case-dubai-data",
+    "case-dilrmp",
+    "case-costar",
+    "case-beike-trust",
+    "case-aldar",
+    "case-godrej",
+    "case-ayala",
+    "case-dlf",
+    "case-capitaland-jll",
+    "case-permitflow",
+    "case-snapdocs",
+    "case-rabbet",
+    "case-trellis",
+    "case-lhoopa",
+    "country-bangladesh",
+    "country-india",
+    "country-pakistan",
+    "country-indonesia",
+    "country-vietnam",
+    "country-philippines",
+    "country-singapore"
+  ],
+  "comparative_source_ids": [
+    "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09", "C10", "C11", "C12", "C13",
+    "D01", "D02", "D03", "D04", "D05", "D06", "D09",
+    "MB-S01", "MB-S02", "MB-S03", "MB-S04", "MB-S06", "MB-S08", "MB-S11", "MB-S12", "MB-S13", "MB-S14", "MB-S15", "MB-S16", "MB-S17", "MB-S20", "MB-S21", "MB-S22", "MB-S23",
+    "RPS-S01", "RPS-S02", "RPS-S03", "RPS-S04", "RPS-S08", "RPS-S09", "RPS-S10", "RPS-S11", "RPS-S12", "RPS-S13", "RPS-S14", "RPS-S22", "RPS-S23", "RPS-S24", "RPS-S25",
+    "VI-S01", "VI-S02", "VI-S03", "VI-S04", "VI-S05", "VI-S06", "VI-S07", "VI-S08", "VI-S09", "VI-S10", "VI-S11", "VI-S12", "VI-S13", "VI-S14", "VI-S18",
+    "Y01", "Y02", "Y03", "Y04", "Y05", "Y06", "Y07", "Y08", "Y09", "Y18", "Y19", "Y20", "Y21"
+  ],
+  "flagship_source_ids": ["F01", "F02", "F03", "F04", "F05", "F06", "F07", "F08", "F09", "F10", "F11"],
+  "flagship_case_ids": ["FCASE-RIGHTMOVE", "FCASE-99ACRES", "FCASE-PINHOME", "FCASE-PROPZY"],
+  "flagship_claim_ids": [
+    "FC-RM-01", "FC-RM-02", "FC-RM-03", "FC-RM-04",
+    "FC-99-01", "FC-99-02", "FC-99-03", "FC-99-04",
+    "FC-PH-01", "FC-PH-02", "FC-PH-03", "FC-PH-04",
+    "FC-PZ-01", "FC-PZ-02", "FC-PZ-03", "FC-PZ-04"
+  ],
+  "flagship_condition_ids": ["TRANSFER-01", "TRANSFER-02", "TRANSFER-03", "TRANSFER-04", "TRANSFER-05", "TRANSFER-06"],
+  "flagship_metric_ids": [
+    "infoedge_99acres_billings_fy2025",
+    "infoedge_99acres_operating_pbt_fy2025",
+    "pinhome_agents_claim_2025",
+    "pinhome_downloads_claim_2025",
+    "pinhome_kpr_takeover_change_h1_2025",
+    "pinhome_listings_claim_2025",
+    "pinhome_sharia_kpr_change_h1_2025",
+    "propzy_closure_date",
+    "rightmove_arpa_all_fy2024",
+    "rightmove_operating_profit_fy2024",
+    "rightmove_partner_retention_fy2024",
+    "rightmove_revenue_fy2024"
+  ],
+  "presentation_source_ids": [
+    "S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11",
+    "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22",
+    "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33"
+  ]
+}

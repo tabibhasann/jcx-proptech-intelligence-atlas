@@ -2,6 +2,7 @@ import { Chapter, Prose, P, DataPoint, CaveatRail, SceneTitle } from "../bits";
 import { chapter, beat } from "../storyRefs";
 import { ExtSource } from "../ExtSource";
 import { Reveal } from "@/components/motion/Reveal";
+import { manifest } from "@/data";
 
 const OS_PARTS: [string, string, string][] = [
   ["01", "Authoritative records", "land, project, unit, customer, contract, cost, asset and service records with named owners"],
@@ -23,7 +24,7 @@ const LAYERS: [string, string, string][] = [
   ["3,896", "source-field assertions", "competing source observations kept separate rather than forced into one scalar"],
   ["44", "outcome & failure cases", "bounded positive, negative and restructured cases with metric context and causal caveat"],
   ["39", "standards & frameworks", "interoperability, information management, controls, GIS, carbon, security, privacy and AI governance"],
-  ["1,600", "normalized sources", "conservative URL identities in this release; 1,625 exact observed variants retained"],
+  [manifest.counts.sources.toLocaleString("en-US"), "public normalized sources", "public URL identities in this release; exact observed variants remain in the private research corpus"],
 ];
 
 export function Chapter01() {

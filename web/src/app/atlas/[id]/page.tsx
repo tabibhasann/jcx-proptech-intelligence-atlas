@@ -119,13 +119,12 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
         ) : (
           <section aria-labelledby="answer-h" className="mt-8 border border-dashed border-line-strong bg-paper-raised p-6 sm:p-8">
             <h2 id="answer-h" className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
-              Plain language summary not yet written
+              Research note, not a finished company review
             </h2>
             <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-2">
-              {e.description ?? "This record is part of the qualified core, but no reviewed synopsis exists yet."}{" "}
-              The attributed claims, cases, and sources below are the full current record. Nothing
-              has been filled in beyond what the sources support.
+              {e.description ?? "No reviewed description is available yet."}
             </p>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft">The description above is a short research label. A reviewed plain-language summary is still missing. Use the sources below to investigate, or <Link href="/capabilities" className="u-link">open the curated company comparison</Link> for a complete introduction.</p>
           </section>
         )}
 
@@ -156,8 +155,7 @@ export default async function EntityPage({ params }: { params: Promise<{ id: str
             </ul>
           ) : (
             <p className="mt-4 border border-dashed border-line-strong bg-paper-raised p-5 text-sm text-ink-soft">
-              No quantified case in the current library names this record. Absence of a case is not
-              evidence of absence of outcomes.
+              We have not linked a measured outcome to this record. That means the evidence here is incomplete, not that the company has no results.
             </p>
           )}
         </section>

@@ -10,14 +10,18 @@
  *  3. Any story reference is unresolved (should be impossible post-gates).
  *  4. Entity/profile data contains private-only field markers.
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { PRIVATE_MARKERS as FLAGSHIP_PRIVATE_MARKERS, validateFlagshipData } from "./flagship-contract.mjs";
+import { validateComparativeData } from "./comparative-contract.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const corpus = join(root, "..", "data");
 const gen = join(root, "src", "data", "generated");
+const workspace = join(root, "..");
 const read = (dir, f) => JSON.parse(readFileSync(join(dir, f), "utf8"));
+const readJsonl = (path) => readFileSync(path, "utf8").split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
 
 let failures = 0;
 const fail = (msg) => {
@@ -101,6 +105,8 @@ const blobsToScan = [
   ["discovery.slim.json", JSON.stringify(read(gen, "discovery.slim.json"))],
   ["cases.json", JSON.stringify(read(gen, "cases.json"))],
   ["launch.json", JSON.stringify(read(gen, "launch.json"))],
+  ["sources.slim.json", JSON.stringify(read(gen, "sources.slim.json"))],
+  ["comparative-gap.json", JSON.stringify(read(gen, "comparative-gap.json"))],
 ];
 for (const p of journeyContentPaths) {
   try {
@@ -191,6 +197,180 @@ const checks = [
 ];
 for (const [m, a, label] of checks) {
   if (m !== a) fail(`manifest ${label}=${m} but bundle=${a}`);
+}
+
+/* 6 — research-to-site handoff checks ---------------------------------- */
+const presentationPath = join(root, "src", "content", "presentation.ts");
+const presentationText = existsSync(presentationPath) ? readFileSync(presentationPath, "utf8") : "";
+const sourceIds = [...presentationText.matchAll(/id:\s*"(S\d+)"/g)].map((match) => match[1]);
+const expectedSourceIds = Array.from({ length: 33 }, (_, index) => `S${String(index + 1).padStart(2, "0")}`);
+if (sourceIds.length !== expectedSourceIds.length || sourceIds.some((id, index) => id !== expectedSourceIds[index])) {
+  fail(`presentation source register must contain ordered S01-S33 (found ${sourceIds.length})`);
+}
+const allowedEvidenceLevels = new Set(["Official", "Reported", "Company-reported", "Interpretation", "Open question"]);
+const presentationLevels = [...presentationText.matchAll(/level:\s*"([^"]+)"/g)].map((match) => match[1]);
+if (presentationLevels.length !== expectedSourceIds.length || presentationLevels.some((level) => !allowedEvidenceLevels.has(level))) {
+  fail("presentation source register contains a non-canonical evidence label");
+}
+if (!presentationText.includes('id: "S09"') || !presentationText.includes("unaudited") || !presentationText.includes('id: "S33"')) {
+  fail("KE Holdings source distinction is missing from the public presentation register");
+}
+const publicSourceRegisterPath = join(workspace, "website_content", "06_sources_and_definitions.md");
+if (existsSync(publicSourceRegisterPath)) {
+  const publicSourceRows = readFileSync(publicSourceRegisterPath, "utf8")
+    .split(/\r?\n/)
+    .filter((line) => /^\| S\d+ \|/.test(line));
+  for (const row of publicSourceRows) {
+    const cells = row.split("|").map((cell) => cell.trim());
+    const label = cells[cells.length - 2];
+    if (!allowedEvidenceLevels.has(label)) fail(`public source register contains non-canonical label: ${label}`);
+  }
+}
+const publicPresentationBlob = [
+  presentationText,
+  existsSync(join(root, "src", "components", "presentation", "ResearchPresentation.tsx"))
+    ? readFileSync(join(root, "src", "components", "presentation", "ResearchPresentation.tsx"), "utf8")
+    : "",
+  existsSync(join(root, "src", "components", "evidence", "CurrentReviewedCases.tsx"))
+    ? readFileSync(join(root, "src", "components", "evidence", "CurrentReviewedCases.tsx"), "utf8")
+    : "",
+].join("\n");
+for (const stale of ["08 September 2026", "innovation funnel", "Suspension reported in 2023", "institutional substrate"]) {
+  if (publicPresentationBlob.toLowerCase().includes(stale.toLowerCase())) fail(`stale public presentation phrase found: ${stale}`);
+}
+if (!existsSync(join(workspace, "website_content", "IMPLEMENTATION_HANDOFF.md"))) {
+  fail("website_content/IMPLEMENTATION_HANDOFF.md is missing");
+}
+const metricsPath = join(workspace, "research_v2", "02_evidence_library", "metrics_reviewed.jsonl");
+if (!existsSync(metricsPath)) {
+  fail("reviewed metrics export is missing");
+} else {
+  const requiredMetricFields = [
+    "metric_id", "entity_id", "initiative_id", "model", "geography", "period", "value", "unit",
+    "currency", "denominator", "scope", "source_id", "source_url", "locator", "review_state",
+    "evidence_label", "note",
+  ];
+  const metricLines = readFileSync(metricsPath, "utf8").split(/\r?\n/).filter(Boolean);
+  metricLines.forEach((line, index) => {
+    try {
+      const metric = JSON.parse(line);
+      for (const field of requiredMetricFields) {
+        if (!(field in metric)) fail(`reviewed metric line ${index + 1} missing ${field}`);
+      }
+      if (!expectedSourceIds.includes(metric.source_id)) fail(`reviewed metric ${metric.metric_id ?? index + 1} has unknown source ${metric.source_id}`);
+    } catch {
+      fail(`reviewed metric line ${index + 1} is not valid JSON`);
+    }
+  });
+  console.log(`reviewed metrics: ${metricLines.length} structured rows checked`);
+}
+const flagshipPath = join(gen, "flagship-chapter.json");
+if (!existsSync(flagshipPath)) {
+  fail("generated flagship chapter is missing");
+} else {
+  try {
+    const flagship = read(gen, "flagship-chapter.json");
+    const flagshipMetrics = new Map((flagship.metrics ?? []).map((metric) => [metric.metric_id, metric]));
+    validateFlagshipData(flagship, flagshipMetrics);
+    if ((flagship.cases ?? []).length !== 4) fail(`flagship chapter expected four cases, got ${(flagship.cases ?? []).length}`);
+    if ((flagship.sources ?? []).length < 8) fail("flagship chapter source depth is below the presentation contract");
+    if ((flagship.metrics ?? []).some((metric) => metric.source_id === "S24" && String(metric.denominator).includes("1,500"))) {
+      fail("flagship export repeats the JLL combined-sample denominator for the 5% occupier result");
+    }
+    const flagshipBlob = JSON.stringify(flagship);
+    for (const marker of FLAGSHIP_PRIVATE_MARKERS) {
+      if (flagshipBlob.includes(marker)) fail(`private marker "${marker}" found in flagship-chapter.json`);
+    }
+    console.log(`flagship chapter: ${(flagship.cases ?? []).length} cases, ${(flagship.claims ?? []).length} claims, ${(flagship.metrics ?? []).length} resolved metrics`);
+  } catch (error) {
+    fail(`flagship chapter contract failed: ${error.message}`);
+  }
+}
+const comparativePath = join(gen, "comparative-gap.json");
+if (!existsSync(comparativePath)) {
+  fail("generated comparative gap chapter is missing");
+} else {
+  try {
+    const comparative = read(gen, "comparative-gap.json");
+    const comparativeInput = read(workspace + "/website_content", "public_comparative_chapter.json");
+    const comparativeSourceRows = readJsonl(join(workspace, "research_v2", "13_gap_completion", "sources_gap.jsonl"));
+    const reviewedMetricRows = readJsonl(metricsPath);
+    validateComparativeData(comparativeInput, comparativeSourceRows, { metrics: reviewedMetricRows });
+    const sourceIds = new Set((comparative.sources ?? []).map((source) => source.id));
+    const sourceById = new Map((comparative.sources ?? []).map((source) => [source.id, source]));
+    const metricById = new Map((comparative.metrics ?? []).map((metric) => [metric.metric_id, metric]));
+    const lensIds = new Set();
+    const caseIds = new Set();
+    for (const lens of comparative.lenses ?? []) {
+      if (lensIds.has(lens.id)) fail(`duplicate comparative lens ${lens.id}`);
+      lensIds.add(lens.id);
+      for (const item of lens.cases ?? []) {
+        if (caseIds.has(item.id)) fail(`duplicate comparative case ${item.id}`);
+        caseIds.add(item.id);
+        if (!allowedEvidenceLevels.has(item.evidence_label)) fail(`comparative case ${item.id} has invalid evidence label`);
+        for (const sourceId of item.source_ids ?? []) {
+          if (!sourceIds.has(sourceId)) fail(`comparative case ${item.id} has unresolved source ${sourceId}`);
+        }
+      }
+    }
+    if (lensIds.size !== 6) fail(`comparative chapter expected six lenses, got ${lensIds.size}`);
+    if (comparative.lensCount !== lensIds.size || comparative.caseCount !== caseIds.size || comparative.sourceCount !== sourceIds.size) {
+      fail("comparative chapter counts do not match generated records");
+    }
+    for (const source of comparative.sources ?? []) {
+      if (!/^https:\/\//.test(source.url)) fail(`comparative source ${source.id} is not an external HTTPS URL`);
+      for (const field of ["title", "publisher", "sourceDate", "accessed", "sourceClass", "evidenceGrade", "locator", "notes"]) {
+        if (typeof source[field] !== "string" || source[field].trim() === "") fail(`comparative source ${source.id} is missing ${field}`);
+      }
+      if (/(?:research_v2[\\/]|\.md(?:#|$)|Propman|Sentinel)/i.test(JSON.stringify(source))) fail(`private/local marker found in comparative source ${source.id}`);
+    }
+    const bindings = comparative.fieldBindings ?? [];
+    const expectedBindings = caseIds.size * 14;
+    if (bindings.length !== expectedBindings) fail(`comparative field binding count=${bindings.length}, expected=${expectedBindings}`);
+    const bindingKeys = new Set();
+    for (const binding of bindings) {
+      const key = `${binding.case_id}:${binding.field}`;
+      if (bindingKeys.has(key)) fail(`duplicate comparative field binding ${key}`);
+      bindingKeys.add(key);
+      if (!binding.claim_id || !binding.statement || !binding.locator) fail(`comparative binding ${binding.claim_id ?? "(missing)"} lacks claim text/locator`);
+      if (!allowedEvidenceLevels.has(binding.evidence_label)) fail(`comparative binding ${binding.claim_id} has invalid evidence state`);
+      if (binding.review_state !== "approved_public") fail(`comparative binding ${binding.claim_id} is not approved_public`);
+      if (!Array.isArray(binding.source_ids) || binding.source_ids.length === 0) fail(`comparative binding ${binding.claim_id} has no source IDs`);
+      binding.source_ids.forEach((sourceId, index) => {
+        const source = sourceById.get(sourceId);
+        if (!source) fail(`comparative binding ${binding.claim_id} has unresolved source ${sourceId}`);
+        if (binding.source_locators?.[index]?.locator !== source?.locator) fail(`comparative binding ${binding.claim_id} locator mismatch for ${sourceId}`);
+      });
+      for (const metricId of binding.metric_ids ?? []) if (!metricById.has(metricId)) fail(`comparative binding ${binding.claim_id} has unresolved metric ${metricId}`);
+    }
+    for (const metric of comparative.metrics ?? []) {
+      if (!/^https:\/\//.test(metric.source_url)) fail(`comparative metric ${metric.metric_id} source_url is not HTTPS`);
+      if (!metric.source_url || !metric.source_id || !metric.locator || metric.review_state === "") fail(`comparative metric ${metric.metric_id} is missing canonical metadata`);
+      const boundSource = [...sourceById.values()].find((source) => source.url === metric.source_url);
+      if (!boundSource) fail(`comparative metric ${metric.metric_id} source_url has no comparative source record`);
+    }
+    const comparativeBlob = JSON.stringify(comparative);
+    for (const marker of FLAGSHIP_PRIVATE_MARKERS) {
+      if (comparativeBlob.includes(marker)) fail(`private marker "${marker}" found in comparative-gap.json`);
+    }
+    console.log(`comparative chapter: ${lensIds.size} lenses, ${caseIds.size} mechanisms, ${sourceIds.size} sources`);
+  } catch (error) {
+    fail(`comparative chapter contract failed: ${error.message}`);
+  }
+}
+const relationshipsPath = join(workspace, "website_content", "content_relationships.json");
+if (existsSync(relationshipsPath)) {
+  try {
+    const relationships = JSON.parse(readFileSync(relationshipsPath, "utf8"));
+    if (relationships.updated !== "2026-09-11") fail("content relationship map is not dated 2026-09-11");
+    const relationshipSources = new Set(relationships.nodes.flatMap((node) => node.sources ?? []));
+    if (!relationshipSources.has("S33")) fail("content relationship map does not bind audited KE source S33");
+    if (!relationships.nodes.some((node) => node.id === "comparative-chapter" && node.route === "/comparison#jcx-comparative")) {
+      fail("content relationship map does not bind the integrated comparative chapter route");
+    }
+  } catch {
+    fail("content relationship map is not valid JSON");
+  }
 }
 
 if (failures) {

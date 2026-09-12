@@ -27,6 +27,7 @@ export function FrontierExplorer() {
   const [ecosystem, setEcosystem] = useState<string | null>(null);
   const [reviewOnly, setReviewOnly] = useState(false);
   const [shown, setShown] = useState(PAGE);
+  useEffect(() => setShown(PAGE), [query, stage, layer, ecosystem, reviewOnly]);
 
   const ecosystems = useMemo(() => {
     if (state.status !== "ready") return [];
@@ -89,7 +90,7 @@ export function FrontierExplorer() {
             />
           </label>
           <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-            Standing
+            Research stage
             <select
               value={stage ?? ""}
               onChange={(e) => setStage(e.target.value === "" ? null : e.target.value)}
@@ -143,11 +144,12 @@ export function FrontierExplorer() {
       <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft" role="status">
         {result?.length ?? 0} of {state.data.length} leads
       </p>
+      {(query || stage || layer || ecosystem || reviewOnly) && <button type="button" className="mt-3 border border-line-strong px-4 py-2 text-sm hover:bg-paper-deep" onClick={() => {setQuery("");setStage(null);setLayer(null);setEcosystem(null);setReviewOnly(false);setShown(PAGE);window.history.replaceState(null,"",window.location.pathname);}}>Clear all filters</button>}
 
       {result && result.length === 0 ? (
         <DatasetEmpty
           label="No leads match"
-          hint="Nothing found under that combination. Try a broader term or clear a filter: an empty result here is a true state."
+          hint="Try a broader term or use Clear all filters to start again."
         />
       ) : (
         <>

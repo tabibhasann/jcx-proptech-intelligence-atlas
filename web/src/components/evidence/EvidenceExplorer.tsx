@@ -81,6 +81,7 @@ export function EvidenceExplorer() {
             </button>
           ))}
         </fieldset>
+        {(query || filter !== "all") && <button type="button" className="border border-line-strong px-3 py-2 text-sm" onClick={() => {setQuery("");setFilter("all");}}>Clear archive filters</button>}
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft" role="status">
           {result?.length ?? 0} of {state.data.length} records
         </p>
@@ -109,6 +110,8 @@ export function EvidenceExplorer() {
                   record checked {c.verificationDate ?? "date not recorded"}
                 </span>
               </div>
+              <details open={anchor === c.id}>
+              <summary className="cursor-pointer px-6 py-5 text-base font-medium leading-relaxed">{c.organization} · {c.vendor}<span className="mt-2 block text-sm font-normal text-ink-soft">{c.geography ?? "Location not recorded"} · Open the result and source</span></summary>
               <div className="grid min-w-0 gap-6 px-6 py-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
                 <div className="min-w-0">
                   <h2 className="font-display text-2xl font-semibold leading-tight tracking-tight">
@@ -177,6 +180,7 @@ export function EvidenceExplorer() {
                   ) : null}
                 </div>
               </div>
+              </details>
             </li>
           ))}
         </ol>

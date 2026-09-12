@@ -17,10 +17,12 @@ export default function AtlasPage() {
             Company records · plain language
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            {manifest.counts.qualifiedEntities} records, each explained
+            The company research library.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-2">
-            {manifest.counts.organizations} companies, {manifest.counts.products} products,{" "}
+            Find a company by name, country or the problem it solves. Open a record to see its description, sources and unanswered questions. For a curated comparison, <a href="/capabilities" className="u-link">start with the capability matrix</a>.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-ink-soft">Includes {manifest.counts.organizations} companies, {manifest.counts.products} products,{" "}
             {manifest.counts.programs} programs, and {manifest.counts.projects} historical project.
             Every card says what the record does in one line. Being listed means worth analyzing,
             never recommended to buy. Leads that did not qualify live in{" "}

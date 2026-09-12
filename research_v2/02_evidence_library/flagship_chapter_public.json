@@ -1,0 +1,306 @@
+{
+  "chapter_id": "flagship-01",
+  "title": "Four property businesses, four ways to make money",
+  "updated": "2026-09-09",
+  "scope": "A bounded public comparison of four anchor cases. It is a chapter, not an exhaustive company count or a forecast for Bangladesh.",
+  "archive_boundary": "This chapter is current reviewed work for the 9 September 2026 presentation edition. The wider evidence route includes a dated archive with different review depth.",
+  "sources": [
+    {
+      "id": "F01",
+      "title": "Rightmove FY2024 results",
+      "url": "https://www.rns-pdf.londonstockexchange.com/rns/7946Y_1-2025-2-27.pdf",
+      "level": "Official",
+      "period": "FY2024",
+      "geography": "United Kingdom",
+      "locator": "pp.1-3, 13-14",
+      "limitation": "Issuer reporting for a mature UK portal. It is not a Bangladesh forecast or a brokerage P&L."
+    },
+    {
+      "id": "F02",
+      "title": "Rightmove company history",
+      "url": "https://hub.rightmove.co.uk/content/uploads/2019/11/London.pdf",
+      "level": "Company-reported",
+      "period": "2000-2018 timeline",
+      "geography": "United Kingdom",
+      "locator": "Company timeline reproduced in the research profile",
+      "limitation": "A company timeline establishes sequence, not independent adoption or causation."
+    },
+    {
+      "id": "F03",
+      "title": "Info Edge FY2024-25 annual report, 99acres segment",
+      "url": "https://www.infoedge.in/pdfs/Report_filings/InfoEdge_Annual_Report_2025.pdf",
+      "level": "Official",
+      "period": "Year ended 31 March 2025",
+      "geography": "India",
+      "locator": "Annual Report 2024-25, pp.70-73, 99acres segment pages",
+      "limitation": "Listed-company segment reporting. Billings, customer mix and operating PBT apply to the reported segment and period."
+    },
+    {
+      "id": "F04",
+      "title": "Pinhome company history",
+      "url": "https://www.pinhome.id/pages/tentang-kami",
+      "level": "Company-reported",
+      "period": "2020-2023 timeline",
+      "geography": "Indonesia",
+      "locator": "Our story timeline: 2020, 2021, 2022 and 2023",
+      "limitation": "The timeline is a company account of product releases, not independent proof of product economics."
+    },
+    {
+      "id": "F05",
+      "title": "Pinhome 2025 H1 market report",
+      "url": "https://assets.pinhome.id/static/research-insights-v2/en/pinhome-market-report-2025-h1.pdf",
+      "level": "Company-reported",
+      "period": "H1 2025 and July 2025 company context",
+      "geography": "Indonesia",
+      "locator": "p.3; pp.22-23; pp.30-31",
+      "limitation": "Company-reported scale, product and internal-data claims. The report does not disclose audited revenue, margin or completed transaction counts."
+    },
+    {
+      "id": "F06",
+      "title": "Propzy Series A reporting",
+      "url": "https://techcrunch.com/2020/06/09/propzy-a-vietnamese-offline-to-online-real-estate-platform-raises-25-million-series-a/",
+      "level": "Reported",
+      "period": "9 June 2020",
+      "geography": "Vietnam",
+      "locator": "Series A report and company description",
+      "limitation": "Funding, footprint and transaction figures are reported claims, not audited unit economics."
+    },
+    {
+      "id": "F07",
+      "title": "Propzy closure reporting",
+      "url": "https://e.vnexpress.net/news/companies/proptech-startup-propzy-to-close-up-shop-4511207.html",
+      "level": "Reported",
+      "period": "14 September 2022 report; cessation on 12 September 2022",
+      "geography": "Vietnam",
+      "locator": "CEO confirmation and closure account",
+      "limitation": "The report attributes hardship, pandemic losses and funding difficulty as context. It does not isolate one measured cause."
+    },
+    {
+      "id": "F08",
+      "title": "Propzy Vietnamese financial analysis",
+      "url": "https://vtcnews.vn/goi-von-duoc-30-trieu-usd-vi-sao-propzy-dung-hoat-dong-tai-viet-nam-ar700843.html",
+      "level": "Reported",
+      "period": "September 2022",
+      "geography": "Vietnam",
+      "locator": "Press analysis of workforce and reported financial pressure",
+      "limitation": "Press-reported context, not an audited filing or a causal decomposition."
+    },
+    {
+      "id": "F09",
+      "title": "IMF experimental Dhaka residential property price index report",
+      "url": "https://www.imf.org/en/publications/technical-assistance-reports/issues/2024/09/20/bangladesh-technical-assistance-report-report-on-residential-property-price-index-rppi-555067",
+      "level": "Official",
+      "period": "2024 publication",
+      "geography": "Bangladesh",
+      "locator": "Technical assistance report and RPPI workplan",
+      "limitation": "Experimental index development is not a live bank-grade price feed or proof of a paying data buyer."
+    },
+    {
+      "id": "F10",
+      "title": "Bangladesh Ministry of Land e-mutation",
+      "url": "https://mutation.land.gov.bd/",
+      "level": "Official",
+      "period": "Accessed for current research edition",
+      "geography": "Bangladesh",
+      "locator": "Public e-mutation service",
+      "limitation": "A digital land service is useful workflow infrastructure. It does not by itself establish complete title or a closing-price series."
+    },
+    {
+      "id": "F11",
+      "title": "JLL real estate technology survey",
+      "url": "https://www.jll.com/en-us/newsroom/real-estates-ai-reality-check-companies-piloting-only-achieved-all-ai-goals",
+      "level": "Reported",
+      "period": "2025 survey release",
+      "geography": "16 markets",
+      "locator": "Survey release; 1,500+ combined decision-maker sample",
+      "limitation": "The 5% result refers to CRE occupier teams; the subgroup denominator is not disclosed. It is not a JCX or Bangladesh result."
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "FCASE-RIGHTMOVE",
+      "name": "Rightmove",
+      "model": "Professional subscription portal",
+      "geography": "United Kingdom",
+      "status": "Active listed company in the reviewed period",
+      "payer": "Estate-agency branches and new-homes developers pay recurring packages, upgrades, data and lead products. Consumers search without being the primary payer.",
+      "problem": "Property professionals need repeatable demand and visibility across a fragmented supply base.",
+      "workflow": "Agents and developers submit structured listings. Rightmove distributes and ranks supply, sells visibility and lead products, and supports data quality and account operations.",
+      "distribution": "A national portal with a professional supply network. The recurring payer relationship is more important to the economics than consumer registration alone.",
+      "journey": [
+        {"period":"2000","event":"Rightmove launched as a property portal.","source_ids":["F02"],"evidence_label":"Company-reported"},
+        {"period":"2002","event":"New Homes became a separate product line.","source_ids":["F02"],"evidence_label":"Company-reported"},
+        {"period":"2015","event":"Mobile use became larger than desktop in the company timeline.","source_ids":["F02"],"evidence_label":"Company-reported"},
+        {"period":"FY2024","event":"The listed business reported recurring professional revenue, retention and profit.","source_ids":["F01"],"evidence_label":"Official"}
+      ],
+      "metric_ids": ["rightmove_revenue_fy2024", "rightmove_operating_profit_fy2024", "rightmove_arpa_all_fy2024", "rightmove_partner_retention_fy2024"],
+      "claim_ids": ["FC-RM-01", "FC-RM-02", "FC-RM-03", "FC-RM-04"],
+      "funding": "Listed-company capital structure. A venture funding round is not the relevant comparison.",
+      "undisclosed": "Current churn by payer cohort, lead-to-close conversion, and the portion of revenue attributable to each product are not established by the selected source.",
+      "transfer_note": "The transferable mechanism is a repeatable professional payer relationship. UK density, regulation, listing quality and mature demand cannot be assumed in Bangladesh.",
+      "source_ids": ["F01", "F02"]
+    },
+    {
+      "case_id": "FCASE-99ACRES",
+      "name": "99acres",
+      "model": "South Asian advertising and lead portal",
+      "geography": "India",
+      "status": "Operating segment of listed Info Edge in the reviewed period",
+      "payer": "Brokers, builders and owners pay for listings, visibility, leads and related products. FY2025 billing mix was 63.4% broker, 28.5% builder and 8.1% owner in the annual report.",
+      "problem": "Searchers need broad, current inventory while professionals need qualified demand and differentiated visibility.",
+      "workflow": "The portal aggregates primary, secondary, rental and commercial supply, improves listing content, sells premium products, and uses on-ground sales teams across key cities.",
+      "distribution": "Online discovery is reinforced by mobile, content, sales coverage and city expansion. The product still bridges users to developers and agents for offline completion.",
+      "journey": [
+        {"period":"FY2023-FY2025","event":"The annual report describes a shift toward richer listing content, video, virtual tours, decision tools and lead-conversion work.","source_ids":["F03"],"evidence_label":"Official"},
+        {"period":"31 March 2025","event":"The report records 956k+ listings, 88.2k+ customers and a ground sales presence in 60 cities.","source_ids":["F03"],"evidence_label":"Official"},
+        {"period":"FY2025","event":"Billings grew while operating PBT remained negative, with cash from operations turning positive in the reported period.","source_ids":["F03"],"evidence_label":"Official"}
+      ],
+      "metric_ids": ["infoedge_99acres_billings_fy2025", "infoedge_99acres_operating_pbt_fy2025"],
+      "claim_ids": ["FC-99-01", "FC-99-02", "FC-99-03", "FC-99-04"],
+      "funding": "Part of listed Info Edge. The selected source does not present 99acres as a separately venture-funded company.",
+      "undisclosed": "Customer-level renewal, lead conversion, acquisition cost by city and unit margin are not disclosed in the selected segment pages.",
+      "transfer_note": "India is the closer regional comparator for distribution and professional payers, but the reported loss warns that audience scale and billing growth do not settle profitability.",
+      "source_ids": ["F03"]
+    },
+    {
+      "case_id": "FCASE-PINHOME",
+      "name": "Pinhome",
+      "model": "Integrated property, finance and home-services platform",
+      "geography": "Indonesia",
+      "status": "Operating company with a company-reported multi-product sequence",
+      "payer": "The public record suggests multiple payer and partner paths across property search, agents, developers, financing and home services. It does not disclose a clean group payer or margin split.",
+      "problem": "Property decisions create adjacent needs: agent coordination, financing, rental protection, maintenance and service fulfilment.",
+      "workflow": "The company timeline shows a sequence from agent tools and property discovery to home services, financing and additional transaction or service layers. Each adjacency has a different partner and fulfilment burden.",
+      "distribution": "A single app, agent network, bank partnerships and provider network are used as distribution claims. The scale figures are company-reported and not independent market share.",
+      "journey": [
+        {"period":"January 2020","event":"Pinhome officially launched and introduced its property and agent product foundation.","source_ids":["F04", "F05"],"evidence_label":"Company-reported"},
+        {"period":"2021","event":"Pinhome Service was added for household needs.","source_ids":["F04"],"evidence_label":"Company-reported"},
+        {"period":"2022","event":"The company timeline adds iVestment and KPR Take Over.","source_ids":["F04"],"evidence_label":"Company-reported"},
+        {"period":"2023","event":"The timeline adds further resale, rental and agent-related product work.","source_ids":["F04"],"evidence_label":"Company-reported"},
+        {"period":"H1 2025","event":"The market report says KPR Take Over transactions rose 5% and Sharia KPR transactions rose 4% versus H2 2024, based on Pinhome internal data.","source_ids":["F05"],"evidence_label":"Company-reported"}
+      ],
+      "metric_ids": ["pinhome_downloads_claim_2025", "pinhome_agents_claim_2025", "pinhome_listings_claim_2025", "pinhome_kpr_takeover_change_h1_2025", "pinhome_sharia_kpr_change_h1_2025"],
+      "claim_ids": ["FC-PH-01", "FC-PH-02", "FC-PH-03", "FC-PH-04"],
+      "funding": "Funding history and capital providers are not used as a success proxy in this chapter because the selected public sources do not provide a clean, comparable audited financing and unit-economics record.",
+      "undisclosed": "Audited revenue, gross margin, completed transaction count, product-level payback, provider retention and the cost of guarantees are not disclosed in the selected sources.",
+      "transfer_note": "The transferable lesson is sequencing and separation of operating burdens. Indonesia's bank, notary, service-provider and geography conditions are not Bangladesh defaults.",
+      "source_ids": ["F04", "F05"]
+    },
+    {
+      "case_id": "FCASE-PROPZY",
+      "name": "Propzy",
+      "model": "Offline-to-online brokerage",
+      "geography": "Vietnam",
+      "status": "Vietnam operations ceased on 12 September 2022",
+      "payer": "The model depended on transaction and service economics around an O2O brokerage workflow. The closure reporting does not isolate the payer or collection step as the single failure point.",
+      "problem": "A brokerage can promise a more trusted transaction by combining digital discovery with field sales centres, screening and human execution.",
+      "workflow": "Reporting described a broad field footprint, prescreened listings and human sales operations. The closure account describes staff departures, wind-down and financial hardship.",
+      "distribution": "Offline centres and a digital platform were combined. That reach also created a meaningful staffing and cash burden.",
+      "journey": [
+        {"period":"2016","event":"Propzy was founded as an O2O residential brokerage in Ho Chi Minh City, according to later reporting.","source_ids":["F06"],"evidence_label":"Reported"},
+        {"period":"June 2020","event":"Series A reporting described 30 sales centres, about 400 staff and a reported US$25m round.","source_ids":["F06"],"evidence_label":"Reported"},
+        {"period":"12 September 2022","event":"Operations ceased after reported financial hardship and a difficult funding environment.","source_ids":["F07"],"evidence_label":"Reported"},
+        {"period":"September 2022","event":"Additional press analysis reported workforce cuts and a heavy operating burden, but did not provide audited causal decomposition.","source_ids":["F08"],"evidence_label":"Reported"}
+      ],
+      "metric_ids": ["propzy_closure_date"],
+      "claim_ids": ["FC-PZ-01", "FC-PZ-02", "FC-PZ-03", "FC-PZ-04"],
+      "funding": "TechCrunch reported a US$25m Series A and later coverage cited total funding around US$33m. Those figures are reported funding, not proof of unit economics.",
+      "undisclosed": "The public closure account does not provide audited runway, contribution margin, collection rate, customer concentration or a causal ranking of failure factors.",
+      "transfer_note": "Use this as a cost and concentration warning. It does not prove that a narrower, better-governed Bangladeshi workflow would fail.",
+      "source_ids": ["F06", "F07", "F08"]
+    }
+  ],
+  "claims": [
+    {"claim_id":"FC-RM-01","case_id":"FCASE-RIGHTMOVE","kind":"fact","evidence_label":"Official","period":"FY2024","statement":"Rightmove reported £389.9m group revenue and £256.3m statutory operating profit in FY2024.","source_ids":["F01"],"metric_ids":["rightmove_revenue_fy2024","rightmove_operating_profit_fy2024"],"locator":"pp.1-2","note":"Company results for a listed UK portal."},
+    {"claim_id":"FC-RM-02","case_id":"FCASE-RIGHTMOVE","kind":"fact","evidence_label":"Official","period":"FY2024","statement":"Average revenue per advertiser was £1,524 per month overall, with agency ARPA of £1,440 and new-homes ARPA of £1,987.","source_ids":["F01"],"metric_ids":["rightmove_arpa_all_fy2024"],"locator":"pp.2, 13-14","note":"The payer denominator is professional advertisers, not consumers or completed sales."},
+    {"claim_id":"FC-RM-03","case_id":"FCASE-RIGHTMOVE","kind":"fact","evidence_label":"Official","period":"FY2024","statement":"Existing-partner retention was reported at 90%, and membership ended at 19,047.","source_ids":["F01"],"metric_ids":["rightmove_partner_retention_fy2024"],"locator":"pp.1-2, 13","note":"Retention is a company metric and membership is not a consumer user count."},
+    {"claim_id":"FC-RM-04","case_id":"FCASE-RIGHTMOVE","kind":"interpretation","evidence_label":"Interpretation","period":"Interpretation from FY2024 record","statement":"The durable mechanism visible here is recurring professional spend around a trusted supply and lead channel, not a transaction commission take rate.","source_ids":["F01"],"metric_ids":["rightmove_revenue_fy2024","rightmove_arpa_all_fy2024"],"locator":"Synthesis of FY2024 results","note":"Interpretation, not a causal claim about every portal."},
+    {"claim_id":"FC-99-01","case_id":"FCASE-99ACRES","kind":"fact","evidence_label":"Official","period":"FY2025","statement":"99acres billings were INR 4,507.44m and operating PBT was negative at INR 475.25m.","source_ids":["F03"],"metric_ids":["infoedge_99acres_billings_fy2025","infoedge_99acres_operating_pbt_fy2025"],"locator":"pp.72-73","note":"Audited annual-report segment figures."},
+    {"claim_id":"FC-99-02","case_id":"FCASE-99ACRES","kind":"fact","evidence_label":"Official","period":"FY2025","statement":"The reported billing mix was 63.4% broker, 28.5% builder and 8.1% owner.","source_ids":["F03"],"metric_ids":[],"locator":"p.73 billing breakdown","note":"A customer or billing mix is not a margin mix."},
+    {"claim_id":"FC-99-03","case_id":"FCASE-99ACRES","kind":"fact","evidence_label":"Official","period":"31 March 2025","statement":"The annual report showed 956k+ listings, 88.2k+ customers and a ground sales presence in 60 cities.","source_ids":["F03"],"metric_ids":[],"locator":"pp.72-73","note":"These are reported business indicators, not completed transaction counts."},
+    {"claim_id":"FC-99-04","case_id":"FCASE-99ACRES","kind":"interpretation","evidence_label":"Interpretation","period":"Interpretation from FY2025 record","statement":"The case supports a professional-payer portal model, but it contradicts any simple assumption that audience and billing scale guarantee portal profit.","source_ids":["F03"],"metric_ids":["infoedge_99acres_billings_fy2025","infoedge_99acres_operating_pbt_fy2025"],"locator":"Synthesis of segment performance","note":"Interpretation from the reported billing and operating result."},
+    {"claim_id":"FC-PH-01","case_id":"FCASE-PINHOME","kind":"company_claim","evidence_label":"Company-reported","period":"July 2025","statement":"Pinhome says it had more than 4.1m downloads, more than 40,000 property agents and more than 1.8m quality property listings.","source_ids":["F05"],"metric_ids":["pinhome_downloads_claim_2025","pinhome_agents_claim_2025","pinhome_listings_claim_2025"],"locator":"p.3, About Pinhome","note":"Downloads, agent collaboration and listings are company-reported. They are not active users, completed transactions or audited market share."},
+    {"claim_id":"FC-PH-02","case_id":"FCASE-PINHOME","kind":"company_claim","evidence_label":"Company-reported","period":"H1 2025 versus H2 2024","statement":"Pinhome reports a 5% increase in KPR Take Over transactions and a 4% increase in Sharia KPR transactions based on its internal data.","source_ids":["F05"],"metric_ids":["pinhome_kpr_takeover_change_h1_2025","pinhome_sharia_kpr_change_h1_2025"],"locator":"pp.30-31","note":"Absolute transaction counts, revenue and margin are not disclosed."},
+    {"claim_id":"FC-PH-03","case_id":"FCASE-PINHOME","kind":"fact","evidence_label":"Company-reported","period":"2020-2023","statement":"The official product timeline shows a sequence from agent tools and property discovery to home services, financing and additional transaction or agent features.","source_ids":["F04"],"metric_ids":[],"locator":"Our story timeline","note":"Sequence is visible. Product-level economics are not."},
+    {"claim_id":"FC-PH-04","case_id":"FCASE-PINHOME","kind":"interpretation","evidence_label":"Interpretation","period":"Interpretation from product sequence","statement":"The useful lesson is not that a single property app becomes a super-app. It is that each adjacency adds a separate operator, partner, liability and metric.","source_ids":["F04", "F05"],"metric_ids":[],"locator":"Synthesis of history and H1 report","note":"Interpretation; it does not rank Pinhome's internal products."},
+    {"claim_id":"FC-PZ-01","case_id":"FCASE-PROPZY","kind":"reported_event","evidence_label":"Reported","period":"12 September 2022","statement":"VnExpress reported that Propzy operations in Vietnam had ceased on 12 September 2022, with the CEO confirming the shutdown.","source_ids":["F07"],"metric_ids":["propzy_closure_date"],"locator":"14 September 2022 report","note":"Closure date is reported and preserved as a dated event."},
+    {"claim_id":"FC-PZ-02","case_id":"FCASE-PROPZY","kind":"reported_context","evidence_label":"Reported","period":"September 2022","statement":"The closure account cites financial hardship, global instability, pandemic lockdown losses, staff departures and an inability to recover after the funding environment changed.","source_ids":["F07"],"metric_ids":[],"locator":"Closure report","note":"These are reported contextual factors, not a measured causal ranking."},
+    {"claim_id":"FC-PZ-03","case_id":"FCASE-PROPZY","kind":"reported_claim","evidence_label":"Reported","period":"June 2020","statement":"TechCrunch described Propzy as an offline-to-online townhouse brokerage with 30 sales centres, about 400 staff and a reported US$25m Series A; the figures were company and investor reporting at the time.","source_ids":["F06"],"metric_ids":[],"locator":"9 June 2020 Series A report","note":"Footprint and cumulative transaction statements are not audited outcomes."},
+    {"claim_id":"FC-PZ-04","case_id":"FCASE-PROPZY","kind":"interpretation","evidence_label":"Interpretation","period":"Interpretation from 2020-2022 record","statement":"The counterexample makes staffing, cash runway and concentration risk part of the venture model. It does not prove that every managed brokerage will fail.","source_ids":["F06", "F07", "F08"],"metric_ids":["propzy_closure_date"],"locator":"Synthesis of funding, footprint and closure reporting","note":"Bounded interpretation; no single cause is asserted."}
+  ],
+  "transfer_conditions": [
+    {
+      "condition_id":"TRANSFER-01",
+      "dimension":"Supply access and freshness",
+      "anchor_observation":"Rightmove and 99acres monetise a professional supply base. Pinhome reports a large agent and listing network, but as company claims.",
+      "bangladesh_question":"Can a defined Dhaka lane obtain fresh, permissioned units with an owner, status and next action, rather than copied listings?",
+      "what_evidence_is_missing":"A dated sample of active units, duplicate rate, freshness, response ownership and paid renewal by payer.",
+      "source_ids":["F01", "F03", "F05"],
+      "claim_ids":["FC-RM-04", "FC-99-03", "FC-PH-01"]
+    },
+    {
+      "condition_id":"TRANSFER-02",
+      "dimension":"Agent incentives and bypass",
+      "anchor_observation":"Professional payers and human field teams remain visible across the cases. Propzy shows that a broad field footprint can also be expensive.",
+      "bangladesh_question":"Will agents share a mandate, document trail and fee rule when a parent-backed venture could compete with them?",
+      "what_evidence_is_missing":"Signed mandate terms, agent fee split, bypass rate, complaint rate and collected commission by deal.",
+      "source_ids":["F01", "F03", "F06", "F07"],
+      "claim_ids":["FC-RM-04", "FC-99-04", "FC-PZ-04"]
+    },
+    {
+      "condition_id":"TRANSFER-03",
+      "dimension":"Title, records and verification",
+      "anchor_observation":"The selected cases depend on structured supply and transaction or service handoffs. Bangladesh has a public e-mutation service, while the IMF describes experimental RPPI work.",
+      "bangladesh_question":"Which document and inspection checks can be completed, rights-aware and owned by a named professional before a booking or fee claim?",
+      "what_evidence_is_missing":"A legal workflow map, sample documents, verification authority, exception log and turnaround baseline.",
+      "source_ids":["F09", "F10"],
+      "claim_ids":[]
+    },
+    {
+      "condition_id":"TRANSFER-04",
+      "dimension":"Financing and collections",
+      "anchor_observation":"Pinhome's financing figures are internal-data claims, while Rightmove's recurring payer model avoids carrying property inventory. Propzy's closure warns against hiding funding needs inside operations.",
+      "bangladesh_question":"Who pays, at what event, under what written mandate, and who owns non-collection or a financing promise?",
+      "what_evidence_is_missing":"A buyer or partner letter, fee schedule, invoice-to-collection trail, arrears ageing and capital-loss owner.",
+      "source_ids":["F01", "F05", "F07"],
+      "claim_ids":["FC-RM-01", "FC-PH-02", "FC-PZ-04"]
+    },
+    {
+      "condition_id":"TRANSFER-05",
+      "dimension":"Acquisition and willingness to pay",
+      "anchor_observation":"Rightmove shows recurring professional ARPA; 99acres shows billing scale with a reported operating loss; Pinhome does not disclose a clean payer or margin split.",
+      "bangladesh_question":"Which local customer will pay for a defined outcome before a national audience exists?",
+      "what_evidence_is_missing":"A paid pilot, acquisition cost, lead quality definition, renewal decision and contribution after human service cost.",
+      "source_ids":["F01", "F03", "F05"],
+      "claim_ids":["FC-RM-02", "FC-99-01", "FC-99-04", "FC-PH-04"]
+    },
+    {
+      "condition_id":"TRANSFER-06",
+      "dimension":"Neutrality and parent advantage",
+      "anchor_observation":"A parent-backed venture could have captive supply, but the same relationship can weaken neutrality for rival developers and agents.",
+      "bangladesh_question":"Can a venture state access, ranking, data-use and conflict rules that outside participants will accept?",
+      "what_evidence_is_missing":"A governance policy, non-parent pilot, participation test and evidence that a rival payer renews.",
+      "source_ids":["F01", "F03", "F04"],
+      "claim_ids":["FC-RM-04", "FC-99-04", "FC-PH-04"]
+    }
+  ],
+  "synthesis": {
+    "supports": [
+      "The payer and workflow, not the interface label, are the unit of comparison.",
+      "Professional recurring spend can support a portal, but audience and billing scale do not guarantee profit.",
+      "Human coordination, records and partner obligations remain part of the work even when discovery is digital.",
+      "Adjacent services and finance should be treated as separate operating systems with separate owners and metrics."
+    ],
+    "contradicts": [
+      "There is no evidence here for one universal property technology model.",
+      "Foreign scale, company-reported activity and funding do not transfer into Bangladesh unit economics by themselves.",
+      "The chapter does not support a brokerage-first verdict, a national marketplace forecast or a capital-heavy launch."
+    ],
+    "cannot_infer": [
+      "Whether a JCX-backed venture has repeatable collected commission today.",
+      "Whether a Bangladesh bank, developer or agent will pay for a specific product.",
+      "Whether a parent-backed marketplace can remain neutral enough to attract outside supply.",
+      "Whether JCX's internal technology adoption will follow any one external developer precedent."
+    ]
+  }
+}

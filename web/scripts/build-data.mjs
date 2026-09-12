@@ -18,16 +18,20 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildFlagshipExport } from "./flagship-contract.mjs";
+import { buildComparativeBindings, validateComparativeData } from "./comparative-contract.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const corpus = join(root, "..", "data");
 const research = join(root, "..", "research");
+const researchV2 = join(root, "..", "research_v2");
 const outDir = join(root, "src", "data", "generated");
 const publicDir = join(root, "public", "data");
 mkdirSync(outDir, { recursive: true });
 mkdirSync(publicDir, { recursive: true });
 
 const read = (dir, name) => JSON.parse(readFileSync(join(dir, name), "utf8"));
+const readJsonl = (path) => readFileSync(path, "utf8").split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
 const J = (v) => {
   if (v === null || v === undefined || v === "") return [];
   try {
@@ -98,6 +102,11 @@ const ycRaw = read(corpus, "yc_real_estate_construction_directory_2026-08-30.jso
 const ecoRaw = read(corpus, "built_environment_ecosystem_discovery_index.json");
 const sourcesRaw = read(corpus, "source_register.json");
 const storyRaw = read(corpus, "website_story_manifest.json");
+const flagshipInput = read(join(researchV2, "02_evidence_library"), "flagship_chapter_public.json");
+const reviewedMetrics = readJsonl(join(researchV2, "02_evidence_library", "metrics_reviewed.jsonl"));
+const comparativeInput = read(join(root, "..", "website_content"), "public_comparative_chapter.json");
+const gapSourceRows = readJsonl(join(researchV2, "13_gap_completion", "sources_gap.jsonl"));
+const flagship = buildFlagshipExport(flagshipInput, reviewedMetrics);
 const selectionMd = readFileSync(
   join(research, "website_launch_editorial_selection.md"),
   "utf8",
@@ -537,7 +546,10 @@ const ecosystems = Object.values(ecoRollups)
 /* ------------------------------------------------------------------ */
 /* Source register (public-appropriate slim)                           */
 /* ------------------------------------------------------------------ */
-const sources = sourcesRaw.map((s) => ({
+/* Keep the research corpus intact, but do not expose client-owned or
+   client-system references through the public source browser. */
+const publicSourceRows = sourcesRaw.filter((s) => !/(?:jcxbd\.com|odoo\.com|odoo)/i.test(JSON.stringify(s)));
+const sources = publicSourceRows.map((s) => ({
   id: s.source_id,
   url: s.url,
   domain: s.domain,
@@ -545,9 +557,9 @@ const sources = sourcesRaw.map((s) => ({
   grade: str(s.source_quality_grade_provisional),
   gradeStatus: str(s.quality_grade_status),
   usedByNames: str(s.used_by_names),
-  usedByDocuments: str(s.used_by_documents),
   lastVerified: str(s.last_verified),
 }));
+console.log(`source register: ${sources.length} public rows emitted (${sourcesRaw.length - sources.length} internal-only rows withheld)`);
 
 /* ------------------------------------------------------------------ */
 /* Story manifest — resolve references, drop jcx_private chapters      */
@@ -640,6 +652,49 @@ if (storyRaw.chapters.length !== 11 || story.chapters.length !== 10) {
 console.log(`story manifest: ${story.chapters.length} public chapters resolved (1 jcx-private chapter withheld by design)`);
 
 /* ------------------------------------------------------------------ */
+/* Comparative gap chapter — curated public handoff                   */
+/* ------------------------------------------------------------------ */
+const gapSourceById = new Map(gapSourceRows.map((source) => [source.source_id, source]));
+const { caseIds: comparativeCaseIds, lensIds: comparativeLensIds, sourceById: comparativeSourceById } =
+  validateComparativeData(comparativeInput, gapSourceRows, { metrics: reviewedMetrics });
+const comparativeFieldBindings = buildComparativeBindings(comparativeInput, gapSourceRows, reviewedMetrics);
+const comparativeSourceIds = new Set(comparativeInput.lenses.flatMap((lens) => lens.cases.flatMap((item) => item.source_ids)));
+const comparativeSources = [...comparativeSourceIds].sort().map((sourceId) => {
+  const source = comparativeSourceById.get(sourceId);
+  if (!/^https:\/\//.test(source.url)) throw new Error(`comparative source is not an external HTTPS URL: ${sourceId}`);
+  return {
+    id: source.source_id,
+    title: source.title,
+    url: source.url,
+    publisher: source.publisher,
+    sourceDate: str(source.source_date),
+    accessed: str(source.accessed),
+    sourceClass: source.source_class,
+    evidenceGrade: source.evidence_grade,
+    locator: source.locator,
+    notes: source.notes,
+  };
+});
+const comparative = {
+  chapterId: comparativeInput.chapter_id,
+  updated: comparativeInput.updated,
+  scope: comparativeInput.scope,
+  opening: comparativeInput.opening,
+  lenses: comparativeInput.lenses,
+  definitions: comparativeInput.definitions,
+  publicBoundary: comparativeInput.public_boundary,
+  /* Field-level claim bindings keep the prose readable while preserving a
+     direct sentence -> source locator -> reviewed metric path. */
+  fieldBindings: comparativeFieldBindings,
+  metrics: reviewedMetrics.filter((metric) => comparativeFieldBindings.some((binding) => binding.metric_ids.includes(metric.metric_id))),
+  sources: comparativeSources,
+  sourceCount: comparativeSources.length,
+  lensCount: comparativeInput.lenses.length,
+  caseCount: comparativeCaseIds.size,
+};
+console.log(`comparative gap chapter: ${comparative.lensCount} lenses, ${comparative.caseCount} mechanisms, ${comparative.sourceCount} external sources resolved`);
+
+/* ------------------------------------------------------------------ */
 /* Matrix + manifest passthrough                                       */
 /* ------------------------------------------------------------------ */
 const matrixCounts = {};
@@ -672,7 +727,7 @@ const siteManifest = {
     relationships: manifest.normalized_schema_outputs.entity_relationships,
     cases: manifest.auxiliary_datasets.quantified_outcome_cases,
     standards: manifest.auxiliary_datasets.standards_registry,
-    sources: manifest.unique_source_urls,
+    sources: sources.length,
     observedSourceVariants: manifest.auxiliary_datasets.full_corpus_source_inventory,
     lifecycleDomains: manifest.normalized_schema_outputs.lifecycle_taxonomy_terms,
     launchProfiles: launch.length,
@@ -711,6 +766,8 @@ emit("yc.json", yc);
 emit("ecosystems.json", ecosystems);
 emit("sources.slim.json", sources);
 emit("story.json", story);
+emit("flagship-chapter.json", flagship);
+emit("comparative-gap.json", comparative);
 
 /* Explorer datasets are also published as static files so client surfaces
    can lazy-fetch them with explicit loading/error states instead of bundling
@@ -729,4 +786,6 @@ emitPublic("case-links.json", caseIdsByEntity);
 emitPublic("standards.json", standards);
 emitPublic("taxonomy.json", taxonomy);
 emitPublic("manifest.json", siteManifest);
+emitPublic("flagship-chapter.json", flagship);
+emitPublic("comparative-gap.json", comparative);
 console.log("data build complete.");

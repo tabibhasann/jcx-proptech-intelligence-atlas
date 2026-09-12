@@ -254,6 +254,102 @@ export interface EcosystemRollup {
   captureDate: string;
 }
 
+export type ComparativeEvidenceLabel = "Official" | "Reported" | "Company-reported" | "Interpretation" | "Open question";
+
+export interface ComparativeCase {
+  id: string;
+  name: string;
+  geography: string;
+  mechanism: string;
+  evidence_label: ComparativeEvidenceLabel;
+  customer: string;
+  payer: string;
+  workflow: string;
+  human_burden: string;
+  journey: string;
+  monetization: string;
+  result: string;
+  capital: string;
+  failure_or_limit: string;
+  unknown: string;
+  transfer_test: string;
+  source_ids: string[];
+}
+
+export interface ComparativeLens {
+  id: string;
+  eyebrow: string;
+  title: string;
+  question: string;
+  summary: string;
+  transfer: string;
+  flow: string[];
+  cases: ComparativeCase[];
+}
+
+export interface ComparativeSource {
+  id: string;
+  title: string;
+  url: string;
+  publisher: string;
+  sourceDate: string | null;
+  accessed: string | null;
+  sourceClass: string;
+  evidenceGrade: string;
+  locator: string;
+  notes: string;
+}
+
+export interface ComparativeMetric {
+  metric_id: string;
+  entity_id: string;
+  initiative_id: string;
+  model: string;
+  geography: string;
+  period: string;
+  value: string | number;
+  unit: string;
+  currency: string | null;
+  denominator: string | null;
+  scope: string;
+  source_id: string;
+  source_url: string;
+  locator: string;
+  review_state: string;
+  evidence_label: ComparativeEvidenceLabel;
+  note: string;
+}
+
+export interface ComparativeFieldBinding {
+  claim_id: string;
+  case_id: string;
+  field: string;
+  statement: string;
+  evidence_label: ComparativeEvidenceLabel;
+  review_state: string;
+  locator: string;
+  source_ids: string[];
+  source_locators: { source_id: string; locator: string }[];
+  metric_ids: string[];
+  numeric_binding: "reviewed_metric_available" | "source_text_only" | "not_applicable";
+}
+
+export interface ComparativeChapter {
+  chapterId: string;
+  updated: string;
+  scope: string;
+  opening: { eyebrow: string; title: string; dek: string; boundary: string };
+  lenses: ComparativeLens[];
+  definitions: { term: string; meaning: string }[];
+  publicBoundary: string[];
+  fieldBindings: ComparativeFieldBinding[];
+  metrics: ComparativeMetric[];
+  sources: ComparativeSource[];
+  sourceCount: number;
+  lensCount: number;
+  caseCount: number;
+}
+
 export interface SourceSlim {
   id: string;
   url: string;
@@ -262,7 +358,6 @@ export interface SourceSlim {
   grade: string | null;
   gradeStatus: string | null;
   usedByNames: string | null;
-  usedByDocuments: string | null;
   lastVerified: string | null;
 }
 

@@ -33,6 +33,8 @@ export function AtlasExplorer() {
 
   const [query, setQuery] = useState("");
   const [lifecycle, setLifecycle] = useState<string | null>(null);
+  const [filtersReady, setFiltersReady] = useState(false);
+  const [shown, setShown] = useState(24);
 
   // Deep links (e.g. /atlas?lifecycle=L5) resolve client-side for static export.
   useEffect(() => {
@@ -43,6 +45,11 @@ export function AtlasExplorer() {
     if (q) setQuery(q);
     const st = p.get("status");
     if (st) setStatus(st);
+    const rt = p.get("type");
+    if (rt && ["organization", "product_offering", "program_ecosystem", "project"].includes(rt)) setRecordType(rt);
+    setFeaturedOnly(p.get("featured") === "1");
+    if (p.get("sort") === "name") setSort("name");
+    setFiltersReady(true);
   }, []);
   const [recordType, setRecordType] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
@@ -51,6 +58,7 @@ export function AtlasExplorer() {
 
   // Keep the URL deep-linkable: every filter persists.
   useEffect(() => {
+    if (!filtersReady) return;
     const p = new URLSearchParams(window.location.search);
     if (lifecycle) p.set("lifecycle", lifecycle);
     else p.delete("lifecycle");
@@ -60,9 +68,12 @@ export function AtlasExplorer() {
     else p.delete("status");
     if (query.trim()) p.set("q", query.trim());
     else p.delete("q");
-    const url = `${window.location.pathname}${p.size ? `?${p}` : ""}`;
+    if (featuredOnly) p.set("featured", "1"); else p.delete("featured");
+    if (sort === "name") p.set("sort", "name"); else p.delete("sort");
+    const url = `${window.location.pathname}${p.size ? `?${p}` : ""}${window.location.hash}`;
     window.history.replaceState(null, "", url);
-  }, [lifecycle, recordType, status, query]);
+  }, [lifecycle, recordType, status, query, featuredOnly, sort, filtersReady]);
+  useEffect(() => setShown(24), [lifecycle, recordType, status, query, featuredOnly, sort]);
 
   const result = useMemo(() => {
     if (entitiesState.status !== "ready") return null;
@@ -154,7 +165,7 @@ export function AtlasExplorer() {
               onChange={(e) => setFeaturedOnly(e.target.checked)}
               className="h-3.5 w-3.5 accent-[#c2410c]"
             />
-            Explained first
+            Explained records only
           </label>
           <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft">
             Sort
@@ -187,7 +198,7 @@ export function AtlasExplorer() {
             <span aria-hidden="true">✕</span>
           </button>
         ))}
-        {activeFilters.length > 1 ? (
+        {activeFilters.length > 0 ? (
           <button
             type="button"
             onClick={() => {
@@ -208,11 +219,11 @@ export function AtlasExplorer() {
       {result && result.length === 0 ? (
         <DatasetEmpty
           label="No records match"
-          hint="Nothing in the research matches that combination. Widen a filter or clear the search: an empty result here is a true state, not an error."
+          hint="Try a company name, a broader term, or Clear all to start again."
         />
       ) : (
         <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {result?.map((e) => {
+          {result?.slice(0, shown).map((e) => {
             const syn = getSynopsis(e.id);
             const oneLiner = syn ? syn.what : e.description;
             return (
@@ -231,7 +242,7 @@ export function AtlasExplorer() {
                 {oneLiner ?? "What this record does is not yet summarized. Open the profile for the full record."}
               </p>
               <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-4 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-soft">
-                <span>{e.lifecycleCodes.length > 0 ? e.lifecycleCodes.join(" ") : "placement unmapped"}</span>
+                <span>{e.lifecycleCodes.length > 0 ? e.lifecycleCodes.map(code => tax.find(t => t.code === code)?.label ?? code).join(" · ") : "Category not yet mapped"}</span>
                 <span aria-hidden="true">·</span>
                 <span>{e.hqCountry ?? "HQ not yet verified"}</span>
                 {syn ? (
@@ -246,6 +257,7 @@ export function AtlasExplorer() {
           })}
         </ul>
       )}
+      {result && result.length > shown && <div className="mt-8 text-center"><p className="mb-3 text-sm text-ink-soft">Showing {Math.min(shown, result.length)} of {result.length} matching records</p><button type="button" className="border border-line-strong px-5 py-3 text-sm hover:bg-paper-deep" onClick={() => setShown(n => n + 24)}>Show {Math.min(24, result.length - shown)} more records</button></div>}
       <p className="mt-8 max-w-2xl text-xs leading-relaxed text-ink-soft">
         Unknowns stay visible: a blank field means not yet verified, not a zero. Featured records
         carry a reviewed plain language summary; every profile keeps its sources and review state.
