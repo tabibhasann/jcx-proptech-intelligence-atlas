@@ -24,6 +24,7 @@ export default function CapabilitiesPage() {
     <article className="cm-page">
       <header className="cm-wrap cm-hero">
         <Link href="/">← Back to the overview</Link>
+        <p><Link href="/companies">Looking for the other companies? Open the full summary table →</Link></p>
         <p className="cm-eyebrow">The evidence / A focused comparison</p>
         <h1>
           What is actually

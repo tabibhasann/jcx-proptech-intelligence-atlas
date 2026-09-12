@@ -422,6 +422,7 @@ export function ExecutiveOverview() {
             <Link href="/capabilities">
               Open the capability matrix <Arrow />
             </Link>
+            <Link href="/companies">Compare 27 companies in one place <Arrow /></Link>
           </div>
           <div
             className="ex-numbers"

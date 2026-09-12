@@ -7,7 +7,7 @@ import { ReadingComfort } from "./ReadingComfort";
 
 const NAV: { href: string; label: string; blurb: string }[] = [
   { href: "/", label: "Overview", blurb: "The opportunity in two minutes" },
-  { href: "/capabilities", label: "Compare", blurb: "Company capabilities, sources and lessons" },
+  { href: "/companies", label: "Companies", blurb: "Company services, evidence and lessons in one table" },
   { href: "/plan", label: "Roadmap", blurb: "What to test, in what order" },
   { href: "/research", label: "Research", blurb: "Find cases, countries, startups and sources" },
   { href: "/guide", label: "Start here", blurb: "New to property technology? Learn the basics" },
@@ -42,6 +42,7 @@ export function SiteHeader() {
   }, [open]);
 
   const isCurrent = (href: string) => {
+    if (href === "/companies") return pathname === "/companies" || pathname === "/capabilities";
     if (href === "/research") return ["/research", "/comparison", "/evidence", "/atlas", "/discovery", "/frontier", "/startups", "/standards", "/methodology", "/story", "/brief"].some(p => pathname === p || pathname.startsWith(p + "/"));
     return pathname === href || pathname.startsWith(`${href}/`);
   };

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const pages: Record<string, { label: string; purpose: string; next: string; nextLabel: string }> = {
+  "/companies": { label: "Companies", purpose: "The reviewed company comparisons in one place. Open a row for details and sources.", next: "/plan", nextLabel: "Discuss the proposed roadmap" },
   "/guide": { label: "Start here", purpose: "The basics, without needing a property background.", next: "/", nextLabel: "See the opportunity" },
   "/capabilities": { label: "Compare", purpose: "See what four companies offer. A feature is not proof of commercial success.", next: "/plan", nextLabel: "Explore the proposed roadmap" },
   "/plan": { label: "Roadmap", purpose: "A proposal to discuss and test, not a committed business plan.", next: "/research", nextLabel: "Explore the supporting research" },

@@ -21,6 +21,7 @@ export function SiteFooter() {
             {[
               ["/", "The executive overview"],
               ["/plan", "Product options and roadmap"],
+              ["/companies", "Company summary table"],
               ["/capabilities", "The capability matrix"],
               ["/guide", "Start here: the basics"],
               ["/research", "All research sections"],

@@ -8,6 +8,7 @@ const groups = [
     ["/plan", "What should we test first?", "Alternatives, product priorities and an illustrative 12-week pilot."],
   ]},
   { id: "compare", title: "Compare the evidence", description: "Learn from a company’s approach without assuming its market behaves like Bangladesh.", links: [
+    ["/companies", "What are the other companies doing?", "27 reviewed companies: services, results, financial context and lessons in one table."],
     ["/capabilities", "Who offers which features?", "Four selected companies, compared capability by capability."],
     ["/comparison", "What transfers across countries?", "Business models, outcomes, failures and local constraints across five research themes."],
     ["/startups", "Which YC startups matter here?", "Six relevant approaches, the lesson in each, and what still needs testing."],
