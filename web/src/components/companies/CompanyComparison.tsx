@@ -13,8 +13,14 @@ export function CompanyComparison({ companies }: { companies: CompanySummary[] }
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("company");
     if (id && companies.some(c => c.id === id)) {
+      setSearch("");
+      setCategory("All categories");
+      setTrack("Both workstreams");
       setExpanded([id]);
-      document.getElementById(`company-${id}`)?.scrollIntoView({ block: "center" });
+      const frame = window.requestAnimationFrame(() => {
+        document.getElementById(`company-${id}`)?.scrollIntoView({ block: "start" });
+      });
+      return () => window.cancelAnimationFrame(frame);
     }
   }, [companies]);
   const visible = companies.filter(c => (category === "All categories" || c.category === category) && (track === "Both workstreams" || c.track === track) && `${c.name} ${c.country} ${c.offer} ${c.category} ${companyDecisions[c.id].features.join(" ")} ${c.yc ? "YC Y Combinator" : ""}`.toLowerCase().includes(search.toLowerCase()));
