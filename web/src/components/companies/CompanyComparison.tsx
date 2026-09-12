@@ -54,7 +54,7 @@ export function CompanyComparison({ companies }: { companies: CompanySummary[] }
         <tr id={`detail-${c.id}`} hidden={!expanded.includes(c.id)} className="co-detail"><td colSpan={view === "decision" ? 5 : 4}><div className="co-detail-grid">
           <div><h3>What it does</h3><p>{c.offer}</p><h3>Who pays?</h3><p>{c.payer}</p><h3>How the service works</h3><p>{c.workflow}</p><h3>The work behind the technology</h3><p>{c.burden}</p></div>
           <div><h3>Reported journey</h3><p>{c.history}</p><h3>Money, funding and valuation</h3><p>{c.capital}</p><p className="co-note">{c.valuation} Funding is not revenue, valuation is not cash, and transaction value is not profit.</p><h3>What we still cannot conclude</h3><p>{c.risk}</p></div>
-          <div><h3>A Bangladesh question to test</h3><p>{c.test}</p><h3>Check the evidence</h3><ul>{c.sources.map((s, i) => <li key={`${s.url}-${i}`}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title} ↗</a></li>)}</ul>{c.caseUrl && <Link href={c.caseUrl}>Read the full comparison ↗</Link>}<p><Link href={`/companies?company=${c.id}`}>Link to this company</Link></p></div>
+          <div><h3>A Bangladesh question to test</h3><p>{c.test}</p><h3>Check the evidence</h3><ul>{c.sources.map((s, i) => <li key={`${s.url}-${i}`}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title} ↗</a></li>)}</ul>{c.caseUrl && <Link href={c.caseUrl}>Read the full comparison ↗</Link>}<p><a href={`/companies?company=${c.id}`}>Link to this company</a></p></div>
         </div></td></tr>
       </Fragment>)}</tbody>
     </table></div>
