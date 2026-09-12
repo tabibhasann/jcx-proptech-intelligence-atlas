@@ -206,16 +206,22 @@ export function ExecutivePlan() {
             <h2 id="xp-transfer-title">Copy the mechanism. Re-test the conditions.</h2>
             <p>Global examples can reveal useful operating patterns. Bangladesh still determines whether the information exists, customers trust the process, participants cooperate and somebody pays.</p>
           </div>
-          <div className="xp-transfer-grid">
-            <div className="xp-transfer-axis">
-              <span>Adapt now</span><span>Verify locally</span><span>Earn later</span>
-            </div>
-            <div className="xp-transfer-item xp-transfer-now"><b>Human-assisted digital journey</b><p>Technology can organise response and follow-up while people handle judgment, negotiation and exceptions.</p></div>
-            <div className="xp-transfer-item xp-transfer-now"><b>Clear role ownership</b><p>Agent contribution, handoffs and fee responsibility need an operating design that fits local practice.</p></div>
-            <div className="xp-transfer-item xp-transfer-test"><b>Inventory and document checks</b><p>Define exactly what is checked, by whom, with what authority and what the result does not guarantee.</p></div>
-            <div className="xp-transfer-item xp-transfer-test"><b>Willingness to pay</b><p>Test the payer for assisted service, listings and institutional data separately.</p></div>
-            <div className="xp-transfer-item xp-transfer-later"><b>Automated price guidance</b><p>Requires sufficient comparable, consistent and permissioned transaction records.</p></div>
-            <div className="xp-transfer-item xp-transfer-later"><b>Super-app expansion</b><p>Revisit when a core journey has repeat usage, defensible distribution and healthy delivery economics.</p></div>
+          <div className="xp-transfer-groups">
+            <section className="xp-transfer-group" aria-labelledby="transfer-adapt">
+              <header><span>01 / Practical starting point</span><h3 id="transfer-adapt">Adapt now</h3></header>
+              <article><h4>Human-assisted digital journey</h4><p>Technology can organise response and follow-up while people handle judgment, negotiation and exceptions.</p></article>
+              <article><h4>Clear role ownership</h4><p>Make it clear who responds, who arranges the visit, who follows up and how fees are shared.</p></article>
+            </section>
+            <section className="xp-transfer-group" aria-labelledby="transfer-validate">
+              <header><span>02 / Evidence we still need</span><h3 id="transfer-validate">Validate locally</h3></header>
+              <article><h4>Inventory and document checks</h4><p>Define exactly what is checked, by whom, with what authority and what the result does not guarantee.</p></article>
+              <article><h4>Willingness to pay</h4><p>Test who would pay for assisted service, listings or institutional data, and what each service costs to deliver.</p></article>
+            </section>
+            <section className="xp-transfer-group" aria-labelledby="transfer-later">
+              <header><span>03 / Only when the foundations hold</span><h3 id="transfer-later">Consider later</h3></header>
+              <article><h4>Automated price guidance</h4><p>Requires enough comparable, consistent transaction records that we have permission to use. Asking prices alone are not completed sale prices.</p></article>
+              <article><h4>Super-app expansion</h4><p>Add more services when customers return, acquisition is repeatable and the core service can be delivered sustainably.</p></article>
+            </section>
           </div>
         </div>
       </section>

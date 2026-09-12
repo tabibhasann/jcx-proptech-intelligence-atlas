@@ -40,4 +40,12 @@ assert.ok(matrix.includes("Missing evidence does not mean a missing feature"), "
 assert.ok(matrix.includes("Operating PBT") || matrix.includes("operating PBT"), "accounting measure stays defined");
 const plan = htmlFor("/plan");
 assert.ok(!plan.includes("Propman"), "private document alias not included in public export");
+const visiblePlan = plan.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+assert.equal((visiblePlan.match(/class="xp-transfer-group"/g) ?? []).length, 3, "transfer lessons have three explicit groups");
+for (const id of ["transfer-adapt", "transfer-validate", "transfer-later"]) {
+  const group = visiblePlan.match(new RegExp(`<section[^>]*aria-labelledby="${id}"[^>]*>([\\s\\S]*?)</section>`));
+  assert.ok(group, `transfer group ${id} exists`);
+  assert.equal((group[1].match(/<article\b/g) ?? []).length, 2, `${id} has two lessons`);
+}
+assert.ok(!visiblePlan.includes('class="xp-transfer-grid"'), "broken sparse desktop grid is not rendered");
 console.log(`Executive presentation: 3 routes, 20 comparison cells and ${linksChecked} local links/anchors checked.`);
