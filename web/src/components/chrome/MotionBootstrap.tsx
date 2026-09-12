@@ -11,11 +11,16 @@ export function MotionBootstrap() {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => {
-      document.documentElement.classList.toggle("js-motion", !mq.matches);
+      const comfortable = document.documentElement.dataset.reading === "comfortable";
+      document.documentElement.classList.toggle("js-motion", !mq.matches && !comfortable);
     };
     apply();
     mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
+    window.addEventListener("propty-reading-change", apply);
+    return () => {
+      mq.removeEventListener("change", apply);
+      window.removeEventListener("propty-reading-change", apply);
+    };
   }, []);
   return null;
 }

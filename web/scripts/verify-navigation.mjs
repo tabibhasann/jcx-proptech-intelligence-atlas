@@ -17,6 +17,8 @@ for (const [file, html] of documents) {
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m=>decode(m[1]));
   if (ids.length !== new Set(ids).size) failures.push(`${route}: duplicate element IDs ${ids.filter((id,i)=>ids.indexOf(id)!==i).join(', ')}`);
   if ((html.match(/<h1\b/g) ?? []).length !== 1) failures.push(`${route}: expected one h1`);
+  if (!/<button[^>]*class="reading-toggle"[^>]*aria-pressed="false"/.test(html)) failures.push(`${route}: missing accessible easy-reading toggle`);
+  if (/user-scalable=no|maximum-scale=1(?:[,"\s])/.test(html)) failures.push(`${route}: browser zoom must remain available`);
   for (const m of html.matchAll(/aria-(?:labelledby|describedby|controls)="([^"]+)"/g)) {
     for (const id of decode(m[1]).split(/\s+/)) if (!ids.includes(id)) failures.push(`${route}: unresolved ARIA reference ${id}`);
   }

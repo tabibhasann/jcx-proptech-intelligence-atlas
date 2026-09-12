@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/chrome/SiteFooter";
 import { MotionBootstrap } from "@/components/chrome/MotionBootstrap";
 import { ReadingPath } from "@/components/chrome/ReadingPath";
 import "./reading.css";
+import "./reading-comfort.css";
 
 const fraunces = Fraunces({
   subsets: ["latin"],

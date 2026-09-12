@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { ReadingComfort } from "./ReadingComfort";
 
 const NAV: { href: string; label: string; blurb: string }[] = [
   { href: "/", label: "Overview", blurb: "The opportunity in two minutes" },
@@ -47,11 +48,11 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b bg-paper/95 backdrop-blur-md transition-shadow duration-300 ${
+      className={`site-header sticky top-0 z-50 border-b bg-paper/95 backdrop-blur-md transition-shadow duration-300 ${
         lifted ? "border-line shadow-paper" : "border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+      <div className="site-header-row mx-auto flex min-h-14 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
         <Link
           href="/"
           className="group flex items-baseline gap-2.5"
@@ -59,7 +60,7 @@ export function SiteHeader() {
         >
           <span className="inline-grid h-7 w-7 place-items-center bg-mark-deep font-display text-lg text-paper-raised" aria-hidden="true">p.</span>
           <span className="font-display text-lg font-semibold tracking-tight">Propty</span>
-          <span className="hidden font-mono text-[9px] uppercase tracking-[0.18em] text-ink-soft transition-colors duration-300 group-hover:text-mark-deep sm:inline">
+          <span className="site-brand-caption hidden font-mono text-[9px] uppercase tracking-[0.18em] text-ink-soft transition-colors duration-300 group-hover:text-mark-deep lg:inline">
             Research & strategy
           </span>
         </Link>
@@ -81,16 +82,19 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <button
-          ref={menuButton}
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          className="rounded-sm border border-line-strong px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-2 md:hidden"
-        >
-          {open ? "Close" : "Menu"}
-        </button>
+        <div className="site-header-actions">
+          <ReadingComfort />
+          <button
+            ref={menuButton}
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            className="rounded-sm border border-line-strong px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-2 md:hidden"
+          >
+            {open ? "Close" : "Menu"}
+          </button>
+        </div>
       </div>
 
       {/* Mobile sheet: labels alone are not enough, so each carries its purpose */}

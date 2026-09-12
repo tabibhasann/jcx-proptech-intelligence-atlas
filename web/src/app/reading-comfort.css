@@ -1,0 +1,94 @@
+/* Optional, site-wide reading preference. The editorial view remains unchanged. */
+.site-header-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.reading-toggle { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:8px 12px; border:1px solid #697363; border-radius:6px; background:#faf7ee; color:#20332b; font:500 14px/1.3 var(--font-sans); cursor:pointer; }
+.reading-toggle:hover { background:#e5ebdc; }
+.reading-toggle[aria-pressed="true"] { background:#203c35; color:#fff; border-color:#203c35; }
+.reading-toggle:focus-visible { outline:3px solid #a44020; outline-offset:3px; }
+.reading-toggle-icon { font:600 20px/1 var(--font-display); }
+.reading-toggle:disabled { cursor:wait; }
+.site-header-row { flex-wrap:wrap; padding-block:6px; }
+@media(max-width:1100px) { .site-brand-caption { display:none; } }
+@media(max-width:380px) { .site-header-row { gap:8px; padding-inline:10px; }.reading-toggle { padding:8px; gap:5px; font-size:13px; }.reading-toggle-icon { display:none; } }
+
+html[data-reading="comfortable"] { font-size:125%; scroll-behavior:auto!important; --color-ink-soft:#394238; --color-dark-ink-soft:#ece9df; --color-dark-ink-faint:#d8d6ca; }
+/* Normalize tiny captions as well as paragraphs. SVG geometry retains its own
+   scale; chart evidence is also available as adjacent HTML text and tables. */
+html[data-reading="comfortable"] :is(main,footer) { font-size:1rem; line-height:1.65; }
+html[data-reading="comfortable"] :is(main,footer) :where(*:not(svg):not(svg *)) { font-size:inherit!important; letter-spacing:normal!important; text-transform:none!important; min-width:0; overflow-wrap:anywhere; }
+html[data-reading="comfortable"] main .whitespace-nowrap { white-space:normal; }
+html[data-reading="comfortable"] :is(main,footer) :is(p,li,dd,dt,td,th,small,label,summary,button,input,select,textarea,figcaption) { line-height:1.65!important; }
+html[data-reading="comfortable"] main h1 { font-size:clamp(2.2rem,5vw,3.8rem)!important; line-height:1.12!important; }
+html[data-reading="comfortable"] main h2 { font-size:clamp(1.7rem,3.8vw,2.6rem)!important; line-height:1.2!important; }
+html[data-reading="comfortable"] main h3 { font-size:1.4rem!important; line-height:1.3!important; }
+html[data-reading="comfortable"] main h4 { font-size:1.15rem!important; line-height:1.35!important; }
+html[data-reading="comfortable"] :is(main,footer) :is(p,small,dd,figcaption) { opacity:1!important; }
+html[data-reading="comfortable"] main :is(p,small,dd,figcaption) { color:inherit!important; }
+html[data-reading="comfortable"] main :is(a,button,input,select,summary) { overflow-wrap:anywhere; }
+html[data-reading="comfortable"] :is(main,footer) a { text-decoration:underline; text-underline-offset:.18em; }
+html[data-reading="comfortable"] main :is(button,select,input,summary) { min-height:44px; }
+html[data-reading="comfortable"] main :is(.truncate,[class*="line-clamp"]) { overflow:visible; white-space:normal; text-overflow:clip; -webkit-line-clamp:unset; }
+html[data-reading="comfortable"] :focus-visible { outline:3px solid currentColor!important; outline-offset:4px; }
+html[data-reading="comfortable"] main [id] { scroll-margin-top:150px!important; }
+
+/* Keep navigation comfortably readable and let it wrap instead of clipping. */
+html[data-reading="comfortable"] .site-header { background:#faf7ee; backdrop-filter:none; }
+html[data-reading="comfortable"] .site-header-row { gap:12px; }
+html[data-reading="comfortable"] .site-header nav a { font-size:16px; letter-spacing:normal; text-transform:none; min-height:44px; display:flex; align-items:center; }
+html[data-reading="comfortable"] #mobile-nav a { align-items:start; flex-direction:column; gap:4px; }
+html[data-reading="comfortable"] #mobile-nav span { font-size:16px; letter-spacing:normal; text-align:left; }
+html[data-reading="comfortable"] .site-brand-caption { display:none; }
+html[data-reading="comfortable"] .site-header-actions button { font-size:16px; min-height:44px; letter-spacing:normal; text-transform:none; }
+html[data-reading="comfortable"] .reading-context { align-items:start; flex-wrap:wrap; }
+html[data-reading="comfortable"] .reading-context nav { flex-wrap:wrap; flex-shrink:1; }
+html[data-reading="comfortable"] .reading-context p { text-align:left; }
+
+/* More generous, quieter layouts for the dense executive views. */
+html[data-reading="comfortable"] :is(.xp-hero-grid,.xp-section-head,.xp-capability-wrap,.xp-guardrail-grid,.xp-jcx-grid) { grid-template-columns:1fr; gap:2rem; }
+html[data-reading="comfortable"] .xp-hero-foot { position:relative; left:auto; bottom:auto; transform:none; margin-top:2rem; flex-wrap:wrap; gap:1rem; }
+html[data-reading="comfortable"] .xp-system-map { display:flex; flex-direction:column; align-items:stretch; }
+html[data-reading="comfortable"] .xp-node-primary { transform:none; background:#953d1b; }
+html[data-reading="comfortable"] .xp-arrow { min-width:0; }
+html[data-reading="comfortable"] .xp-arrow span { max-width:none; }
+html[data-reading="comfortable"] .xp-arrow i { transform:rotate(90deg); }
+html[data-reading="comfortable"] .xp-funnel b { width:100%; clip-path:none; background:#102532; }
+html[data-reading="comfortable"] .xp-route-table article { grid-template-columns:1fr; gap:1rem; }
+html[data-reading="comfortable"] .xp-jcx-note { grid-column:auto; }
+html[data-reading="comfortable"] :is(.xp-thesis-top,.xp-hero-actions,.ex-priority-tabs,.flagship-lens-tabs,.comparative-result-meta) { flex-wrap:wrap; }
+html[data-reading="comfortable"] .ex-hero { min-height:0; }
+html[data-reading="comfortable"] .ex-hero-grid { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:2rem; }
+html[data-reading="comfortable"] .ex-section-head { align-items:start; flex-wrap:wrap; gap:1.5rem; }
+html[data-reading="comfortable"] .ex-drawing { max-width:620px; width:100%; }
+html[data-reading="comfortable"] :is(.ex-progress,.section-rail,.page-progress) { display:none; }
+html[data-reading="comfortable"] :is(.ex-page,.learn-page) { --ex-muted:#354b3c; }
+html[data-reading="comfortable"] :is(.xp-hero,.xp-routes,.xp-transfer,.xp-guardrails) :is(p,dd,small,.xp-thesis-top,.xp-hero-foot) { color:#f4f0e6!important; }
+html[data-reading="comfortable"] .xp-judgment p { color:#102532!important; }
+html[data-reading="comfortable"] .xp-label { color:#a83f16; }
+html[data-reading="comfortable"] .xp-page { --xp-orange:#963c15; }
+html[data-reading="comfortable"] :is(.xp-hero,.xp-routes,.xp-transfer,.xp-guardrails) { --xp-orange:#ffd4b8; }
+html[data-reading="comfortable"] :is(.xp-hero,.xp-routes,.xp-transfer,.xp-guardrails) .xp-label { color:#ffd4b8; }
+html[data-reading="comfortable"] .ex-ink :is(p,small,dd) { color:#f4f0e6!important; }
+html[data-reading="comfortable"] :is(.ex-stat-card,.ex-metric-card) strong { font-size:1.7rem!important; }
+html[data-reading="comfortable"] :is(.comparative-lens-tabs,.comparative-case-index,.flagship-case-nav,.learn-grid,.learn-path) { grid-template-columns:repeat(2,minmax(0,1fr)); }
+html[data-reading="comfortable"] :is(.comparative-case-panel,.flagship-case-panel,.learn-card) { min-width:0; }
+
+/* Remove motion rather than simply making animations faster. Do not reset all
+   transforms: some are required for layout and diagram positioning. */
+html[data-reading="comfortable"] *,html[data-reading="comfortable"] *::before,html[data-reading="comfortable"] *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+html[data-reading="comfortable"] :is(.reveal,.line-clip>span,.ex-layer,.ex-hero-copy>*,.xp-hero-copy>*,.xp-thesis) { opacity:1!important; transform:none!important; }
+html[data-reading="comfortable"] .draw-path { stroke-dashoffset:0!important; }
+html[data-reading="comfortable"] .grain::after { display:none; }
+@media(max-width:1100px) {
+  html[data-reading="comfortable"] :is(.xp-transfer-groups,.xp-route-table dl,.xp-gates,.xp-next-links,.learn-glossary) { grid-template-columns:1fr; }
+  html[data-reading="comfortable"] .xp-transfer-group { grid-template-rows:auto; grid-row:auto; }
+}
+@media(max-width:760px) {
+  html[data-reading="comfortable"] main label.flex { flex-wrap:wrap; width:100%; }
+  html[data-reading="comfortable"] main select { max-width:100%; width:100%; }
+  html[data-reading="comfortable"] main .flex:has(>.whitespace-nowrap) { flex-wrap:wrap; }
+  html[data-reading="comfortable"] .ex-hero-grid { grid-template-columns:1fr; }
+  html[data-reading="comfortable"] :is(.comparative-lens-tabs,.comparative-case-index,.flagship-case-nav,.learn-grid,.learn-path,.xp-rules,.xp-branch,.xp-judgment,.xp-timeline li) { grid-template-columns:1fr; }
+  html[data-reading="comfortable"] .xp-hero-foot { display:none; }
+  html[data-reading="comfortable"] :is(.ex-hero-meta,.ex-hero-actions) { flex-wrap:wrap; }
+  html[data-reading="comfortable"] .reading-next { flex-wrap:wrap; }
+}
+@media print { .reading-toggle { display:none; } }
