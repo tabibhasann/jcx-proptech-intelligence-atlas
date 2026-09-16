@@ -5,6 +5,14 @@
 .pt-app input, .pt-app select, .pt-app textarea { max-width: 100%; }
 .pt-app .pt-dialog { overscroll-behavior: contain; }
 .pt-search-hero { overflow: clip; }
+/* Restore the original expansive desktop frame without changing mobile. */
+@media (min-width: 1101px) {
+  .pt-search-hero {
+    width: min(1600px, calc(100% - 128px));
+    margin-top: 22px;
+    min-height: max(660px, calc(100svh - 140px));
+  }
+}
 .pt-search-box { position: relative; }
 .pt-search-input-row { padding-right: 206px; }
 .pt-app .pt-search-input-row textarea {
