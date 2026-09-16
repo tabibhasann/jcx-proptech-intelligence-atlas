@@ -1,0 +1,27 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import ts from "typescript";
+
+const transpile = (source) => `data:text/javascript;base64,${Buffer.from(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText).toString("base64")}`;
+const demo = transpile(readFileSync(new URL("../src/content/propty-demo.ts", import.meta.url), "utf8"));
+const search = transpile(readFileSync(new URL("../src/content/propty-search.ts", import.meta.url), "utf8").replace('"./propty-demo"', JSON.stringify(demo)));
+const lib = transpile(readFileSync(new URL("../src/content/propty-matches.ts", import.meta.url), "utf8").replace('"./propty-demo"', JSON.stringify(demo)).replace('"./propty-search"', JSON.stringify(search)));
+const { properties } = await import(demo);
+const { getCloseMatches } = await import(lib);
+const q = { area: "Bashundhara", budget: 15_000_000, bedrooms: 3, readyOnly: true };
+assert.equal(getCloseMatches(q, [], [], properties).some((x) => x.property.id === "lightwell"), false);
+assert.deepEqual(getCloseMatches(q, ["pool"], [], properties), []);
+assert.deepEqual(getCloseMatches(q, ["parking"], ["negation"], properties), []);
+assert.deepEqual(getCloseMatches({ area: "Gulshan", readyOnly: true }, ["parking"], [], properties).map((x) => x.property.area), ["Gulshan"]);
+assert.ok(getCloseMatches({ area: "Bashundhara", budget: 15_000_000, readyOnly: true }, [], [], properties).every((x) => x.property.status === "Ready"));
+const over = getCloseMatches({ area: "Gulshan", budget: 35_000_000 }, [], [], properties);
+assert.equal(over[0]?.differences[0], "BDT 4000000 above your budget");
+const fewer = getCloseMatches({ area: "Bashundhara", bedrooms: 4 }, [], [], properties);
+assert.equal(fewer[0]?.differences[0], "One fewer bedroom");
+const parking = getCloseMatches({ area: "Bashundhara", bedrooms: 3 }, ["parking"], [], properties);
+assert.ok(parking.every((x) => x.differences.includes("Parking not listed") || x.matched.includes("parking")));
+assert.ok(getCloseMatches({ area: "Bashundhara", budget: 1_000_000 }, [], [], properties).length === 0);
+const ids = getCloseMatches({ bedrooms: 3 }, ["balcony"], [], properties).map((x) => x.property.id);
+assert.equal(new Set(ids).size, ids.length);
+assert.deepEqual(ids, getCloseMatches({ bedrooms: 3 }, ["balcony"], [], properties).map((x) => x.property.id));
+console.log("Propty close-match checks passed: strict exclusions, bounded compromises, labels, thresholds and deterministic ordering.");
