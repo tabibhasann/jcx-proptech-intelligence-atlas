@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import ts from 'typescript';
+
+// Transpile the isolated fixture so this check also works on Node 20.
+const file = new URL('../src/content/propty-demo.ts', import.meta.url);
+const source = readFileSync(file, 'utf8');
+const { outputText } = ts.transpileModule(source, {
+  compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
+});
+const { properties, filterProperties, formatPrice, DEMO_NOTICE } = await import(
+  `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`
+);
+
+assert.equal(properties.length, 6);
+assert.equal(new Set(properties.map((property) => property.id)).size, properties.length);
+assert.match(DEMO_NOTICE, /fictional/i);
+assert.ok(!source.includes('—'), 'Demo copy must not contain em dashes');
+for (const property of properties) {
+  assert.equal(property.isDemo, true);
+  assert.ok(property.price >= 13_000_000 && property.price <= 40_000_000);
+  assert.ok(property.bedrooms > 0 && property.bathrooms > 0 && property.sqft > 0);
+  assert.ok(property.images.length > 0);
+  assert.ok(property.images.every((image) => /^\/propty\/home-[1-6]\.jpg$/.test(image)));
+  assert.ok(property.checks.some((check) => /not checked/i.test(check.label)));
+}
+
+assert.equal(formatPrice(17_500_000), 'BDT 1.75 crore');
+assert.equal(formatPrice(1_500_000), 'BDT 15 lakh');
+assert.equal(formatPrice(Number.NaN), 'Price unavailable');
+assert.equal(filterProperties().length, 6);
+assert.deepEqual(filterProperties({ area: ' bashundhara ', budget: 18_000_000, bedrooms: 3, readyOnly: true }).map((property) => property.id), ['banyan', 'lightwell']);
+assert.deepEqual(filterProperties({ area: 'Bashundhara', budget: 16_000_000 }).map((property) => property.id), ['lightwell']);
+assert.deepEqual(filterProperties({ area: 'Dhanmondi', readyOnly: true }), []);
+assert.deepEqual(filterProperties({ area: 'Gulshan', budget: 18_000_000 }), []);
+assert.deepEqual(filterProperties({ budget: 0 }), []);
+assert.equal(filterProperties({ area: 'All areas' }).length, 6);
+assert.equal(filterProperties({ bedrooms: 4 }).length, 1);
+assert.equal(filterProperties({ readyOnly: true }).length, 5);
+assert.deepEqual(filterProperties({}, []), []);
+console.log('Propty demo fixtures: 6 sample homes; filters, currency and disclosure checks passed.');

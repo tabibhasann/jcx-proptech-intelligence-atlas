@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/chrome/SiteHeader";
-import { SiteFooter } from "@/components/chrome/SiteFooter";
+import { ResearchFrame } from "@/components/chrome/ResearchFrame";
 import { MotionBootstrap } from "@/components/chrome/MotionBootstrap";
-import { ReadingPath } from "@/components/chrome/ReadingPath";
 import "./reading.css";
 import "./reading-comfort.css";
 
@@ -52,9 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main"><ReadingPath />{children}<ReadingPath position="bottom" /></main>
-        <SiteFooter />
+        <ResearchFrame>{children}</ResearchFrame>
       </body>
     </html>
   );
