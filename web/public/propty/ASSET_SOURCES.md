@@ -20,6 +20,11 @@ Images use Unsplash's supplied size/quality variants, with no local retouching o
 
 ## Original brand artwork
 
+- `propty-deck.png`: exact Propty / Powered by JCX lockup embedded as `ppt/media/image3.png` in slide 1 of the supplied final presentation. Proportionally downsampled from 20000 × 20000 to 1000 × 1000 with macOS sips; artwork and colours preserved. The interface masks only the surrounding empty canvas, retaining the complete mark, wordmark and JCX endorsement.
+- `jcx-deck.png`: unchanged 374 × 135 JCX / beyond bonding logo embedded as `ppt/media/image56.png` in the same final presentation. This replaces the text-only sponsor treatment.
+
+The files below are retained from the first prototype for provenance, but no longer render as its logo:
+
 - `logo-original.jpg`: unchanged supplied brand artwork, including the `HERE AND NOW` tagline. Original supplied file: `WhatsApp Image 2026-09-15 at 15.03.07 (2).jpeg`. Dimensions: 1024 × 1024. Off-white background.
 - `logo-wordmark-original.jpg`: unchanged supplied symbol and Propty wordmark. Original supplied file: `WhatsApp Image 2026-09-15 at 15.03.07 (1).jpeg`. Dimensions: 1004 × 709. Off-white background.
 

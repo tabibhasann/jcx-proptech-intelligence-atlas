@@ -31,10 +31,10 @@ export function Advisor({
   return (
     <div className="pt-advisor">
       <div className="pt-ai-label">
-        <Icon name="spark" /> AI preview <span>Guided demo · no live AI</span>
+        <Icon name="guide" /> Home finder <span>Guided demo · no live AI</span>
       </div>
       <p className="pt-muted">
-        A few thoughtful questions. A clearer shortlist.
+        Choose what you need. We’ll show the homes that match.
       </p>
       {step > 0 && (
         <div className="pt-brief">

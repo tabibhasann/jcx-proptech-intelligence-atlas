@@ -13,6 +13,9 @@ import {
 import { Icon } from "./Icon";
 import { Modal } from "./Modal";
 import { Advisor } from "./Advisor";
+import { SearchHero } from "./SearchHero";
+import { ProptyBrand, JcxBrand } from "./Brand";
+import { parseHomeSearch, matchesHomeText } from "@/content/propty-search";
 
 type View = "explore" | "saved" | "visits" | "team";
 type Visit = {
@@ -22,7 +25,7 @@ type Visit = {
   time: string;
   status: "Requested" | "Reviewed" | "Cancelled";
 };
-type Dialog = "advisor" | "compare" | "booking" | "reset" | null;
+type Dialog = "advisor" | "compare" | "booking" | "reset" | "photo" | null;
 const STORAGE = "propty-product-demo-v1";
 const validId = (id: unknown): id is string =>
   typeof id === "string" && properties.some((p) => p.id === id);
@@ -124,6 +127,9 @@ export function ProptyApp() {
   const [large, setLarge] = useState(false);
   const [query, setQuery] = useState<PropertyQuery>({});
   const [sort, setSort] = useState("featured");
+  const [searchText, setSearchText] = useState("");
+  const [searchTerms, setSearchTerms] = useState<string[]>([]);
+  const [submittedText, setSubmittedText] = useState("");
   const [dialog, setDialog] = useState<Dialog>(null);
   const [bookingHome, setBookingHome] = useState<string>(properties[0].id);
   const [editing, setEditing] = useState<string | null>(null);
@@ -261,7 +267,9 @@ export function ProptyApp() {
     setTime(visit?.time || "11:00 AM");
     setDialog("booking");
   };
-  const matched = filterProperties(query);
+  const matched = filterProperties(query).filter((p) =>
+    matchesHomeText(p, searchTerms),
+  );
   const listing =
     view === "saved"
       ? properties.filter((p) => saved.includes(p.id))
@@ -285,7 +293,7 @@ export function ProptyApp() {
   return (
     <div className={`pt-app ${large ? "pt-large" : ""}`}>
       <div className="pt-demo-bar">
-        <span>Meet your next home.</span>
+        <span>PROPTY · HERE AND NOW</span>
         <span>
           Interactive prototype <i /> Sample homes, no live bookings
         </span>
@@ -296,16 +304,7 @@ export function ProptyApp() {
           onClick={() => navigate("explore")}
           aria-label="Propty home"
         >
-          <span className="pt-logo-crop">
-            <Image
-              src="/propty/logo-wordmark-original.jpg"
-              width={160}
-              height={113}
-              alt="Propty"
-              priority
-            />
-          </span>
-          <span className="pt-backed">Backed by JCX</span>
+          <ProptyBrand />
         </button>
         <nav aria-label="Propty navigation">
           <button
@@ -346,8 +345,8 @@ export function ProptyApp() {
             className="pt-advisor-button"
             onClick={() => setDialog("advisor")}
           >
-            <Icon name="spark" size={17} />
-            <span>Find my home</span>
+            <Icon name="guide" size={18} />
+            <span>Help me choose</span>
           </button>
         </div>
       </header>
@@ -366,7 +365,14 @@ export function ProptyApp() {
                   {selected.area.toUpperCase()} · DHAKA
                 </p>
                 <h1>{selected.title}</h1>
-                <p>{selected.tagline}</p>
+                <p>
+                  <Icon name="pin" size={16} />
+                  {selected.area}, Dhaka{" "}
+                  <span className="pt-detail-separator">·</span>{" "}
+                  {selected.sqft.toLocaleString()} sq ft{" "}
+                  <span className="pt-detail-separator">·</span>{" "}
+                  {selected.bedrooms} bedrooms
+                </p>
               </div>
               <div className="pt-detail-actions">
                 <button
@@ -398,6 +404,13 @@ export function ProptyApp() {
                 priority
               />
               <span>Illustrative interior · fictional sample home</span>
+              <button
+                className="pt-photo-expand"
+                onClick={() => setDialog("photo")}
+              >
+                <Icon name="expand" size={18} />
+                View photo
+              </button>
             </div>
             <div className="pt-detail-grid">
               <div>
@@ -419,7 +432,7 @@ export function ProptyApp() {
                   </span>
                 </div>
                 <section className="pt-detail-section">
-                  <h2>A little more about this home.</h2>
+                  <h2>About this home</h2>
                   <p>{selected.description}</p>
                   <div className="pt-feature-list">
                     {selected.features.map((f) => (
@@ -435,7 +448,7 @@ export function ProptyApp() {
                   <p>{selected.tradeoff}</p>
                 </section>
                 <section className="pt-detail-section">
-                  <h2>Clarity before commitment.</h2>
+                  <h2>What has been checked?</h2>
                   <p className="pt-muted">
                     A real listing should tell you what has been checked and
                     what still needs review. Here is how that could look.
@@ -454,6 +467,11 @@ export function ProptyApp() {
               <aside className="pt-booking-card">
                 <p className="pt-eyebrow">SAMPLE ASKING PRICE</p>
                 <h2>{formatPrice(selected.price)}</h2>
+                <p className="pt-unit-price">
+                  BDT{" "}
+                  {Math.round(selected.price / selected.sqft).toLocaleString()}{" "}
+                  per sq ft · sample calculation
+                </p>
                 <p>
                   Additional charges and payment terms are not established in
                   this demo.
@@ -468,7 +486,7 @@ export function ProptyApp() {
                   className="pt-outline pt-full"
                   onClick={() => setDialog("advisor")}
                 >
-                  <Icon name="spark" />
+                  <Icon name="guide" />
                   Help me compare my options
                 </button>
                 <div className="pt-booking-note">
@@ -487,132 +505,20 @@ export function ProptyApp() {
         ) : (
           <>
             {view === "explore" && (
-              <>
-                <section className="pt-hero pt-container">
-                  <div className="pt-hero-heading">
-                    <div>
-                      <p className="pt-eyebrow">
-                        <span className="pt-dot" /> A NEW WAY HOME, IN DHAKA
-                      </p>
-                      <h1>
-                        A place to call
-                        <br />
-                        <span>your own.</span>
-                      </h1>
-                    </div>
-                    <div className="pt-hero-intro">
-                      <p>
-                        Finding a home is personal. <br />
-                        Let’s make it feel that way.
-                      </p>
-                      <button
-                        className="pt-text-button"
-                        onClick={() => setDialog("advisor")}
-                      >
-                        Not sure where to start? <Icon name="arrow" size={18} />
-                      </button>
-                    </div>
-                  </div>
-                  <form
-                    className="pt-search"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      showResults();
-                    }}
-                  >
-                    <label>
-                      <span>Where</span>
-                      <select
-                        aria-label="Location"
-                        value={query.area || "All"}
-                        onChange={(e) =>
-                          setQuery((q) => ({ ...q, area: e.target.value }))
-                        }
-                      >
-                        <option value="All">Anywhere in Dhaka</option>
-                        {propertyAreas.map((a) => (
-                          <option key={a}>{a}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      <span>Your budget</span>
-                      <select
-                        aria-label="Maximum budget"
-                        value={query.budget || ""}
-                        onChange={(e) =>
-                          setQuery((q) => ({
-                            ...q,
-                            budget: e.target.value
-                              ? Number(e.target.value)
-                              : undefined,
-                          }))
-                        }
-                      >
-                        <option value="">Any asking price</option>
-                        {[15000000, 18000000, 25000000, 40000000].map((b) => (
-                          <option key={b} value={b}>
-                            Up to {formatPrice(b)}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      <span>Room for you</span>
-                      <select
-                        aria-label="Minimum bedrooms"
-                        value={query.bedrooms || ""}
-                        onChange={(e) =>
-                          setQuery((q) => ({
-                            ...q,
-                            bedrooms: e.target.value
-                              ? Number(e.target.value)
-                              : undefined,
-                          }))
-                        }
-                      >
-                        <option value="">Any bedrooms</option>
-                        {[2, 3, 4].map((b) => (
-                          <option key={b} value={b}>
-                            {b}+ bedrooms
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <button className="pt-search-submit" type="submit">
-                      <Icon name="search" />
-                      <span>Find a home</span>
-                    </button>
-                  </form>
-                  <div className="pt-hero-image">
-                    <Image
-                      src="/propty/hero.jpg"
-                      alt="An airy contemporary living room opening onto a green courtyard, an illustrative home interior"
-                      fill
-                      sizes="100vw"
-                      priority
-                    />
-                    <div className="pt-hero-overlay">
-                      <span>HERE AND NOW.</span>
-                      <p>
-                        Room for your
-                        <br />
-                        next chapter.
-                      </p>
-                    </div>
-                    <span className="pt-hero-caption">
-                      A little inspiration. An illustrative interior.
-                    </span>
-                  </div>
-                  <div className="pt-hero-foot">
-                    <p>A clearer way to find, compare and choose.</p>
-                    <span>
-                      01 / EXPLORE WHAT’S POSSIBLE{" "}
-                      <Icon name="arrow" size={16} />
-                    </span>
-                  </div>
-                </section>
-              </>
+              <SearchHero
+                text={searchText}
+                onText={setSearchText}
+                query={query}
+                onQuery={setQuery}
+                onGuide={() => setDialog("advisor")}
+                onSearch={(text, reset) => {
+                  const parsed = parseHomeSearch(text);
+                  setQuery((q) => ({ ...(reset ? {} : q), ...parsed.query }));
+                  setSearchTerms(parsed.terms);
+                  setSubmittedText(text.trim());
+                  requestAnimationFrame(showResults);
+                }}
+              />
             )}
             {(view === "explore" || view === "saved") && (
               <section
@@ -625,21 +531,21 @@ export function ProptyApp() {
                     <p className="pt-eyebrow">
                       {view === "saved"
                         ? "YOUR PERSONAL SHORTLIST"
-                        : "FIND YOUR KIND OF PLACE"}
+                        : "THE COLLECTION"}
                     </p>
                     {view === "saved" ? (
-                      <h1>Worth coming back to.</h1>
+                      <h1>Your saved homes</h1>
                     ) : (
                       <h2>
-                        Different homes.
-                        <br className="pt-mobile-only" /> Different
-                        possibilities.
+                        {submittedText
+                          ? "Homes for your search"
+                          : "Find a home that feels right"}
                       </h2>
                     )}
                     <p className="pt-muted">
                       {view === "saved"
                         ? "The homes you like, all in one place. Saved on this device."
-                        : "Six sample homes. A first look at a more thoughtful search."}
+                        : "Explore six sample homes across five Dhaka neighbourhoods."}
                     </p>
                   </div>
                   {view === "explore" && (
@@ -686,7 +592,16 @@ export function ProptyApp() {
                     </label>
                   </div>
                 )}
-                <div className="pt-result-meta">
+                {view === "explore" && submittedText && (
+                  <div className="pt-search-receipt">
+                    <Icon name="search" size={18} />
+                    <span>“{submittedText}”</span>
+                    <small>
+                      Demo search · area, price, bedrooms and listing keywords
+                    </small>
+                  </div>
+                )}
+                <div className="pt-result-meta" aria-live="polite">
                   <span>
                     {listing.length} {listing.length === 1 ? "home" : "homes"}
                     {query.budget && view === "explore"
@@ -696,9 +611,19 @@ export function ProptyApp() {
                       ? ` · ${query.bedrooms}+ bedrooms`
                       : ""}
                   </span>
-                  {view === "explore" && Object.values(query).some(Boolean) && (
-                    <button onClick={() => setQuery({})}>Clear filters</button>
-                  )}
+                  {view === "explore" &&
+                    (Object.values(query).some(Boolean) || submittedText) && (
+                      <button
+                        onClick={() => {
+                          setQuery({});
+                          setSearchText("");
+                          setSearchTerms([]);
+                          setSubmittedText("");
+                        }}
+                      >
+                        Clear search
+                      </button>
+                    )}
                 </div>
                 {listing.length ? (
                   <div className="pt-card-grid">
@@ -722,18 +647,21 @@ export function ProptyApp() {
                     />
                     <h3>
                       {view === "saved"
-                        ? "Your next home could be here."
-                        : "A little room to rethink."}
+                        ? "Keep the homes you like"
+                        : "No homes match this search"}
                     </h3>
                     <p>
                       {view === "saved"
                         ? "Tap the heart on a home to keep it here."
-                        : "No sample homes match these filters. Try another area or a more flexible budget."}
+                        : "Try a different area, adjust the budget or remove a keyword. Search only covers our six sample listings."}
                     </p>
                     <button
                       className="pt-primary"
                       onClick={() => {
                         setQuery({});
+                        setSearchText("");
+                        setSearchTerms([]);
+                        setSubmittedText("");
                         navigate("explore");
                       }}
                     >
@@ -752,31 +680,28 @@ export function ProptyApp() {
                     sizes="(max-width: 700px) 100vw, 45vw"
                     alt="Illustrative calm, naturally lit apartment interior"
                   />
-                  <span>More than a list of places.</span>
+                  <span>Every home comes with a choice.</span>
                 </div>
                 <div className="pt-assist-copy">
                   <div className="pt-ai-mark">
-                    <Icon name="spark" size={26} />
+                    <Icon name="guide" size={26} />
                   </div>
-                  <p className="pt-eyebrow">
-                    A LITTLE GUIDANCE GOES A LONG WAY
-                  </p>
+                  <p className="pt-eyebrow">YOUR HOME, YOUR PRIORITIES</p>
                   <h2>
-                    You know your life.
-                    <br />
-                    Let’s find the home.
+                    A few questions.
+                    <br />A more useful shortlist.
                   </h2>
                   <p>
-                    Tell us what matters. We’ll help you narrow the options and
-                    see the trade-offs, one clear step at a time.
+                    Choose your area, budget and bedrooms. See the homes that
+                    fit, then compare what you gain and what you give up.
                   </p>
                   <button
                     className="pt-primary"
                     onClick={() => setDialog("advisor")}
                   >
-                    Build my shortlist <Icon name="arrow" />
+                    Help me choose <Icon name="arrow" />
                   </button>
-                  <small>Try our guided AI preview. No sign-up needed.</small>
+                  <small>Guided demo. No sign-up or live AI connection.</small>
                 </div>
               </section>
             )}
@@ -789,8 +714,8 @@ export function ProptyApp() {
                 </p>
                 <h1>
                   {view === "team"
-                    ? "A clear handoff."
-                    : "Make yourself at home."}
+                    ? "Viewing requests"
+                    : "Your viewing requests"}
                 </h1>
                 <p className="pt-muted">
                   {view === "team"
@@ -934,26 +859,15 @@ export function ProptyApp() {
       <footer className="pt-footer pt-container">
         <div className="pt-footer-top">
           <div>
-            <span className="pt-logo-crop">
-              <Image
-                src="/propty/logo-wordmark-original.jpg"
-                width={160}
-                height={113}
-                alt="Propty"
-              />
-            </span>
+            <ProptyBrand />
             <p>
               Here and now.
               <br />
-              <span>Backed by JCX.</span>
+              <span>A home for your next chapter in Dhaka.</span>
             </p>
           </div>
           <div>
-            <p>
-              A little closer to
-              <br />
-              somewhere you belong.
-            </p>
+            <JcxBrand />
             <button
               className="pt-text-button"
               onClick={() => {
@@ -1025,15 +939,15 @@ export function ProptyApp() {
         )}
       </div>
       {dialog === "advisor" && (
-        <Modal
-          title="A home that feels like you."
-          onClose={() => setDialog(null)}
-        >
+        <Modal title="Let’s narrow it down" onClose={() => setDialog(null)}>
           <Advisor
             onOpen={openHome}
             onApply={(q) => {
               setBrief(q);
               setQuery(q);
+              setSearchText("");
+              setSearchTerms([]);
+              setSubmittedText("");
               setView("explore");
               setHome(null);
               history.pushState(null, "", "/prototype");
@@ -1048,7 +962,7 @@ export function ProptyApp() {
       )}
       {dialog === "compare" && (
         <Modal
-          title="A little perspective helps."
+          title="Your homes, side by side"
           wide
           onClose={() => setDialog(null)}
         >
@@ -1129,7 +1043,7 @@ export function ProptyApp() {
       )}
       {dialog === "booking" && (
         <Modal
-          title={editing ? "Find a better time." : "Come a little closer."}
+          title={editing ? "Change your preferred time" : "Request a viewing"}
           onClose={() => setDialog(null)}
         >
           <div className="pt-booking-preview">
@@ -1216,6 +1130,22 @@ export function ProptyApp() {
           </form>
         </Modal>
       )}
+      {dialog === "photo" && selected && (
+        <Modal title={selected.title} wide onClose={() => setDialog(null)}>
+          <div className="pt-lightbox">
+            <Image
+              src={selected.images[0]}
+              alt={`Illustrative interior for ${selected.title}`}
+              width={1400}
+              height={1000}
+            />
+          </div>
+          <p className="pt-fine">
+            Illustrative photograph only. This is not a real listing or a
+            photograph of a JCX property.
+          </p>
+        </Modal>
+      )}
       {dialog === "reset" && (
         <Modal
           title="Start with a clean slate?"
@@ -1233,6 +1163,9 @@ export function ProptyApp() {
               setCompared([]);
               setBrief(null);
               setQuery({});
+              setSearchText("");
+              setSearchTerms([]);
+              setSubmittedText("");
               setDialog(null);
               navigate("explore");
               notify("Demo reset. Ready for a fresh start.");

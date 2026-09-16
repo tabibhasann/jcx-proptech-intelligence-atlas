@@ -1,5 +1,16 @@
 export function Icon({ name, size = 20 }: { name: string; size?: number }) {
   const paths: Record<string, React.ReactNode> = {
+    guide: (
+      <>
+        <path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 3-2Z" />
+        <path d="M7 9h10M7 13h6" />
+      </>
+    ),
+    expand: (
+      <>
+        <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6" />
+      </>
+    ),
     arrow: (
       <>
         <path d="M5 12h14M13 6l6 6-6 6" />
