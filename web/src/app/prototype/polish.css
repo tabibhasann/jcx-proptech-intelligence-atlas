@@ -44,7 +44,7 @@
   padding-inline: 20px !important;
 }
 .pt-search-hero {
-  width: min(1440px, calc(100% - 96px));
+  width: min(1520px, calc(100% - 96px));
   margin: 24px auto 0;
   min-height: clamp(620px, calc(100svh - 190px), 860px);
   border-radius: 24px;
@@ -256,6 +256,12 @@
   gap: 16px;
   margin-top: 36px;
 }
+.pt-close-matches { border-top: 1px solid var(--pt-line); margin-top: 44px; padding-top: 36px; }
+.pt-app .pt-close-matches > h3 { font-size: clamp(23px, 2vw, 30px); letter-spacing: -.03em; margin: 0; }
+.pt-app .pt-close-matches > p { margin: 12px 0 25px; font-size: 14px; line-height: 1.7; color: var(--pt-muted); }
+.pt-match-note { background: #f7f3ec; border-radius: 10px; padding: 12px; margin-bottom: 16px; }
+.pt-app .pt-match-note p { color: #785b30; font-size: 13px; line-height: 1.5; }
+.pt-match-note small { display: block; color: #68616e; font-size: 11px; margin-top: 6px; line-height: 1.5; }
 .pt-collection-more p {
   font-size: 13px;
   color: var(--pt-muted);
@@ -591,6 +597,25 @@
     opacity: 1;
   }
 }
+.pt-app .pt-dialog.pt-dialog-closing {
+  animation: pt-dialog-leave 220ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
+.pt-app .pt-dialog.pt-dialog-closing::backdrop {
+  animation: pt-backdrop-leave 220ms ease forwards;
+}
+@keyframes pt-dialog-leave {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+@keyframes pt-backdrop-leave {
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
 .pt-gallery-caption {
   padding-top: 18px;
   display: flex;
@@ -599,6 +624,93 @@
   gap: 20px;
   font-size: 11px;
   color: #b9b6bd;
+}
+.pt-gallery-thumbnails {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 14px 3px 5px;
+}
+.pt-app .pt-gallery-thumbnails button {
+  flex-shrink: 0;
+  width: 96px;
+  height: 66px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 3px;
+  opacity: 0.65;
+  transition:
+    opacity 180ms,
+    border-color 180ms;
+}
+.pt-app .pt-gallery-thumbnails button[aria-pressed="true"] {
+  opacity: 1;
+  border-color: #6741c4;
+}
+.pt-app .pt-gallery-thumbnails button:hover {
+  opacity: 1;
+}
+.pt-gallery-thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.pt-gallery-position {
+  font-size: 12px;
+  color: #766d80;
+  white-space: nowrap;
+  margin-left: auto;
+  padding: 0 6px;
+}
+@media (max-width: 600px) {
+  .pt-gallery-thumbnails { flex-wrap: wrap; }
+  .pt-gallery-position { flex-basis: 100%; padding-top: 4px; }
+  .pt-app .pt-gallery-thumbnails button { width: 84px; height: 60px; }
+}
+.pt-app .pt-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #302a36;
+  background: #fffffff0;
+  box-shadow: 0 2px 12px #00000015;
+  z-index: 2;
+}
+.pt-gallery-prev {
+  left: 14px;
+}
+.pt-gallery-next {
+  right: 14px;
+}
+.pt-gallery-counter {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffffff0;
+  border-radius: 24px;
+  padding: 7px 14px;
+  font-size: 12px;
+  color: #302a36;
+}
+.pt-property-gallery .pt-detail-photo > img,
+.pt-dialog-photo .pt-lightbox > img {
+  animation: pt-photo-swap 240ms ease both;
+}
+@keyframes pt-photo-swap {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
 }
 .pt-gallery-caption > span {
   color: #fff;

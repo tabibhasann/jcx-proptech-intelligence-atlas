@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import ts from "typescript";
 
 // Transpile the isolated fixture so this check also works on Node 20.
@@ -42,8 +42,10 @@ for (const property of properties) {
   );
   assert.ok(property.images.length > 0);
   assert.ok(
-    property.images.every((image) => /^\/propty\/home-[1-6]\.jpg$/.test(image)),
+    property.images.every((image) => /^\/propty\/(home-[1-6]|gallery-kitchen|gallery-bedroom|gallery-bedroom-green)\.jpg$/.test(image)),
   );
+  assert.equal(new Set(property.images).size, property.images.length);
+  for (const image of property.images) assert.ok(existsSync(new URL(`../public${image}`, import.meta.url)), `Image exists: ${image}`);
   assert.ok(property.checks.some((check) => /not checked/i.test(check.label)));
 }
 

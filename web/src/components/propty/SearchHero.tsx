@@ -28,23 +28,34 @@ export function SearchHero({
   useEffect(() => {
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
-    const update = () => {
+    let current = 0;
+    let previousTime = 0;
+    const update = (time: number) => {
       frame = 0;
       if (!hero.current || !scene.current) return;
-      const progress = media.matches
+      const target = media.matches
         ? 0
         : Math.max(0, Math.min(1, window.scrollY / hero.current.offsetHeight));
-      hero.current.style.setProperty("--hero-inset", `${progress * 24}px`);
+      const delta = previousTime ? Math.min(time - previousTime, 64) : 16;
+      previousTime = time;
+      current = media.matches
+        ? 0
+        : current + (target - current) * (1 - Math.exp(-delta / 70));
+      if (Math.abs(target - current) < 0.0005) current = target;
+      const progress = current;
+      const narrow = window.innerWidth <= 600;
+      hero.current.style.setProperty("--hero-inset", `${progress * (narrow ? 6 : 28)}px`);
       hero.current.style.setProperty(
         "--hero-radius",
         `${24 + progress * 18}px`,
       );
-      scene.current.style.transform = `translate3d(0, ${progress * 70}px, 0) scale(${1.04 + progress * 0.04})`;
+      scene.current.style.transform = `translate3d(0, ${progress * (narrow ? 28 : 70)}px, 0) scale(${1.04 + progress * 0.04})`;
+      if (current !== target) frame = requestAnimationFrame(update);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
-    update();
+    schedule();
     addEventListener("scroll", schedule, { passive: true });
     addEventListener("resize", schedule);
     media.addEventListener("change", schedule);
@@ -91,14 +102,15 @@ export function SearchHero({
           <div className="pt-search-input-row">
             <Icon name="search" size={24} />
             <label className="pt-sr-only" htmlFor="home-search">
-              Search homes
+              Describe your ideal home
             </label>
             <input
               id="home-search"
               type="search"
               value={text}
               onChange={(e) => onText(e.target.value)}
-              placeholder="Area, home name, or what you have in mind"
+              placeholder="Describe your ideal home…"
+              enterKeyHint="search"
               autoComplete="off"
               maxLength={180}
             />
@@ -108,7 +120,7 @@ export function SearchHero({
               disabled={busy}
               aria-busy={busy}
             >
-              {busy ? "Finding homes…" : "Search homes"}{" "}
+              {busy ? "Finding homes…" : "Search with AI"}{" "}
               {!busy && <Icon name="arrow" size={18} />}
             </button>
           </div>
@@ -196,7 +208,7 @@ export function SearchHero({
           </div>
         </form>
         <div className="pt-search-suggestions">
-          <span>Try a search</span>
+          <span>Try AI search</span>
           {["Bashundhara under 1.8 crore", "Ready homes with parking"].map(
             (example) => (
               <button

@@ -62,7 +62,7 @@ export const properties: Property[] = [
     ],
     tradeoff:
       "More space than Lightwell, but a higher sample price. Parking and other additional charges are not established.",
-    images: ["/propty/home-1.jpg"],
+    images: ["/propty/home-1.jpg", "/propty/gallery-kitchen.jpg", "/propty/gallery-bedroom.jpg"],
     checks: checks(),
     isDemo: true,
   },
@@ -82,7 +82,7 @@ export const properties: Property[] = [
     features: ["Balcony", "Open living and dining", "Lift", "Utility area"],
     tradeoff:
       "Less floor space and one fewer bathroom than Banyan. No dedicated parking space is included in the sample specification.",
-    images: ["/propty/home-2.jpg"],
+    images: ["/propty/home-2.jpg", "/propty/gallery-bedroom-green.jpg", "/propty/gallery-kitchen.jpg"],
     checks: checks(),
     isDemo: true,
   },
@@ -108,7 +108,7 @@ export const properties: Property[] = [
     ],
     tradeoff:
       "The highest sample price in this collection. Larger floor space does not establish lower maintenance costs or better investment returns.",
-    images: ["/propty/home-3.jpg"],
+    images: ["/propty/home-3.jpg", "/propty/gallery-kitchen.jpg", "/propty/gallery-bedroom.jpg"],
     checks: checks(),
     isDemo: true,
   },
@@ -134,7 +134,7 @@ export const properties: Property[] = [
     ],
     tradeoff:
       "Not ready to occupy. The demo does not establish a handover date, completion assurance or payment schedule.",
-    images: ["/propty/home-4.jpg"],
+    images: ["/propty/home-4.jpg", "/propty/gallery-bedroom-green.jpg", "/propty/gallery-kitchen.jpg"],
     checks: checks(),
     isDemo: true,
   },
@@ -160,7 +160,7 @@ export const properties: Property[] = [
     ],
     tradeoff:
       "More expensive than the Bashundhara examples. The area label alone does not establish travel time, street conditions or services.",
-    images: ["/propty/home-5.jpg"],
+    images: ["/propty/home-5.jpg", "/propty/gallery-kitchen.jpg", "/propty/gallery-bedroom.jpg"],
     checks: checks(),
     isDemo: true,
   },
@@ -180,7 +180,7 @@ export const properties: Property[] = [
     features: ["Balcony", "Open living and dining", "Utility area", "Lift"],
     tradeoff:
       "Two bedrooms rather than three. Dedicated parking is not included in this sample, and building charges remain unknown.",
-    images: ["/propty/home-6.jpg"],
+    images: ["/propty/home-6.jpg", "/propty/gallery-bedroom-green.jpg", "/propty/gallery-kitchen.jpg"],
     checks: checks(),
     isDemo: true,
   },

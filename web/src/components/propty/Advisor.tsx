@@ -53,14 +53,18 @@ export function Advisor({
         <div className="pt-question" key={step}>
           <p className="pt-eyebrow">QUESTION {step + 1} OF 3</p>
           <h3>{questions[step]}</h3>
+          {step === 0 && (
+            <div className="pt-advisor-area">
+              <label htmlFor="advisor-area">Neighbourhood</label>
+              <select id="advisor-area" value={query.area ?? ""} onChange={(event) => setQuery((current) => ({ ...current, area: event.target.value }))}>
+                <option value="" disabled>Choose an area</option>
+                <option value="All">I’m open to suggestions</option>
+                {propertyAreas.map((area) => <option key={area}>{area}</option>)}
+              </select>
+              <button className="pt-primary pt-full" disabled={!query.area} onClick={() => setStep(1)}>Continue <Icon name="arrow" size={18} /></button>
+            </div>
+          )}
           <div className="pt-choice-grid">
-            {step === 0 &&
-              [...propertyAreas, "All"].map((area) => (
-                <button key={area} onClick={() => choose({ area })}>
-                  {area === "All" ? "I’m open to suggestions" : area}
-                  <Icon name="arrow" size={17} />
-                </button>
-              ))}
             {step === 1 &&
               [15000000, 18000000, 25000000, 40000000].map((budget) => (
                 <button key={budget} onClick={() => choose({ budget })}>
@@ -95,7 +99,7 @@ export function Advisor({
           <p className="pt-muted">
             {matches.length
               ? "These sample homes match your area, maximum price and minimum bedroom count. The choice is yours."
-              : "None of our six demo homes matches all three preferences. We haven’t silently changed your requirements."}
+              : "No home in this collection matches all three preferences. Try adjusting your brief."}
           </p>
           {matches.slice(0, 3).map((p) => (
             <button

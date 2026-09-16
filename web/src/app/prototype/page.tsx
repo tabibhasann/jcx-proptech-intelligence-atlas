@@ -4,6 +4,7 @@ import { ProptyApp } from "@/components/propty/ProptyApp";
 import "./prototype.css";
 import "./refinement.css";
 import "./polish.css";
+import "./responsive.css";
 
 const inter = Inter({
   subsets: ["latin"],

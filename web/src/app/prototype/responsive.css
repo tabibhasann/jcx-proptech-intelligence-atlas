@@ -1,0 +1,141 @@
+/* Product-specific, touch-first refinements. Keep the research atlas isolated. */
+.pt-app main, .pt-app .pt-container, .pt-app .pt-property-gallery {
+  min-width: 0;
+}
+.pt-app input, .pt-app select, .pt-app textarea { max-width: 100%; }
+.pt-app .pt-dialog { overscroll-behavior: contain; }
+.pt-search-hero { overflow: clip; }
+.pt-app .pt-advisor-button { width: auto; }
+.pt-advisor-button span { display: inline; }
+.pt-choice-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.pt-choice-grid button { min-width: 0; gap: 8px; }
+.pt-choice-grid button svg { flex-shrink: 0; }
+.pt-advisor-area { display: grid; gap: 12px; margin-bottom: 20px; }
+.pt-advisor-area label { font-size: 14px; }
+.pt-app .pt-advisor-area select { width: 100%; padding: 14px 36px 14px 14px; border: 1px solid #ded6e8; border-radius: 12px; background-color: #fff; font-size: 16px; min-height: 52px; }
+
+@media (min-width: 601px) and (max-width: 1000px) {
+  .pt-header { padding-inline: 24px; gap: 12px; }
+  .pt-app .pt-header nav button { padding-inline: 12px; }
+  .pt-app .pt-advisor-button { padding-inline: 14px !important; font-size: 13px !important; }
+  .pt-header-actions { gap: 6px; }
+  .pt-search-hero { width: calc(100% - 48px); min-height: 650px; }
+  .pt-search-hero-content { width: calc(100% - 48px); padding-block: 52px 88px; }
+  .pt-search-input-row input { font-size: 16px; }
+  .pt-search-options select { font-size: 16px; }
+}
+
+@media (max-width: 600px) {
+  .pt-app { font-size: 15px; }
+  .pt-header { padding: 6px 16px 8px; gap: 2px 8px; }
+  .pt-header nav { gap: 4px; padding: 0; margin: 0; height: auto; }
+  .pt-header nav button { white-space: nowrap; }
+  .pt-header nav button:first-child { flex-grow: 1.2; }
+  .pt-app .pt-header nav button { flex: 1; min-height: 44px; height: auto; padding: 10px 8px; font-size: 13px; justify-content: center; }
+  .pt-app .reading-toggle { width: 44px; height: 44px; font-size: 16px; }
+  .pt-header-actions { gap: 2px; }
+  .pt-app .pt-advisor-button { min-height: 44px; padding-inline: 14px !important; font-size: 13px !important; }
+  .pt-container, .pt-detail { width: calc(100% - 32px); }
+  .pt-search-hero { width: calc(100% - 24px); margin: 12px auto 0; min-height: 0; border-radius: 22px; }
+  .pt-search-hero-content { width: calc(100% - 28px); padding: 36px 0 70px; }
+  .pt-app .pt-search-hero h1 { font-size: clamp(32px, 9.7vw, 54px); line-height: 1.07; }
+  .pt-hero-kicker { font-size: 10px; margin-bottom: 18px !important; }
+  .pt-search-subtitle { font-size: 14px; line-height: 1.6; margin-top: 16px !important; }
+  .pt-search-box { margin-top: 24px; border-radius: 18px; }
+  .pt-search-input-row { gap: 8px; padding: 10px 14px 0; }
+  .pt-search-input-row input, .pt-search-input-row input::placeholder { font-size: 16px; }
+  .pt-search-input-row input { min-width: 0; height: 48px; }
+  .pt-search-input-row > .pt-primary { min-height: 48px; font-size: 15px; margin-bottom: 14px; border-radius: 12px; }
+  .pt-search-options { padding: 12px 14px 14px; gap: 10px 0; }
+  .pt-search-options small { font-size: 11px; color: #716879; }
+  .pt-search-options select { height: 36px; font-size: 16px; min-width: 0; }
+  .pt-search-options label { gap: 6px; padding-inline: 9px; min-width: 0; }
+  .pt-search-options label:not(:first-child) > svg,
+  .pt-search-options .pt-taka { display: none; }
+  .pt-search-options label:first-child { padding-bottom: 8px; }
+  .pt-search-suggestions { margin-top: 14px; }
+  .pt-search-suggestions button { font-size: 12px; min-height: 44px; padding: 9px 13px; }
+  .pt-scroll-cue { bottom: 20px; font-size: 12px; min-height: 32px; }
+  .pt-section-heading h2 { font-size: 30px; }
+  .pt-section-heading .pt-muted { font-size: 14px; }
+  .pt-area-chips { gap: 8px; padding-bottom: 10px; }
+  .pt-area-chips button { min-height: 44px; font-size: 13px; padding: 9px 16px; }
+  .pt-filter-tools { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .pt-ready { font-size: 13px; min-height: 44px; gap: 8px; }
+  .pt-ready input { width: 18px; height: 18px; }
+  .pt-app .pt-sort select { height: 44px; width: 150px; font-size: 16px; }
+  .pt-result-meta { font-size: 13px; flex-wrap: wrap; gap: 8px; }
+  .pt-card-grid { gap: 28px; }
+  .pt-card-image { aspect-ratio: 1.35; border-radius: 18px; }
+  .pt-card-title { font-size: 22px !important; line-height: 1.3; }
+  .pt-card-top, .pt-facts { font-size: 13px; }
+  .pt-facts { flex-wrap: wrap; gap: 8px 15px; }
+  .pt-card-bottom { flex-wrap: wrap; gap: 8px; }
+  .pt-card-bottom strong { font-size: 19px; }
+  .pt-card-bottom button { font-size: 13px; min-height: 44px; }
+  .pt-app .pt-save { width: 44px; height: 44px; }
+  .pt-detail-heading h1 { font-size: clamp(27px, 7.5vw, 36px) !important; overflow-wrap: anywhere; }
+  .pt-detail-heading > div > p { font-size: 13px; gap: 6px; }
+  .pt-detail-actions .pt-outline { min-height: 44px; font-size: 14px; }
+  .pt-detail-lead .pt-detail-photo { height: auto; aspect-ratio: 1.18; border-radius: 18px; }
+  .pt-detail-summary { padding: 22px; }
+  .pt-detail-section > p, .pt-tradeoff p:last-child { font-size: 15px; line-height: 1.75; }
+  .pt-feature-list { font-size: 14px; }
+  .pt-detail-facts { gap: 16px 8px; }
+  .pt-app .pt-dialog:not(.pt-dialog-photo) { width: calc(100vw - 20px); max-width: 100%; max-height: calc(100dvh - 24px); border-radius: 22px; }
+  .pt-dialog-inner { padding: 22px 18px; }
+  .pt-dialog-head { gap: 12px; }
+  .pt-dialog-head h2 { font-size: 25px; }
+  .pt-dialog-head .pt-icon-button { width: 44px; height: 44px; flex-shrink: 0; }
+  .pt-app .pt-dialog input, .pt-app .pt-dialog select, .pt-app .pt-dialog textarea { font-size: 16px; min-width: 0; }
+  .pt-dialog .pt-muted { font-size: 14px; }
+  .pt-choice-grid button { min-height: 48px; font-size: 14px; }
+  .pt-question h3 { font-size: 25px; }
+  .pt-ai-result strong { font-size: 15px; }
+  .pt-ai-result small { font-size: 12px; }
+  .pt-visits { padding-top: 28px; }
+  .pt-visits > h1 { font-size: 34px; }
+  .pt-visit-photo { width: 84px; min-height: 104px; }
+  .pt-visit-info { min-width: 0; }
+  .pt-visit h2 { font-size: 20px; }
+  .pt-visit-info p { font-size: 13px; }
+  .pt-visit-info small { font-size: 12px; }
+  .pt-visit-actions { gap: 8px; justify-content: flex-start; }
+  .pt-visit-actions button, .pt-visit-actions .pt-outline { min-height: 44px; font-size: 13px; }
+  .pt-team-summary { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .pt-team-summary span { font-size: 11px; }
+  .pt-app .pt-compare-tray { max-width: calc(100vw - 24px); width: max-content; gap: 8px; bottom: max(12px,env(safe-area-inset-bottom)); }
+  .pt-compare-tray > span { display: none; }
+  .pt-compare-tray > .pt-primary { min-height: 44px; font-size: 13px; padding: 10px 14px; }
+  .pt-compare-tray > .pt-icon-button { width: 44px; height: 44px; }
+  .pt-compare-thumbs button { min-width: 36px; min-height: 44px; }
+  .pt-footer-bottom p { font-size: 12px; }
+  .pt-footer-bottom > div { flex-wrap: wrap; justify-content: flex-start; gap: 8px 20px; }
+  .pt-footer-bottom button, .pt-footer-bottom a { min-height: 44px; display: inline-flex; align-items: center; font-size: 13px; }
+  .pt-assist-copy h2 { font-size: 30px; }
+  .pt-assist-copy > p:not(.pt-eyebrow) { font-size: 15px; }
+  .pt-large .pt-search-input-row input, .pt-large .pt-search-options select { font-size: 18px; }
+}
+
+@media (min-width: 601px) and (max-width: 740px) {
+  .pt-header { display: grid; grid-template-columns: 1fr auto; height: auto; padding-block: 8px; }
+  .pt-header-actions { grid-column: 2; grid-row: 1; }
+  .pt-header nav { grid-column: 1 / -1; grid-row: 2; width: 100%; justify-content: center; }
+  .pt-header nav button { white-space: nowrap; }
+  .pt-search-options { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 14px; gap: 10px 0; }
+  .pt-search-options label:first-child { grid-column: 1 / -1; border: 0; border-bottom: 1px solid #eee7f3; padding-bottom: 12px; }
+  .pt-search-options label { padding-inline: 12px; }
+}
+
+@media (max-width: 360px) {
+  .pt-choice-grid { grid-template-columns: minmax(0,1fr); }
+  .pt-app .pt-header nav button { font-size: 12px; padding-inline: 5px; }
+  .pt-app .pt-advisor-button { padding-inline: 10px !important; font-size: 12px !important; }
+  .pt-search-options { grid-template-columns: minmax(0,1fr); }
+  .pt-search-options label { padding: 0 !important; border: 0; }
+  .pt-search-options label:first-child { border-bottom: 0; }
+  .pt-search-options label + label { border-top: 1px solid #eee7f3; padding-top: 8px !important; }
+  .pt-search-options label > svg { display: none; }
+  .pt-filter-tools { align-items: stretch; }
+  .pt-app .pt-sort select { width: 132px; }
+}

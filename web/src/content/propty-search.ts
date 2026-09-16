@@ -77,5 +77,12 @@ export function matchesHomeText(property: Property, terms: string[]): boolean {
     .join(" ")
     .toLowerCase()
     .replaceAll("balconies", "balcony");
-  return terms.every((term) => searchable.includes(term));
+  return terms.every((raw) => {
+    const term = raw.toLowerCase().replaceAll("balconies", "balcony");
+    if (term === "parking" || term === "lift" || term === "elevator") {
+      const feature = term === "parking" ? /parking/ : /lift|elevator/;
+      return property.features.some((value) => feature.test(value.toLowerCase()) && !/planned/i.test(value));
+    }
+    return searchable.includes(term);
+  });
 }

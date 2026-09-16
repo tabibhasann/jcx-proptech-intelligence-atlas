@@ -15,8 +15,10 @@ import { Modal } from "./Modal";
 import { Advisor } from "./Advisor";
 import { CompareHomes } from "./CompareHomes";
 import { SearchHero } from "./SearchHero";
+import { PropertyGallery } from "./PropertyGallery";
 import { ProptyBrand, JcxBrand } from "./Brand";
 import { parseHomeSearch, matchesHomeText } from "@/content/propty-search";
+import { getCloseMatches } from "@/content/propty-matches";
 
 type View = "explore" | "saved" | "visits" | "team";
 type Visit = {
@@ -26,7 +28,7 @@ type Visit = {
   time: string;
   status: "Requested" | "Reviewed" | "Cancelled";
 };
-type Dialog = "advisor" | "compare" | "booking" | "reset" | "photo" | null;
+type Dialog = "advisor" | "compare" | "booking" | "reset" | null;
 const STORAGE = "propty-product-demo-v1";
 const validId = (id: unknown): id is string =>
   typeof id === "string" && properties.some((p) => p.id === id);
@@ -51,6 +53,7 @@ function HomeCard({
   onOpen,
   onSave,
   onCompare,
+  matchNotes,
 }: {
   property: Property;
   saved: boolean;
@@ -58,6 +61,7 @@ function HomeCard({
   onOpen: () => void;
   onSave: () => void;
   onCompare: () => void;
+  matchNotes?: { matched: string[]; differences: string[] };
 }) {
   return (
     <article className="pt-card">
@@ -85,6 +89,12 @@ function HomeCard({
         </button>
       </div>
       <div className="pt-card-content">
+        {matchNotes && (
+          <div className="pt-match-note">
+            <p>{matchNotes.differences.join(" · ")}</p>
+            {matchNotes.matched.length > 0 && <small>{matchNotes.matched.join(" · ")}</small>}
+          </div>
+        )}
         <div className="pt-card-top">
           <span>{p.area}, Dhaka</span>
         </div>
@@ -294,6 +304,7 @@ export function ProptyApp() {
                 : 0,
         );
   const activeVisits = visits.filter((v) => v.status !== "Cancelled");
+  const closeMatches = view === "explore" && matched.length < 3 ? getCloseMatches(query, searchTerms, unsupported) : [];
   const collectionKey = JSON.stringify([
     view,
     query,
@@ -459,22 +470,7 @@ export function ProptyApp() {
               </div>
             </div>
             <div className="pt-detail-lead">
-              <div className="pt-detail-photo">
-                <Image
-                  src={selected.images[0]}
-                  fill
-                  sizes="(max-width: 800px) 100vw, 90vw"
-                  alt={`Illustrative interior for ${selected.title}, not a photograph of a real listed home`}
-                  priority
-                />
-                <button
-                  className="pt-photo-expand"
-                  onClick={() => setDialog("photo")}
-                >
-                  <Icon name="expand" size={18} />
-                  View photo
-                </button>
-              </div>
+              <PropertyGallery key={selected.id} property={selected} />
             </div>
             <div className="pt-detail-grid">
               <div className="pt-detail-body">
@@ -726,6 +722,17 @@ export function ProptyApp() {
                       Show more homes
                     </button>
                   </div>
+                )}
+                {closeMatches.length > 0 && (
+                  <section className="pt-close-matches" aria-labelledby="close-matches-title">
+                    <h3 id="close-matches-title">Close matches, with one difference</h3>
+                    <p>Your search stays unchanged. These alternatives are worth a look if you can be flexible.</p>
+                    <div className="pt-card-grid">
+                      {closeMatches.map(({property: p, matched, differences}) => (
+                        <HomeCard key={p.id} property={p} saved={saved.includes(p.id)} compared={compared.includes(p.id)} onOpen={() => openHome(p.id)} onSave={() => toggleSave(p.id)} onCompare={() => toggleCompare(p.id)} matchNotes={{matched, differences}} />
+                      ))}
+                    </div>
+                  </section>
                 )}
               </section>
             )}
@@ -1115,23 +1122,6 @@ export function ProptyApp() {
               These times are preferences, not verified appointment slots.
             </small>
           </form>
-        </Modal>
-      )}
-      {dialog === "photo" && selected && (
-        <Modal
-          title={selected.title}
-          wide
-          variant="photo"
-          onClose={() => setDialog(null)}
-        >
-          <div className="pt-lightbox">
-            <Image
-              src={selected.images[0]}
-              alt={`Illustrative interior for ${selected.title}`}
-              width={1400}
-              height={1000}
-            />
-          </div>
         </Modal>
       )}
       {dialog === "reset" && (

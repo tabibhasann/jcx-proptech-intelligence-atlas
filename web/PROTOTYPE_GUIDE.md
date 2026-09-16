@@ -5,7 +5,7 @@ Route: `/prototype`. The existing research atlas remains at `/`.
 ## A five-minute demonstration
 
 1. Open the prototype. Introduce it as a proposed buyer experience, not a live marketplace. The supplied Propty artwork, “Here and now” tagline and “Powered by JCX” attribution are retained.
-2. Type **3 bedrooms in Bashundhara under 1.8 crore** into the central search bar and click **Search homes**. Two fictional homes match. Add **with parking** to get Banyan only. Gemini interprets the words, but the inventory and matching code determine the results. Alternatively, use the filters without an API call. Bangla search is also supported, but all results remain English.
+2. Type **3 bedrooms in Bashundhara under 1.8 crore** into the central search bar and click **Search with AI**. Two fictional homes match. Add **with parking** to get Banyan as the exact match and Lightwell separately labelled **Parking not listed**. Gemini interprets the words, but the inventory and matching code determine the results. Alternatively, use the filters without an API call. Bangla interpretation is supported by Gemini; all results remain English.
 3. Save Banyan and Lightwell using their hearts. Add both to Compare. Explain the actual sample trade-off: Lightwell costs BDT 25 lakh less; Banyan provides 300 more square feet, an extra bathroom and a sample parking inclusion. These are invented demonstration figures, not market evidence.
 4. Open Banyan. Show the clear price, features, trade-off and disclosure of what has not been checked. The intended product differentiator is understandable information and a coherent next step, not an unsubstantiated “verified” badge.
 5. Request a viewing for a future date. The request appears in **My visits**. Change its time to show the journey really works within the demo.
@@ -22,7 +22,9 @@ If asked whether it is real AI: “The text search now uses Gemini to interpret 
 - 49 property-detail views with shareable `?home=` URLs. The collection shows nine at a time; Show more homes reveals another nine without changing the search.
 - Restored photo-and-shortlist section opens the guided questionnaire. It has no decorative icon.
 - Gently inset hero and background parallax on scroll; reduced-motion settings disable these effects.
-- Full-size illustrative photo viewing and sample price per square foot.
+- The original six homes each have a three-photo inspiration gallery, thumbnail selection, keyboard arrows, image count and animated open/close. These are separate licensed interiors, not rooms of one actual apartment. Other homes retain a single photo.
+- Close matches appear when fewer than three exact matches exist. They preserve neighbourhood and ready-only constraints and allow one compromise only: up to 10% over budget, one fewer bedroom, or one feature not listed. Unsupported requirements and unknown text do not produce purported close matches. Exact counts remain separate. Planned parking/lifts do not count as available amenities.
+- Responsive phone controls use readable input sizes and touch targets, with a stacked layout at narrow widths. The guided area selector avoids a long overflowing grid. Comparison tables scroll within their own container.
 - Saved homes retained on the current device.
 - Up to three homes in an in-session comparison, with calculated price/space ranges and a Differences only switch.
 - A three-step guided assistant, including an honest no-match state.
@@ -33,7 +35,7 @@ If asked whether it is real AI: “The text search now uses Gemini to interpret 
 
 ## Deliberate boundaries
 
-- All 49 homes, prices, specifications and statuses are fictional. The original six licensed interior photos are reused across this collection, not actual JCX or Dhaka listings. Provenance is in `public/propty/ASSET_SOURCES.md`. Repeated photo disclaimers were removed from hero and cards; the footer and viewing action retain the demo explanation.
+- All 49 homes, prices, specifications and statuses are fictional. Six original interior photos are reused across this collection; three additional licensed kitchen/bedroom images illustrate the gallery. None represents actual JCX or Dhaka inventory. Provenance is in `public/propty/ASSET_SOURCES.md`. Repeated photo disclaimers were removed from hero and cards; the footer and viewing action retain the demo explanation.
 - No external agents, emails, calls, accounts, payments, maps, legal verification or backend database. The text search alone calls Gemini through a server-side endpoint. Search text is sent to Google; no saved homes, visits or private client documents are sent.
 - Viewing times are preferences, not available appointment slots. No third party receives requests.
 - Saved homes, visits and the text preference are stored locally. Comparisons, filters and the latest buyer brief are session state. This is not cross-device synchronization or an authenticated team console.
@@ -60,4 +62,6 @@ Browser checks performed at desktop and mobile widths: browsing, filtering, savi
 
 Run `npm run build`, `npm run verify:prototype`, `npm run verify:navigation`, `npm run verify:output`, `npm run verify:executive` and `npm run verify:companies` before future releases. Use `npm run dev` for development or `npm start` after building. The legacy `serve:static` command only serves an older export and does not represent the current application.
 
-Next visual additions worth prioritizing: a coherent 4–6-photo set for each property; an accurate, labelled floor plan; and a real neighbourhood location when actual inventory is approved. Do not mix unrelated interiors as if they show the same home.
+Next visual additions worth prioritizing: an approved coherent 4–6-photo set for each property; an accurate, labelled floor plan; and a real neighbourhood location when actual inventory is approved. Do not mix unrelated interiors as if they show the same home.
+
+Extra filters are recommendations only, not implemented in this pass: keep location, budget and bedrooms in the hero, and add a compact More filters panel near the collection with floor area, bathrooms, parking, lift, balcony and readiness. Show an apply/result count and removable active filters. Bayut's search is a useful reference for grouping basic criteria and additional filters: https://www.bayut.com/for-sale/property/uae/?map_active=true . Do not add unsubstantiated commute times, verified badges or invented location data.
