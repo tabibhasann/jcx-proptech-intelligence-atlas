@@ -104,25 +104,23 @@ export function SearchHero({
             <label className="pt-sr-only" htmlFor="home-search">
               Describe your ideal home
             </label>
-            <input
+            <textarea
               id="home-search"
-              type="search"
+              role="searchbox"
+              rows={1}
               value={text}
               onChange={(e) => onText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  if (!busy) e.currentTarget.form?.requestSubmit();
+                }
+              }}
               placeholder="Describe your ideal home…"
               enterKeyHint="search"
               autoComplete="off"
               maxLength={180}
             />
-            <button
-              className="pt-primary"
-              type="submit"
-              disabled={busy}
-              aria-busy={busy}
-            >
-              {busy ? "Finding homes…" : "Search with AI"}{" "}
-              {!busy && <Icon name="arrow" size={18} />}
-            </button>
           </div>
           <div className="pt-search-options">
             <label>
@@ -206,6 +204,15 @@ export function SearchHero({
               </span>
             </label>
           </div>
+          <button
+            className="pt-primary pt-search-submit-action"
+            type="submit"
+            disabled={busy}
+            aria-busy={busy}
+          >
+            {busy ? "Finding homes…" : "Search with AI"}{" "}
+            {!busy && <Icon name="arrow" size={18} />}
+          </button>
         </form>
         <div className="pt-search-suggestions">
           <span>Try AI search</span>

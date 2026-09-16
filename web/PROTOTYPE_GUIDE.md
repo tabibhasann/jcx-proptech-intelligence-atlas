@@ -56,6 +56,8 @@ Provider reference: [Gemini structured outputs](https://ai.google.dev/gemini-api
 
 ## Verification checks
 
+The mobile home screen uses a compact header with underline navigation, a shorter photo-led introduction and an overlapping white search card. Filters precede the primary search action on phones. The search field wraps long requests, grows where browser support permits, and submits with Enter (Shift+Enter adds a line). Phone controls retain at least 16px input text to avoid iOS focus zoom. The desktop hero keeps its wider, image-led layout.
+
 Production build and TypeScript pass. Research content, privacy, navigation, executive and company-summary checks remain in place. Fixture tests cover 49 unique identities, preservation of the six original IDs, every area's exact local-search results and AI-validator acceptance, local-currency formatting, strict filter matches and empty results. Bangla interpretation depends on Gemini; the deterministic fallback is primarily English and does not guarantee full Bangla matching.
 
 Browser checks performed at desktop and mobile widths: browsing, filtering, saving, two-home comparison, property details, viewing requests, rescheduling, team review, cancellation, refresh persistence, assistant matches and assistant no-match state. No console errors were observed in the tested flow.
