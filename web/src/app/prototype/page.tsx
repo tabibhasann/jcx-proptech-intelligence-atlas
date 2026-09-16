@@ -13,7 +13,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: { absolute: "Propty · Here and now" },
   description:
-    "Explore the Propty product concept. A guided apartment discovery demo, backed by JCX.",
+    "Explore the Propty product concept. A guided apartment discovery demo, powered by JCX.",
   robots: { index: false, follow: false },
 };
 export default function PrototypePage() {

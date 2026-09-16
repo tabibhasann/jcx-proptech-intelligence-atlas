@@ -31,21 +31,27 @@ export function SearchHero({
     const update = () => {
       frame = 0;
       if (!hero.current || !scene.current) return;
-      const rect = hero.current.getBoundingClientRect();
       const progress = media.matches
         ? 0
-        : Math.max(0, Math.min(1, -rect.top / rect.height));
-      scene.current.style.transform = `translate3d(0, ${progress * 75}px, 0) scale(${1.035 + progress * 0.055})`;
+        : Math.max(0, Math.min(1, window.scrollY / hero.current.offsetHeight));
+      hero.current.style.setProperty("--hero-inset", `${progress * 24}px`);
+      hero.current.style.setProperty(
+        "--hero-radius",
+        `${24 + progress * 18}px`,
+      );
+      scene.current.style.transform = `translate3d(0, ${progress * 70}px, 0) scale(${1.04 + progress * 0.04})`;
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
     update();
     addEventListener("scroll", schedule, { passive: true });
+    addEventListener("resize", schedule);
     media.addEventListener("change", schedule);
     return () => {
       cancelAnimationFrame(frame);
       removeEventListener("scroll", schedule);
+      removeEventListener("resize", schedule);
       media.removeEventListener("change", schedule);
     };
   }, []);
@@ -206,17 +212,10 @@ export function SearchHero({
             ),
           )}
         </div>
-        <p className="pt-search-privacy">
-          Gemini helps interpret your search. Please leave out personal details.
-        </p>
         <a className="pt-scroll-cue" href="#homes">
           <span>Explore the collection</span>
           <span aria-hidden="true">↓</span>
         </a>
-      </div>
-      <div className="pt-scene-caption">
-        <span>Room to imagine your everyday.</span>
-        <span>Illustrative interior · demo inventory</span>
       </div>
     </section>
   );

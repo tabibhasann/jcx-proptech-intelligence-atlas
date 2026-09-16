@@ -83,12 +83,10 @@ function HomeCard({
         >
           <Icon name="heart" size={19} />
         </button>
-        <span className="pt-photo-note">Illustrative photo</span>
       </div>
       <div className="pt-card-content">
         <div className="pt-card-top">
           <span>{p.area}, Dhaka</span>
-          <span>Sample home</span>
         </div>
         <button className="pt-card-title" onClick={onOpen}>
           {p.title}
@@ -307,7 +305,7 @@ export function ProptyApp() {
     let parsed = { ...parseHomeSearch(text), unsupported: [] as string[] };
     setSearchBusy(!!text.trim());
     setSearchNote("");
-    let note = "Standard search · sample homes";
+    let note = "";
     if (text.trim()) {
       try {
         const response = await fetch("/api/propty/search", {
@@ -328,7 +326,6 @@ export function ProptyApp() {
         )
           throw new Error("Invalid response");
         parsed = result;
-        note = "Interpreted with Gemini · matched against sample inventory";
       } catch {
         if (controller.signal.aborted) return;
         note =
@@ -458,59 +455,36 @@ export function ProptyApp() {
                   alt={`Illustrative interior for ${selected.title}, not a photograph of a real listed home`}
                   priority
                 />
-                <span>Illustrative interior · fictional sample home</span>
                 <button
                   className="pt-photo-expand"
                   onClick={() => setDialog("photo")}
                 >
                   <Icon name="expand" size={18} />
-                  Explore photo <span className="pt-photo-count">01</span>
+                  View photo
                 </button>
               </div>
-              <aside className="pt-detail-summary">
-                <p className="pt-eyebrow">SAMPLE ASKING PRICE</p>
-                <h2>{formatPrice(selected.price)}</h2>
-                <p className="pt-unit-price">
-                  BDT{" "}
-                  {Math.round(selected.price / selected.sqft).toLocaleString()}{" "}
-                  / sq ft · sample
-                </p>
-                <div className="pt-summary-facts">
-                  <span>
-                    <strong>{selected.bedrooms}</strong> bedrooms
-                  </span>
-                  <span>
-                    <strong>{selected.bathrooms}</strong> bathrooms
-                  </span>
-                  <span>
-                    <strong>{selected.sqft.toLocaleString()}</strong> sq ft
-                  </span>
-                </div>
-                <p className="pt-summary-status">
-                  <span
-                    className={
-                      selected.status === "Ready"
-                        ? "pt-status-ready"
-                        : "pt-status-progress"
-                    }
-                  />
-                  {selected.status} <small>Sample status</small>
-                </p>
-                <p className="pt-summary-description">{selected.tagline}</p>
-                <button
-                  className="pt-primary pt-full"
-                  onClick={() => book(selected.id)}
-                >
-                  Request a viewing <Icon name="arrow" size={17} />
-                </button>
-                <small className="pt-summary-disclosure">
-                  Demo request only. No real appointment is booked. Additional
-                  charges are not established.
-                </small>
-              </aside>
             </div>
             <div className="pt-detail-grid">
-              <div>
+              <div className="pt-detail-body">
+                <div className="pt-detail-facts">
+                  <span>
+                    <strong>{selected.bedrooms}</strong>bedrooms
+                  </span>
+                  <span>
+                    <strong>{selected.bathrooms}</strong>bathrooms
+                  </span>
+                  <span>
+                    <strong>{selected.sqft.toLocaleString()}</strong>sq ft
+                  </span>
+                  <span>
+                    <strong>
+                      {selected.status === "Under construction"
+                        ? "In progress"
+                        : selected.status}
+                    </strong>
+                    completion
+                  </span>
+                </div>
                 <section className="pt-detail-section">
                   <h2>About this home</h2>
                   <p>{selected.description}</p>
@@ -544,6 +518,26 @@ export function ProptyApp() {
                   ))}
                 </section>
               </div>
+              <aside className="pt-detail-summary">
+                <p className="pt-eyebrow">ASKING PRICE</p>
+                <h2>{formatPrice(selected.price)}</h2>
+                <p className="pt-unit-price">
+                  BDT{" "}
+                  {Math.round(selected.price / selected.sqft).toLocaleString()}{" "}
+                  / sq ft
+                </p>
+                <p className="pt-summary-description">{selected.tagline}</p>
+                <button
+                  className="pt-primary pt-full"
+                  onClick={() => book(selected.id)}
+                >
+                  Request a viewing <Icon name="arrow" size={17} />
+                </button>
+                <small className="pt-summary-disclosure">
+                  Demo request only. No real appointment is booked. Additional
+                  charges are not established.
+                </small>
+              </aside>
             </div>
           </div>
         ) : (
@@ -591,7 +585,7 @@ export function ProptyApp() {
                     <p className="pt-muted">
                       {view === "saved"
                         ? "The homes you like, all in one place. Saved on this device."
-                        : "Explore six sample homes across five Dhaka neighbourhoods."}
+                        : "Find your next home in Dhaka’s neighbourhoods."}
                     </p>
                   </div>
                 </div>
@@ -623,7 +617,6 @@ export function ProptyApp() {
                         Ready homes only
                       </label>
                       <label className="pt-sort">
-                        <span>Sort</span>
                         <select
                           aria-label="Sort homes"
                           value={sort}
@@ -642,7 +635,7 @@ export function ProptyApp() {
                   <div className="pt-search-receipt">
                     <Icon name="search" size={18} />
                     <span>“{submittedText}”</span>
-                    <small>{searchNote}</small>
+                    {searchNote && <small>{searchNote}</small>}
                   </div>
                 )}
                 <div className="pt-result-meta" aria-live="polite">
@@ -690,7 +683,7 @@ export function ProptyApp() {
                         ? "Tap the heart on a home to keep it here."
                         : unsupported.length
                           ? `We cannot check these requirements in this collection: ${unsupported.join(", ")}. Try a search using area, price, bedrooms or listed features.`
-                          : "Try a different area, adjust the budget or remove a keyword. Search only covers our six sample listings."}
+                          : "Try a different area, adjust the budget or remove a keyword."}
                     </p>
                     <button
                       className="pt-primary"
@@ -854,6 +847,39 @@ export function ProptyApp() {
               </section>
             )}
           </>
+        )}
+        {!selected && view === "explore" && (
+          <section
+            className="pt-shortlist-story pt-container"
+            aria-labelledby="shortlist-title"
+          >
+            <div className="pt-shortlist-image">
+              <Image
+                src="/propty/home-3.jpg"
+                alt="A welcoming living room with a light sofa and teal cushions"
+                fill
+                sizes="(max-width: 800px) 100vw, 50vw"
+              />
+            </div>
+            <div className="pt-shortlist-copy">
+              <p className="pt-eyebrow">A LITTLE GUIDANCE GOES A LONG WAY</p>
+              <h2 id="shortlist-title">
+                You know your life.
+                <br />
+                Let’s find the home.
+              </h2>
+              <p>
+                Tell us what matters. We’ll help you narrow the options, one
+                clear step at a time.
+              </p>
+              <button
+                className="pt-primary"
+                onClick={() => setDialog("advisor")}
+              >
+                Build my shortlist
+              </button>
+            </div>
+          </section>
         )}
       </main>
       <footer className="pt-footer pt-container">
@@ -1074,12 +1100,6 @@ export function ProptyApp() {
               width={1400}
               height={1000}
             />
-          </div>
-          <div className="pt-gallery-caption">
-            <span>
-              01 / 01 <span>Illustrative interior</span>
-            </span>
-            <p>Sample imagery, not a photograph of a JCX listing.</p>
           </div>
         </Modal>
       )}

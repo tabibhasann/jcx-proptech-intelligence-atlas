@@ -17,7 +17,7 @@ export function ProptyBrand() {
 export function JcxBrand() {
   return (
     <span className="pt-jcx-brand">
-      <span>Backed by</span>
+      <span>Powered by</span>
       <Image
         src="/propty/jcx-deck.png"
         width={374}
