@@ -16,6 +16,7 @@ const library = asModule(
   ).replace('"../content/propty-demo"', JSON.stringify(fixture)),
 );
 const { validateInterpretation } = await import(library);
+const { propertyAreas } = await import(fixture);
 const good = {
   area: "Bashundhara",
   maxPrice: 18000000,
@@ -35,6 +36,9 @@ assert.deepEqual(validateInterpretation(good), {
   terms: ["parking"],
   unsupported: [],
 });
+for (const area of propertyAreas) {
+  assert.equal(validateInterpretation({ ...good, area }).query.area, area);
+}
 for (const bad of [
   { ...good, area: "Imaginary area" },
   { ...good, maxPrice: -1 },

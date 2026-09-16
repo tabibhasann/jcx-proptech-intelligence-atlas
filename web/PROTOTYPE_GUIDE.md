@@ -4,7 +4,7 @@ Route: `/prototype`. The existing research atlas remains at `/`.
 
 ## A five-minute demonstration
 
-1. Open the prototype. Introduce it as a proposed buyer experience, not a live marketplace. The supplied Propty artwork, “Here and now” tagline and “Backed by JCX” attribution are retained.
+1. Open the prototype. Introduce it as a proposed buyer experience, not a live marketplace. The supplied Propty artwork, “Here and now” tagline and “Powered by JCX” attribution are retained.
 2. Type **3 bedrooms in Bashundhara under 1.8 crore** into the central search bar and click **Search homes**. Two fictional homes match. Add **with parking** to get Banyan only. Gemini interprets the words, but the inventory and matching code determine the results. Alternatively, use the filters without an API call. Bangla search is also supported, but all results remain English.
 3. Save Banyan and Lightwell using their hearts. Add both to Compare. Explain the actual sample trade-off: Lightwell costs BDT 25 lakh less; Banyan provides 300 more square feet, an extra bathroom and a sample parking inclusion. These are invented demonstration figures, not market evidence.
 4. Open Banyan. Show the clear price, features, trade-off and disclosure of what has not been checked. The intended product differentiator is understandable information and a coherent next step, not an unsubstantiated “verified” badge.
@@ -12,14 +12,16 @@ Route: `/prototype`. The existing research atlas remains at `/`.
 6. Open **Team demo** in the footer. The same request appears there, with a **Mark reviewed** action. This illustrates an operational handoff, not an actual staffed service or appointment confirmation.
 7. Try **Help me choose**: Bashundhara → BDT 1.8 crore → 3+ bedrooms. The guided preview returns the same two sample homes. **Explore these matches** applies the brief to the browsing view and shares it with the in-session team demo.
 
-If asked whether it is real AI: “The text search now uses Gemini to interpret what you need. It cannot invent homes or prices: those come from our six sample listings. The separate Help me choose questionnaire is still rule-based. We are seeking approval for the experience and development scope, not claiming a live marketplace.”
+If asked whether it is real AI: “The text search now uses Gemini to interpret what you need. It cannot invent homes or prices: those come from our 49 sample listings. The separate Help me choose questionnaire is still rule-based. We are seeking approval for the experience and development scope, not claiming a live marketplace.”
 
 ## Working controls
 
 - Text search for known areas, home names, budget, bedrooms, readiness and matching feature keywords. Unsupported requests can return no matches, rather than invented results.
 - Original Propty/Powered by JCX and separate JCX artwork extracted from the final presentation. No private slide content is published.
 - Location, maximum asking price, minimum bedrooms, ready-only filter and sorting.
-- Six property-detail views with shareable `?home=` URLs.
+- 49 property-detail views with shareable `?home=` URLs. The collection shows nine at a time; Show more homes reveals another nine without changing the search.
+- Restored photo-and-shortlist section opens the guided questionnaire. It has no decorative icon.
+- Gently inset hero and background parallax on scroll; reduced-motion settings disable these effects.
 - Full-size illustrative photo viewing and sample price per square foot.
 - Saved homes retained on the current device.
 - Up to three homes in an in-session comparison, with calculated price/space ranges and a Differences only switch.
@@ -31,7 +33,7 @@ If asked whether it is real AI: “The text search now uses Gemini to interpret 
 
 ## Deliberate boundaries
 
-- All six homes, prices, specifications and statuses are fictional. Licensed interior photos are illustrative, not actual JCX or Dhaka listings. Provenance is in `public/propty/ASSET_SOURCES.md`.
+- All 49 homes, prices, specifications and statuses are fictional. The original six licensed interior photos are reused across this collection, not actual JCX or Dhaka listings. Provenance is in `public/propty/ASSET_SOURCES.md`. Repeated photo disclaimers were removed from hero and cards; the footer and viewing action retain the demo explanation.
 - No external agents, emails, calls, accounts, payments, maps, legal verification or backend database. The text search alone calls Gemini through a server-side endpoint. Search text is sent to Google; no saved homes, visits or private client documents are sent.
 - Viewing times are preferences, not available appointment slots. No third party receives requests.
 - Saved homes, visits and the text preference are stored locally. Comparisons, filters and the latest buyer brief are session state. This is not cross-device synchronization or an authenticated team console.
@@ -52,7 +54,7 @@ Provider reference: [Gemini structured outputs](https://ai.google.dev/gemini-api
 
 ## Verification checks
 
-Production build and TypeScript pass. Research content, privacy, navigation, executive and company-summary checks remain in place. Fixture tests cover all six identities, local-currency formatting, strict filter matches and empty results.
+Production build and TypeScript pass. Research content, privacy, navigation, executive and company-summary checks remain in place. Fixture tests cover 49 unique identities, preservation of the six original IDs, every area's exact local-search results and AI-validator acceptance, local-currency formatting, strict filter matches and empty results. Bangla interpretation depends on Gemini; the deterministic fallback is primarily English and does not guarantee full Bangla matching.
 
 Browser checks performed at desktop and mobile widths: browsing, filtering, saving, two-home comparison, property details, viewing requests, rescheduling, team review, cancellation, refresh persistence, assistant matches and assistant no-match state. No console errors were observed in the tested flow.
 

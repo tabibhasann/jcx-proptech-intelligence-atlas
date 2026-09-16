@@ -126,6 +126,7 @@ export function ProptyApp() {
   const [large, setLarge] = useState(false);
   const [query, setQuery] = useState<PropertyQuery>({});
   const [sort, setSort] = useState("featured");
+  const [collectionPage, setCollectionPage] = useState({ key: "", count: 9 });
   const [searchText, setSearchText] = useState("");
   const [searchTerms, setSearchTerms] = useState<string[]>([]);
   const [submittedText, setSubmittedText] = useState("");
@@ -291,6 +292,15 @@ export function ProptyApp() {
                 : 0,
         );
   const activeVisits = visits.filter((v) => v.status !== "Cancelled");
+  const collectionKey = JSON.stringify([
+    view,
+    query,
+    sort,
+    searchTerms,
+    unsupported,
+  ]);
+  const visibleCount =
+    collectionPage.key === collectionKey ? collectionPage.count : 9;
   const showResults = () =>
     resultsRef.current?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -655,7 +665,7 @@ export function ProptyApp() {
                 </div>
                 {listing.length ? (
                   <div className="pt-card-grid">
-                    {listing.map((p) => (
+                    {listing.slice(0, visibleCount).map((p) => (
                       <HomeCard
                         key={p.id}
                         property={p}
@@ -693,6 +703,24 @@ export function ProptyApp() {
                       }}
                     >
                       Explore all homes <Icon name="arrow" />
+                    </button>
+                  </div>
+                )}
+                {listing.length > visibleCount && (
+                  <div className="pt-collection-more">
+                    <p>
+                      Showing {visibleCount} of {listing.length} homes
+                    </p>
+                    <button
+                      className="pt-outline"
+                      onClick={() =>
+                        setCollectionPage({
+                          key: collectionKey,
+                          count: visibleCount + 9,
+                        })
+                      }
+                    >
+                      Show more homes
                     </button>
                   </div>
                 )}

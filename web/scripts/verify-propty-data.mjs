@@ -16,8 +16,18 @@ const { properties, filterProperties, formatPrice, DEMO_NOTICE } = await import(
 );
 
 assert.ok(properties.length >= 40);
-for (const id of ["banyan", "lightwell", "terrace", "courtyard", "horizon", "garden"])
-  assert.ok(properties.some((property) => property.id === id), `preserved id: ${id}`);
+for (const id of [
+  "banyan",
+  "lightwell",
+  "terrace",
+  "courtyard",
+  "horizon",
+  "garden",
+])
+  assert.ok(
+    properties.some((property) => property.id === id),
+    `preserved id: ${id}`,
+  );
 assert.equal(
   new Set(properties.map((property) => property.id)).size,
   properties.length,
@@ -99,7 +109,11 @@ assert.deepEqual(search("3 bedrooms in Bashundhara under 1.8 crore"), [
 ]);
 const readyParking = search("ready homes with parking");
 const expectedReadyParking = properties
-  .filter((p) => p.status === "Ready" && p.features.some((f) => f.toLowerCase().includes("parking")))
+  .filter(
+    (p) =>
+      p.status === "Ready" &&
+      p.features.some((f) => f.toLowerCase().includes("parking")),
+  )
   .map((p) => p.id);
 assert.deepEqual(readyParking, expectedReadyParking);
 assert.deepEqual(search("Gulshan under 150 lakh"), []);
@@ -110,6 +124,9 @@ assert.deepEqual(
   properties.map((p) => p.id),
 );
 assert.ok(search("3 bedrooms in Uttara under 2 crore").includes("lakeview"));
+for (const area of new Set(properties.map((property) => property.area))) {
+  assert.deepEqual(search(area), properties.filter((property) => property.area === area).map((property) => property.id));
+}
 const banglaMixed = parseHomeSearch("Uttara এ ready বাসা");
 assert.equal(banglaMixed.query.area, "Uttara");
 assert.equal(banglaMixed.query.readyOnly, true);
