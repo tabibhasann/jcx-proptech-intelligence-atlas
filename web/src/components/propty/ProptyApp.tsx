@@ -96,7 +96,9 @@ function HomeCard({
             <Icon name="bed" size={17} />
             {p.bedrooms} beds
           </span>
-          <span>{p.bathrooms} baths</span>
+          <span>
+            {p.bathrooms} {p.bathrooms === 1 ? "bath" : "baths"}
+          </span>
           <span>{p.sqft.toLocaleString()} sq ft</span>
         </div>
         <div className="pt-card-bottom">
@@ -481,7 +483,8 @@ export function ProptyApp() {
                     <strong>{selected.bedrooms}</strong>bedrooms
                   </span>
                   <span>
-                    <strong>{selected.bathrooms}</strong>bathrooms
+                    <strong>{selected.bathrooms}</strong>
+                    {selected.bathrooms === 1 ? "bathroom" : "bathrooms"}
                   </span>
                   <span>
                     <strong>{selected.sqft.toLocaleString()}</strong>sq ft
