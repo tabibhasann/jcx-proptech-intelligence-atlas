@@ -5,7 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const output = join(root, "out");
+const output = join(root, ".next/server/app");
 const routes = ["/", "/capabilities", "/plan"];
 const htmlFor = (route) => readFileSync(join(output, route === "/" ? "index.html" : `${route.slice(1)}.html`), "utf8");
 let linksChecked = 0;
@@ -20,7 +20,7 @@ for (const route of routes) {
     const url = new URL(href, `http://localhost${route}`);
     if (url.pathname.startsWith("/_next/")) continue;
     if (/\.[a-z0-9]+$/i.test(url.pathname)) {
-      assert.ok(existsSync(join(output, url.pathname)), `${route}: asset exists ${href}`);
+      assert.ok(existsSync(join(root, "public", url.pathname)) || existsSync(join(output, url.pathname)), `${route}: asset exists ${href}`);
       continue;
     }
     const target = htmlFor(url.pathname);

@@ -75,6 +75,7 @@ export function parseHomeSearch(input: string): {
 export function matchesHomeText(property: Property, terms: string[]): boolean {
   const searchable = [property.title, property.area, ...property.features]
     .join(" ")
-    .toLowerCase();
+    .toLowerCase()
+    .replaceAll("balconies", "balcony");
   return terms.every((term) => searchable.includes(term));
 }

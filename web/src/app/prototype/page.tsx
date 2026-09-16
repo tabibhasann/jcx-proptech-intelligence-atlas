@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { ProptyApp } from "@/components/propty/ProptyApp";
 import "./prototype.css";
 import "./refinement.css";
+import "./polish.css";
 
 const inter = Inter({
   subsets: ["latin"],

@@ -5,7 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const output = join(root, "out");
+const output = join(root, ".next/server/app");
 const markers = [
   "JCX_Meeting_Dossier",
   "JCX_Meeting_Cheat_Sheet",
@@ -30,10 +30,12 @@ const walk = (dir) => {
     const path = join(dir, name);
     const stat = statSync(path);
     if (stat.isDirectory()) walk(path);
-    else files.push(path);
+    else if (!path.startsWith(output) || /\.(html|rsc|body)$/.test(path)) files.push(path);
   }
 };
 walk(output);
+walk(join(root,".next/static"));
+walk(join(root,"public"));
 
 const hits = [];
 for (const path of files) {

@@ -8,8 +8,8 @@
   },
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
-    "verify": "node scripts/verify-content.mjs && node scripts/flagship-negative-tests.mjs && node scripts/comparative-negative-tests.mjs && node scripts/verify-propty-data.mjs",
-    "verify:prototype": "node scripts/verify-propty-data.mjs",
+    "verify": "node scripts/verify-content.mjs && node scripts/flagship-negative-tests.mjs && node scripts/comparative-negative-tests.mjs && node scripts/verify-propty-data.mjs && node scripts/verify-propty-ai.mjs",
+    "verify:prototype": "node scripts/verify-propty-data.mjs && node scripts/verify-propty-ai.mjs",
     "verify:output": "node scripts/verify-output-privacy.mjs",
     "verify:executive": "node scripts/verify-executive.mjs",
     "verify:navigation": "node scripts/verify-navigation.mjs",

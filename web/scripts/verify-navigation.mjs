@@ -3,9 +3,10 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-const root = join(dirname(dirname(fileURLToPath(import.meta.url))), "out");
+const project = dirname(dirname(fileURLToPath(import.meta.url)));
+const root = join(project, ".next/server/app");
 function walk(dir) { return readdirSync(dir,{withFileTypes:true}).flatMap(e => e.isDirectory() ? walk(join(dir,e.name)) : [join(dir,e.name)]); }
-const pages = walk(root).filter(f => f.endsWith(".html"));
+const pages = walk(root).filter(f => f.endsWith(".html") && !f.endsWith("_global-error.html"));
 const clean = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
 const decode = value => value.replaceAll("&amp;", "&").replaceAll("&#x27;", "'").replaceAll("&quot;", '"');
 const documents = new Map(pages.map(f => [f, clean(readFileSync(f,"utf8"))]));
@@ -31,6 +32,7 @@ for (const [file, html] of documents) {
     const path = decodeURIComponent(url.pathname);
     let target = join(root,path === "/" ? "index.html" : path);
     if (!existsSync(target)) target += ".html";
+    if (!existsSync(target) && existsSync(join(project,"public",path))) target = join(project,"public",path);
     if (!existsSync(target)) {failures.push(`${route}: missing local target ${href}`);continue;}
     if (url.hash && documents.has(target) && !documents.get(target).includes(`id="${decodeURIComponent(url.hash.slice(1))}"`)) failures.push(`${route}: missing anchor ${href}`);
     links++;

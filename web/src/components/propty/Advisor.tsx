@@ -31,7 +31,7 @@ export function Advisor({
   return (
     <div className="pt-advisor">
       <div className="pt-ai-label">
-        <Icon name="guide" /> Home finder <span>Guided demo · no live AI</span>
+        Home finder <span>Step-by-step filters</span>
       </div>
       <p className="pt-muted">
         Choose what you need. We’ll show the homes that match.

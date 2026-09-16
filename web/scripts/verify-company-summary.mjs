@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-const html = readFileSync(new URL("../out/companies.html", import.meta.url), "utf8").replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+const html = readFileSync(new URL("../.next/server/app/companies.html", import.meta.url), "utf8").replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
 const table = html.match(/<table class="co-table co-decision-table">([\s\S]*?)<\/table>/)?.[1];
 assert.ok(table, "The decision table must be the default server-rendered view");
 assert.equal((table.match(/scope="col"/g) ?? []).length, 5, "Expected five decision columns");

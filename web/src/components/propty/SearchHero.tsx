@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import {
   formatPrice,
   propertyAreas,
@@ -13,18 +14,48 @@ export function SearchHero({
   query,
   onQuery,
   onSearch,
-  onGuide,
+  busy,
 }: {
   text: string;
   onText: (value: string) => void;
   query: PropertyQuery;
   onQuery: (value: PropertyQuery) => void;
   onSearch: (text: string, reset?: boolean) => void;
-  onGuide: () => void;
+  busy: boolean;
 }) {
+  const scene = useRef<HTMLDivElement>(null);
+  const hero = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const media = matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!hero.current || !scene.current) return;
+      const rect = hero.current.getBoundingClientRect();
+      const progress = media.matches
+        ? 0
+        : Math.max(0, Math.min(1, -rect.top / rect.height));
+      scene.current.style.transform = `translate3d(0, ${progress * 75}px, 0) scale(${1.035 + progress * 0.055})`;
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    addEventListener("scroll", schedule, { passive: true });
+    media.addEventListener("change", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener("scroll", schedule);
+      media.removeEventListener("change", schedule);
+    };
+  }, []);
   return (
-    <section className="pt-search-hero" aria-label="Find an apartment in Dhaka">
-      <div className="pt-search-scene">
+    <section
+      ref={hero}
+      className="pt-search-hero"
+      aria-label="Find an apartment in Dhaka"
+    >
+      <div ref={scene} className="pt-search-scene">
         <Image
           src="/propty/hero.jpg"
           fill
@@ -65,8 +96,14 @@ export function SearchHero({
               autoComplete="off"
               maxLength={180}
             />
-            <button className="pt-primary" type="submit">
-              Search homes <Icon name="arrow" size={18} />
+            <button
+              className="pt-primary"
+              type="submit"
+              disabled={busy}
+              aria-busy={busy}
+            >
+              {busy ? "Finding homes…" : "Search homes"}{" "}
+              {!busy && <Icon name="arrow" size={18} />}
             </button>
           </div>
           <div className="pt-search-options">
@@ -92,7 +129,7 @@ export function SearchHero({
                 <small>Maximum price</small>
                 <select
                   aria-label="Maximum budget"
-                  value={query.budget || ""}
+                  value={query.budget ?? ""}
                   onChange={(e) =>
                     onQuery({
                       ...query,
@@ -125,7 +162,7 @@ export function SearchHero({
                 <small>Bedrooms</small>
                 <select
                   aria-label="Minimum bedrooms"
-                  value={query.bedrooms || ""}
+                  value={query.bedrooms ?? ""}
                   onChange={(e) =>
                     onQuery({
                       ...query,
@@ -169,12 +206,13 @@ export function SearchHero({
             ),
           )}
         </div>
-        <button className="pt-hero-help" onClick={onGuide}>
-          Prefer a little guidance?{" "}
-          <span>
-            Help me choose <Icon name="arrow" size={16} />
-          </span>
-        </button>
+        <p className="pt-search-privacy">
+          Gemini helps interpret your search. Please leave out personal details.
+        </p>
+        <a className="pt-scroll-cue" href="#homes">
+          <span>Explore the collection</span>
+          <span aria-hidden="true">↓</span>
+        </a>
       </div>
       <div className="pt-scene-caption">
         <span>Room to imagine your everyday.</span>

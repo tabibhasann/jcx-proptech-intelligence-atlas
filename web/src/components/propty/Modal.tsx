@@ -7,11 +7,13 @@ export function Modal({
   children,
   onClose,
   wide = false,
+  variant,
 }: {
   title: string;
   children: React.ReactNode;
   onClose: () => void;
   wide?: boolean;
+  variant?: "photo" | "compare";
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -27,7 +29,7 @@ export function Modal({
   return (
     <dialog
       ref={ref}
-      className={`pt-dialog ${wide ? "pt-dialog-wide" : ""}`}
+      className={`pt-dialog ${wide ? "pt-dialog-wide" : ""} ${variant ? `pt-dialog-${variant}` : ""}`}
       aria-labelledby="pt-dialog-title"
       onCancel={onClose}
       onClick={(e) => {
