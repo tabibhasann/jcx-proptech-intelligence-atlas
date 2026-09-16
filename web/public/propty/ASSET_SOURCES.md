@@ -16,6 +16,17 @@ The individual source pages identify these images as free under the [Unsplash Li
 | `home-5.jpg` | Francesca Tosolini | https://unsplash.com/photos/l43rLPXCP1M | https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?w=1400&q=82&fit=max&fm=jpg |
 | `home-6.jpg` | Minh Pham | https://unsplash.com/photos/OtXADkUh3-I | https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=1100&q=78&fit=max&fm=jpg |
 
+## Verified inspiration additions
+
+These three files are distinct interior inspirations, not photographs of the fictional homes and not a coherent same-apartment set. Each source page explicitly identifies the photographer and says “Free to use under the Unsplash License.”
+
+| Local asset | Photographer | Official Unsplash page | Download URL |
+| --- | --- | --- | --- |
+| `gallery-kitchen.jpg` | Francesca Tosolini (@fromitaly) | https://unsplash.com/photos/brown-kitchen-cabinet-with-kitchen-island-ykHFS4Ul64U | https://images.unsplash.com/photo-1560185008-37a6ea85a4d4?auto=format&fit=crop&fm=jpg&q=78&w=1400 |
+| `gallery-bedroom.jpg` | Francesca Tosolini (@fromitaly) | https://unsplash.com/photos/white-bedspread-hJMe1TDOBfw | https://images.unsplash.com/photo-1560185893-d9680d601385?auto=format&fit=crop&fm=jpg&q=78&w=1400 |
+| `gallery-bedroom-green.jpg` | Francesca Tosolini (@fromitaly) | https://unsplash.com/photos/two-green-and-white-pillows-on-empty-bed-w1RE0lBbREo | https://images.unsplash.com/photo-1560448205-4d9b3e6bb6db?auto=format&fit=crop&fm=jpg&q=78&w=1400 |
+
+
 Images use Unsplash's supplied size/quality variants, with no local retouching or generated visual changes. The hero is an aspirational interior illustration, not a claim about available inventory.
 
 ## Original brand artwork
