@@ -1,0 +1,87 @@
+.gallery {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  height: clamp(320px, 35vw, 490px);
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 22px;
+  background: #f2efea;
+}
+
+.gallery .tile {
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #f2efea;
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile:first-child { grid-row: 1 / -1; }
+.gallery[data-count="1"] { grid-template-columns: 1fr; grid-template-rows: 1fr; gap: 0; }
+.gallery[data-count="2"] .tile:nth-child(2) { grid-row: 1 / -1; }
+
+.tile img {
+  object-fit: cover;
+  transition: transform 650ms cubic-bezier(.2,.65,.3,1), filter 400ms ease;
+}
+
+.gallery .tile:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -7px;
+  box-shadow: inset 0 0 0 4px #6235c9;
+  z-index: 1;
+}
+
+.gallery .viewAll {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 11px 16px;
+  border: 1px solid #ffffffb3;
+  border-radius: 12px;
+  background: #fffffff2;
+  color: #302a36;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 3px 14px #0000000d;
+  backdrop-filter: blur(12px);
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover img { transform: scale(1.035); filter: brightness(.96); }
+  .viewAll:hover { background: #fff; transform: translateY(-2px); }
+}
+
+@media (max-width: 600px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    height: auto;
+    gap: 4px;
+    border-radius: 18px;
+  }
+  .tile:first-child { grid-column: 1 / -1; grid-row: 1; aspect-ratio: 1.45; }
+  .tile:not(:first-child) { aspect-ratio: 1.6; }
+  .gallery[data-count="2"] .tile:nth-child(2) { grid-column: 1 / -1; grid-row: 2; aspect-ratio: 2.9; }
+  .gallery .viewAll { grid-column: 1 / -1; grid-row: 1 / 2; bottom: 12px; right: 12px; padding: 9px 12px; font-size: 12px; border-radius: 10px; gap: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile img, .gallery .viewAll { transition: none; }
+  .tile:hover img, .viewAll:hover { transform: none; }
+}

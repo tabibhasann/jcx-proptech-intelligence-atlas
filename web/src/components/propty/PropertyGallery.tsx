@@ -5,49 +5,55 @@ import { useState } from "react";
 import type { Property } from "@/content/propty-demo";
 import { Icon } from "./Icon";
 import { Modal } from "./Modal";
+import styles from "./PropertyGallery.module.css";
 
 export function PropertyGallery({ property }: { property: Property }) {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
   const images = property.images;
   const multiple = images.length > 1;
+  const previewImages = images.slice(0, 3);
+  const openPhoto = (index: number) => {
+    setActive(index);
+    setOpen(true);
+  };
   const move = (direction: number) =>
     setActive((index) => (index + direction + images.length) % images.length);
   return (
     <>
-      <div className="pt-property-gallery">
-        <div className="pt-detail-photo">
-          <Image
-            key={images[active]}
-            src={images[active]}
-            fill
-            sizes="(max-width: 800px) 100vw, 90vw"
-            alt={`Interior inspiration for ${property.title}, photo ${active + 1}`}
-            priority
-          />
-          <button className="pt-photo-expand" onClick={() => setOpen(true)}>
-            <Icon name="expand" size={18} />
-            {multiple ? `View ${images.length} photos` : "View photo"}
+      <section
+        className={`pt-property-gallery ${styles.gallery}`}
+        data-count={previewImages.length}
+        aria-label={`${property.title} photo gallery`}
+      >
+        {previewImages.map((src, index) => (
+          <button
+            key={src}
+            type="button"
+            className={styles.tile}
+            aria-label={`Open photo ${index + 1} of ${images.length}`}
+            onClick={() => openPhoto(index)}
+          >
+            <Image
+              src={src}
+              fill
+              sizes={index === 0
+                ? multiple ? "(max-width: 600px) 100vw, (max-width: 1400px) 62vw, 850px" : "(max-width: 1400px) 95vw, 1300px"
+                : "(max-width: 600px) 50vw, (max-width: 1400px) 32vw, 450px"}
+              alt={`Interior inspiration for ${property.title}, photo ${index + 1}`}
+              priority={index === 0}
+            />
           </button>
-        </div>
-        {multiple && (
-          <div className="pt-gallery-thumbnails" aria-label="Interior inspiration photos">
-            {images.map((src, index) => (
-              <button
-                key={src}
-                aria-label={`Show photo ${index + 1}`}
-                aria-pressed={active === index}
-                onClick={() => setActive(index)}
-              >
-                <Image src={src} alt="" width={144} height={96} />
-              </button>
-            ))}
-            <span className="pt-gallery-position" aria-live="polite">
-              Interior inspiration · {active + 1} / {images.length}
-            </span>
-          </div>
-        )}
-      </div>
+        ))}
+        <button
+          type="button"
+          className={styles.viewAll}
+          onClick={() => openPhoto(0)}
+        >
+          <Icon name="expand" size={16} />
+          {multiple ? `View ${images.length} photos` : "View photo"}
+        </button>
+      </section>
       {open && (
         <Modal
           title={`${property.title}: interior inspiration`}
