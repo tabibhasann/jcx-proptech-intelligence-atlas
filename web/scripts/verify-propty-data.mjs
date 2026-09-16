@@ -98,8 +98,10 @@ assert.deepEqual(search("3 bedrooms in Bashundhara under 1.8 crore"), [
   "lightwell",
 ]);
 const readyParking = search("ready homes with parking");
-for (const id of ["banyan", "terrace", "horizon", "lakeview", "maple", "lumen", "atlas", "skylark", "parkline", "solace", "willowcrest", "rainier"])
-  assert.ok(readyParking.includes(id), `ready parking result: ${id}`);
+const expectedReadyParking = properties
+  .filter((p) => p.status === "Ready" && p.features.some((f) => f.toLowerCase().includes("parking")))
+  .map((p) => p.id);
+assert.deepEqual(readyParking, expectedReadyParking);
 assert.deepEqual(search("Gulshan under 150 lakh"), []);
 assert.deepEqual(search("Lightwell"), ["lightwell"]);
 assert.deepEqual(search("rooftop pool"), []);
@@ -108,7 +110,9 @@ assert.deepEqual(
   properties.map((p) => p.id),
 );
 assert.ok(search("3 bedrooms in Uttara under 2 crore").includes("lakeview"));
-assert.ok(search("৩ bedrooms in Bashundhara") .length >= 1 || search("Bashundhara 3 bedrooms").length >= 1);
+const banglaMixed = parseHomeSearch("Uttara এ ready বাসা");
+assert.equal(banglaMixed.query.area, "Uttara");
+assert.equal(banglaMixed.query.readyOnly, true);
 assert.equal(parseHomeSearch("under 1.7 cr").query.budget, 17000000);
 assert.equal(parseHomeSearch("5 bedrooms").query.bedrooms, 5);
 assert.ok(!Number.isNaN(parseHomeSearch("under 1.2.3 crore").query.budget));

@@ -245,10 +245,16 @@ const extendedFixtureData: Array<[
   ["rainier", "Uttara", 24800000, 4, 3, 2180, "Ready", ["Study nook", "Balcony", "1 parking space"]],
 ];
 
-for (const [id, area, price, bedrooms, bathrooms, sqft, status, features] of extendedFixtureData) {
+const titleCase = (value: string) =>
+  value
+    .split(/[-_]/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+for (const [index, [id, area, price, bedrooms, bathrooms, sqft, status, features]] of extendedFixtureData.entries()) {
   properties.push({
     id,
-    title: `${id.replace(/(^|-)/g, (m) => m.toUpperCase())} Residence`,
+    title: `${titleCase(id)} Residence`,
     area,
     address: `${area}, Dhaka · fictional address`,
     price,
@@ -256,8 +262,13 @@ for (const [id, area, price, bedrooms, bathrooms, sqft, status, features] of ext
     bathrooms,
     sqft,
     status,
-    tagline: "A fictional home to compare at a glance.",
-    description: `A concise fictional ${bedrooms}-bedroom sample in ${area} for exploring Propty's search and comparison flows.`,
+    tagline: [
+      "A calm base for busy Dhaka days.",
+      "A practical plan with room to settle.",
+      "A bright sample home with flexible edges.",
+      "A considered footprint for city living.",
+    ][index % 4],
+    description: `A fictional ${bedrooms}-bedroom ${status === "Ready" ? "ready-to-view" : "planned"} home in ${area}, with ${features.slice(0, 2).join(" and ").toLowerCase()}. It is included to make Propty's comparison journey concrete, not to represent a live listing.`,
     features,
     tradeoff: "Illustrative details only; availability, charges and documents are not established.",
     images: [`/propty/home-${(properties.length % 6) + 1}.jpg`],
