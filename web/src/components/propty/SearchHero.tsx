@@ -1,12 +1,18 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   formatPrice,
   propertyAreas,
   type PropertyQuery,
 } from "@/content/propty-demo";
 import { Icon } from "./Icon";
+import {
+  MoreFilters,
+  type ExtendedPropertyQuery,
+  type Transaction,
+} from "./MoreFilters";
+import styles from "./MoreFilters.module.css";
 
 export function SearchHero({
   text,
@@ -15,6 +21,7 @@ export function SearchHero({
   onQuery,
   onSearch,
   busy,
+  onTransactionChange,
 }: {
   text: string;
   onText: (value: string) => void;
@@ -22,9 +29,41 @@ export function SearchHero({
   onQuery: (value: PropertyQuery) => void;
   onSearch: (text: string, reset?: boolean) => void;
   busy: boolean;
+  onTransactionChange?: (transaction: Transaction) => void;
 }) {
   const scene = useRef<HTMLDivElement>(null);
   const hero = useRef<HTMLElement>(null);
+  const [transaction, setTransaction] = useState<Transaction>(
+    (query as ExtendedPropertyQuery).transaction ?? "buy",
+  );
+  const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
+  const extendedQuery = query as ExtendedPropertyQuery;
+  const budgetOptions = transaction === "rent"
+    ? [30000, 50000, 80000, 120000]
+    : [15000000, 18000000, 25000000, 40000000];
+  const activeFilters = useMemo(() => {
+    const chips: { key: keyof ExtendedPropertyQuery; label: string }[] = [];
+    if (extendedQuery.minSqft !== undefined) chips.push({ key: "minSqft", label: `${extendedQuery.minSqft.toLocaleString()}+ sq ft` });
+    if (extendedQuery.maxSqft !== undefined) chips.push({ key: "maxSqft", label: `Up to ${extendedQuery.maxSqft.toLocaleString()} sq ft` });
+    if (extendedQuery.bathrooms !== undefined) chips.push({ key: "bathrooms", label: `${extendedQuery.bathrooms}+ baths` });
+    (extendedQuery.amenities ?? []).forEach((amenity) => chips.push({ key: "amenities", label: amenity }));
+    if (extendedQuery.furnishing) chips.push({ key: "furnishing", label: extendedQuery.furnishing });
+    if (transaction === "rent" && extendedQuery.availableNow) chips.push({ key: "availableNow", label: "Available now" });
+    if (transaction === "buy" && extendedQuery.readyOnly) chips.push({ key: "readyOnly", label: "Ready to move" });
+    if (transaction === "buy" && extendedQuery.newProjectsOnly) chips.push({ key: "newProjectsOnly", label: "New projects" });
+    return chips;
+  }, [extendedQuery, transaction]);
+  const setTransactionMode = (next: Transaction) => {
+    setTransaction(next);
+    if (onTransactionChange) onTransactionChange(next);
+    else onQuery({ ...query, transaction: next } as PropertyQuery);
+  };
+  const removeFilter = (key: keyof ExtendedPropertyQuery, label: string) => {
+    const next = { ...extendedQuery };
+    if (key === "amenities") next.amenities = (next.amenities ?? []).filter((amenity) => amenity !== label);
+    else delete next[key];
+    onQuery(next as PropertyQuery);
+  };
   useEffect(() => {
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
@@ -92,13 +131,27 @@ export function SearchHero({
           A home for the life you have in mind.
         </p>
         <form
-          className="pt-search-box"
+          className={`pt-search-box ${styles.searchBox}`}
           onSubmit={(e) => {
             e.preventDefault();
             onSearch(text);
           }}
           role="search"
         >
+          <div className={styles.tabs} role="tablist" aria-label="Search for a home to buy or rent">
+            {(["buy", "rent"] as const).map((mode) => (
+              <button
+                className={`${styles.tab} ${transaction === mode ? styles.tabActive : ""}`}
+                key={mode}
+                type="button"
+                role="tab"
+                aria-selected={transaction === mode}
+                onClick={() => setTransactionMode(mode)}
+              >
+                {mode === "buy" ? "Buy" : "Rent"}
+              </button>
+            ))}
+          </div>
           <div className="pt-search-input-row">
             <Icon name="search" size={24} />
             <label className="pt-sr-only" htmlFor="home-search">
@@ -142,7 +195,7 @@ export function SearchHero({
             <label>
               <span className="pt-taka">৳</span>
               <span>
-                <small>Maximum price</small>
+                <small>{transaction === "rent" ? "Maximum monthly rent" : "Maximum price"}</small>
                 <select
                   aria-label="Maximum budget"
                   value={query.budget ?? ""}
@@ -156,17 +209,14 @@ export function SearchHero({
                   }
                 >
                   <option value="">Any budget</option>
-                  {query.budget !== undefined &&
-                    ![15000000, 18000000, 25000000, 40000000].includes(
-                      query.budget,
-                    ) && (
+                  {query.budget !== undefined && !budgetOptions.includes(query.budget) && (
                       <option value={query.budget}>
-                        {formatPrice(query.budget)}
+                        {transaction === "rent" ? `${formatPrice(query.budget)} / month` : formatPrice(query.budget)}
                       </option>
                     )}
-                  {[15000000, 18000000, 25000000, 40000000].map((price) => (
+                  {budgetOptions.map((price) => (
                     <option key={price} value={price}>
-                      {formatPrice(price)}
+                      {transaction === "rent" ? `${formatPrice(price)} / month` : formatPrice(price)}
                     </option>
                   ))}
                 </select>
@@ -204,6 +254,28 @@ export function SearchHero({
               </span>
             </label>
           </div>
+          <div className={styles.filterBar}>
+            <button
+              className={styles.moreButton}
+              type="button"
+              onClick={() => setMoreFiltersOpen(true)}
+              aria-haspopup="dialog"
+            >
+              + More filters
+            </button>
+            {activeFilters.length > 0 && (
+              <div className={styles.chips} aria-label="Active filters">
+                {activeFilters.map((filter, index) => (
+                  <span className={styles.chip} key={`${filter.key}-${filter.label}-${index}`}>
+                    {filter.label}
+                    <button type="button" aria-label={`Remove ${filter.label} filter`} onClick={() => removeFilter(filter.key, filter.label)}>
+                      <Icon name="close" size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
           <button
             className="pt-primary pt-search-submit-action"
             type="submit"
@@ -216,7 +288,10 @@ export function SearchHero({
         </form>
         <div className="pt-search-suggestions">
           <span>Try AI search</span>
-          {["Bashundhara under 1.8 crore", "Ready homes with parking"].map(
+          {(transaction === "rent"
+            ? ["Gulshan under BDT 80,000 / month", "Move-in ready with parking"]
+            : ["Bashundhara under 1.8 crore", "Ready homes with parking"]
+          ).map(
             (example) => (
               <button
                 key={example}
@@ -236,6 +311,13 @@ export function SearchHero({
           <span aria-hidden="true">↓</span>
         </a>
       </div>
+      <MoreFilters
+        open={moreFiltersOpen}
+        onClose={() => setMoreFiltersOpen(false)}
+        query={extendedQuery}
+        transaction={transaction}
+        onApply={(next) => onQuery(next as PropertyQuery)}
+      />
     </section>
   );
 }

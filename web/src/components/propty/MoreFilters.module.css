@@ -1,0 +1,206 @@
+.panel {
+  display: grid;
+  gap: 24px;
+  min-width: min(100%, 560px);
+}
+
+.searchBox {
+  position: relative;
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 4px;
+  margin: 12px 12px 0;
+  padding: 4px;
+  border-radius: 11px;
+  background: #f3f0f6;
+}
+
+.tab {
+  min-width: 72px;
+  min-height: 34px;
+  border-radius: 8px;
+  color: #766b80;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center !important;
+}
+
+.tabActive {
+  background: #fff;
+  color: #4b2a9c;
+  box-shadow: 0 2px 7px #35203d16;
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 0 16px 13px;
+}
+
+.moreButton {
+  min-height: 34px;
+  border: 1px solid #ded6e8 !important;
+  border-radius: 9px !important;
+  color: #5633a2;
+  font-size: 12px;
+  padding: 7px 11px !important;
+}
+
+.moreButton:hover { background: #f4f0fa; }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  border-radius: 16px;
+  background: #f0ebfa;
+  color: #55369a;
+  font-size: 11px;
+  padding: 5px 7px 5px 10px;
+}
+
+.chip button {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50% !important;
+  color: currentColor;
+}
+
+.chip button:hover { background: #dfd4f5; }
+
+.intro {
+  color: #756b7d;
+  font-size: 14px;
+  line-height: 1.55;
+  margin-top: -14px;
+}
+
+.section {
+  display: grid;
+  gap: 10px;
+}
+
+.sectionTitle {
+  color: #72677b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.range,
+.selectRow {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  color: #5d5366;
+  font-size: 13px;
+}
+
+.field input,
+.field select {
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid #ded6e8;
+  border-radius: 11px;
+  background: #fff;
+  padding: 10px 12px;
+  font-size: 16px;
+}
+
+.field select {
+  padding-right: 34px;
+}
+
+.toggleGrid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border: 1px solid #ded6e8;
+  border-radius: 11px;
+  color: #62576c;
+  font-size: 14px;
+  transition: background .18s, border-color .18s, color .18s;
+}
+
+.toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.toggle:has(input:checked) {
+  border-color: #9b7ad9;
+  background: #f0ebfa;
+  color: #4b2a9c;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  color: #51485a;
+  font-size: 14px;
+}
+
+.checkStack {
+  display: grid;
+  gap: 2px;
+}
+
+.checkRow input {
+  width: 19px;
+  height: 19px;
+  accent-color: #6235c9;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 2px;
+}
+
+.actions button {
+  min-height: 48px;
+}
+
+@media (max-width: 600px) {
+  .tabs { margin-top: 10px; }
+  .filterBar { padding-inline: 14px; }
+  .panel { gap: 20px; }
+  .range, .selectRow { grid-template-columns: 1fr; }
+  .toggleGrid { grid-template-columns: 1fr 1fr; }
+  .actions { position: sticky; bottom: 0; background: #fff; padding-top: 12px; }
+}
+
+@media (min-width: 601px) {
+  .searchBox :global(.pt-search-submit-action) { top: 64px; }
+}
