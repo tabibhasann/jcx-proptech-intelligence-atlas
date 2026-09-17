@@ -11,15 +11,14 @@
 .tabs {
   display: inline-flex;
   gap: 4px;
-  margin: 12px 12px 0;
-  padding: 4px;
-  border-radius: 11px;
-  background: #f3f0f6;
+  padding: 3px;
+  border-radius: 10px;
+  background: #f6f4f8;
 }
 
-.tab {
+.searchBox .tab {
   min-width: 72px;
-  min-height: 34px;
+  min-height: 38px;
   border-radius: 8px;
   color: #766b80;
   font-size: 13px;
@@ -27,10 +26,10 @@
   text-align: center !important;
 }
 
-.tabActive {
+.searchBox .tabActive {
   background: #fff;
   color: #4b2a9c;
-  box-shadow: 0 2px 7px #35203d16;
+  box-shadow: 0 1px 4px #35203d0c;
 }
 
 .filterBar {
@@ -38,24 +37,33 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px 12px;
-  padding: 0 16px 13px;
+  justify-content: space-between;
+  margin: 0 26px;
+  padding: 12px 0 16px;
+  border-top: 1px solid #f0edf3;
 }
 
-.moreButton {
-  min-height: 34px;
-  border: 1px solid #ded6e8 !important;
-  border-radius: 9px !important;
-  color: #5633a2;
-  font-size: 12px;
-  padding: 7px 11px !important;
+.searchBox .moreButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 9px;
+  color: #645970;
+  font-size: 13px;
+  padding: 8px 10px;
+  transition: background .2s ease, color .2s ease;
 }
 
-.moreButton:hover { background: #f4f0fa; }
+.searchBox .moreButton:hover { background: #f6f3fa; color: #5633a2; }
+.filterCount { display: grid; place-items: center; min-width: 20px; height: 20px; border-radius: 50%; background: #eee7f9; color: #5633a2; font-size: 11px; }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  flex-basis: 100%;
 }
 
 .chip {
@@ -193,14 +201,11 @@
 }
 
 @media (max-width: 600px) {
-  .tabs { margin-top: 10px; }
-  .filterBar { padding-inline: 14px; }
+  .filterBar { margin-inline: 18px; padding-block: 10px 12px; gap: 8px; }
+  .searchBox .tab { min-width: 56px; }
+  .searchBox .moreButton { font-size: 12px; padding-inline: 5px; gap: 6px; }
   .panel { gap: 20px; }
   .range, .selectRow { grid-template-columns: 1fr; }
   .toggleGrid { grid-template-columns: 1fr 1fr; }
   .actions { position: sticky; bottom: 0; background: #fff; padding-top: 12px; }
-}
-
-@media (min-width: 601px) {
-  .searchBox :global(.pt-search-submit-action) { top: 64px; }
 }

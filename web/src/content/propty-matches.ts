@@ -73,7 +73,7 @@ export function getCloseMatches(
     const dimensions = missing.length + Number(overBudget) + Number(fewerBeds);
     if (dimensions !== 1 || (overBudget && p.price > query.budget! * 1.1) || (fewerBeds && p.bedrooms < query.bedrooms! - 1)) continue;
     const differences: string[] = [];
-    if (overBudget) differences.push(`${formatPrice(p.price - query.budget!)} above your budget`);
+    if (overBudget) differences.push(`${transaction === "rent" ? `BDT ${(p.price - query.budget!).toLocaleString()} / month` : formatPrice(p.price - query.budget!)} above your budget`);
     if (fewerBeds) differences.push("One fewer bedroom");
     for (const f of missing) differences.push(f === "parking" ? "Parking not listed" : `${f[0].toUpperCase()}${f.slice(1)} not listed`);
     const matched = [

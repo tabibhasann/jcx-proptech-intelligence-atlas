@@ -45,7 +45,7 @@ export function MoreFilters({
   }, [open, query]);
 
   const amenities = draft.amenities ?? [];
-  const title = transaction === "rent" ? "More rental filters" : "More buying filters";
+  const title = "Make it yours";
   const furnishing = draft.furnishing ?? "";
   const clear = () => setDraft({ transaction });
   const toggleAmenity = (name: string) =>
@@ -62,7 +62,7 @@ export function MoreFilters({
     <Modal title={title} onClose={onClose} wide>
       <div className={styles.panel}>
         <p className={styles.intro}>
-          Keep the essentials above and use these filters when you already know what matters.
+          A little more space, the right amenities, a better fit.
         </p>
 
         <section className={styles.section} aria-labelledby="more-size-label">

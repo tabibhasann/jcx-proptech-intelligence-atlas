@@ -12,5 +12,5 @@
 .mobileNavigation button { display:flex; justify-content:space-between; align-items:center; min-height:56px; border-bottom:1px solid #eee9f2; padding:12px 0; }
 .mobileNavigation button[aria-current] { color:#6235c9; }
 .mobileNavigation button span { color:#9d93a6; }
-@media(min-width:801px) and (max-width:1100px) { .header { gap:14px; padding-inline:24px; flex-wrap:wrap; }.navigation { order:3; width:100%; justify-content:center; padding-bottom:4px; }.utilities{margin-left:auto;} }
+@media(min-width:801px) and (max-width:1100px) { .header { gap:14px; padding-inline:24px; }.navigation { gap:18px; }.utilities{gap:12px;} }
 @media(max-width:800px) { .header { min-height:78px; padding:12px 16px; gap:12px; }.navigation{display:none;}.utilities{gap:12px;}.header .menu span{display:none;} }

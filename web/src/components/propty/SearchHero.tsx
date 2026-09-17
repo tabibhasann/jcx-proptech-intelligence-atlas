@@ -135,20 +135,6 @@ export function SearchHero({
           }}
           role="search"
         >
-          <div className={styles.tabs} role="tablist" aria-label="Search for a home to buy or rent">
-            {(["buy", "rent"] as const).map((mode) => (
-              <button
-                className={`${styles.tab} ${transaction === mode ? styles.tabActive : ""}`}
-                key={mode}
-                type="button"
-                role="tab"
-                aria-selected={transaction === mode}
-                onClick={() => setTransactionMode(mode)}
-              >
-                {mode === "buy" ? "Buy" : "Rent"}
-              </button>
-            ))}
-          </div>
           <div className="pt-search-input-row">
             <Icon name="search" size={24} />
             <label className="pt-sr-only" htmlFor="home-search">
@@ -252,13 +238,28 @@ export function SearchHero({
             </label>
           </div>
           <div className={styles.filterBar}>
+            <div className={styles.tabs} role="group" aria-label="Search for a home to buy or rent">
+              {(["buy", "rent"] as const).map((mode) => (
+                <button
+                  className={`${styles.tab} ${transaction === mode ? styles.tabActive : ""}`}
+                  key={mode}
+                  type="button"
+                  aria-pressed={transaction === mode}
+                  onClick={() => setTransactionMode(mode)}
+                >
+                  {mode === "buy" ? "Buy" : "Rent"}
+                </button>
+              ))}
+            </div>
             <button
               className={styles.moreButton}
               type="button"
               onClick={() => setMoreFiltersOpen(true)}
               aria-haspopup="dialog"
             >
-              + More filters
+              Amenities &amp; more
+              {activeFilters.length > 0 && <span className={styles.filterCount}>{activeFilters.length}</span>}
+              <Icon name="chevron" size={15} />
             </button>
             {activeFilters.length > 0 && (
               <div className={styles.chips} aria-label="Active filters">
