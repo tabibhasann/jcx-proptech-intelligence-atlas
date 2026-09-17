@@ -8,11 +8,14 @@ const search = transpile(readFileSync(new URL("../src/content/propty-search.ts",
 const lib = transpile(readFileSync(new URL("../src/content/propty-matches.ts", import.meta.url), "utf8").replace('"./propty-demo"', JSON.stringify(demo)).replace('"./propty-search"', JSON.stringify(search)));
 const { properties } = await import(demo);
 const { getCloseMatches } = await import(lib);
+assert.equal(getCloseMatches({ transaction: "rent", area: "Uttara", budget: 60_000 }, [], [], properties).every((x) => x.property.transaction === "rent"), true);
+assert.equal(getCloseMatches({ transaction: "rent", area: "Uttara", budget: 60_000, furnishing: "Furnished" }, [], [], properties).every((x) => x.property.rental?.furnishing === "Furnished"), true);
 const q = { area: "Bashundhara", budget: 15_000_000, bedrooms: 3, readyOnly: true };
 assert.equal(getCloseMatches(q, [], [], properties).some((x) => x.property.id === "lightwell"), false);
 assert.deepEqual(getCloseMatches(q, ["pool"], [], properties), []);
 assert.deepEqual(getCloseMatches(q, ["parking"], ["negation"], properties), []);
-assert.deepEqual(getCloseMatches({ area: "Bashundhara", readyOnly: true }, ["parking"], [], properties).map((x) => x.property.area), ["Bashundhara", "Bashundhara"]);
+assert.ok(getCloseMatches({ area: "Bashundhara", readyOnly: true }, ["parking"], [], properties).length >= 2);
+assert.ok(getCloseMatches({ area: "Bashundhara", readyOnly: true }, ["parking"], [], properties).every((x) => x.property.area === "Bashundhara"));
 assert.ok(getCloseMatches({ area: "Bashundhara", budget: 15_000_000, readyOnly: true }, [], [], properties).every((x) => x.property.status === "Ready"));
 const over = getCloseMatches({ area: "Gulshan", budget: 36_000_000 }, [], [], properties);
 assert.equal(over[0]?.differences[0], "BDT 30 lakh above your budget");

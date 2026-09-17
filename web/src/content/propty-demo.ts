@@ -5,6 +5,16 @@ export interface Property {
   area: string;
   address: string;
   price: number;
+  /** Legacy records omit this and are treated as buy listings. */
+  transaction?: "buy" | "rent";
+  rental?: {
+    furnishing: "Furnished" | "Semi-furnished" | "Unfurnished";
+    availableFrom: string;
+    serviceCharge: number | null;
+    deposit: number | null;
+  };
+  /** A lightweight demo flag used by the optional new-project filter. */
+  newProject?: boolean;
   bedrooms: number;
   bathrooms: number;
   sqft: number;
@@ -617,6 +627,7 @@ for (const [
     ][index % 4],
     description: `A fictional ${bedrooms}-bedroom ${status === "Ready" ? "ready-to-view" : "planned"} home in ${area}, with ${features.slice(0, 2).join(" and ").toLowerCase()}. It is included to make Propty's comparison journey concrete, not to represent a live listing.`,
     features,
+    newProject: status === "Under construction",
     tradeoff:
       "Illustrative details only; availability, charges and documents are not established.",
     images: [`/propty/home-${(properties.length % 6) + 1}.jpg`],
@@ -625,14 +636,107 @@ for (const [
   });
 }
 
+const rentalFixtureData: Array<{
+  id: string;
+  title: string;
+  area: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  sqft: number;
+  status: Property["status"];
+  features: string[];
+  furnishing: "Furnished" | "Semi-furnished" | "Unfurnished";
+  availableFrom: string;
+  serviceCharge: number | null;
+  deposit: number | null;
+  newProject: boolean;
+}> = [
+  { id: "rent-banyan", title: "Banyan Lease Home", area: "Bashundhara", price: 65000, bedrooms: 3, bathrooms: 3, sqft: 1850, status: "Ready", features: ["Balcony", "Lift", "1 parking space", "Furnished kitchen"], furnishing: "Semi-furnished", availableFrom: "2026-01-01", serviceCharge: 7000, deposit: 130000, newProject: false },
+  { id: "rent-lightwell", title: "Lightwell Rental", area: "Bashundhara", price: 52000, bedrooms: 3, bathrooms: 2, sqft: 1550, status: "Ready", features: ["Balcony", "Lift", "Utility area"], furnishing: "Unfurnished", availableFrom: "2026-10-01", serviceCharge: 5500, deposit: 104000, newProject: false },
+  { id: "rent-terrace", title: "Terrace House Lease", area: "Gulshan", price: 145000, bedrooms: 4, bathrooms: 4, sqft: 2850, status: "Ready", features: ["2 balconies", "Lift", "2 parking spaces", "Study"], furnishing: "Furnished", availableFrom: "2026-02-15", serviceCharge: 15000, deposit: 290000, newProject: false },
+  { id: "rent-courtyard", title: "Courtyard Rental", area: "Dhanmondi", price: 78000, bedrooms: 3, bathrooms: 3, sqft: 2050, status: "Ready", features: ["Balcony", "Lift", "Separate dining"], furnishing: "Semi-furnished", availableFrom: "2026-11-01", serviceCharge: null, deposit: 156000, newProject: true },
+  { id: "rent-horizon", title: "Horizon Apartment Lease", area: "Banani", price: 98000, bedrooms: 3, bathrooms: 3, sqft: 2150, status: "Ready", features: ["Balcony", "Lift", "1 parking space", "Family lounge"], furnishing: "Furnished", availableFrom: "2026-01-20", serviceCharge: 10000, deposit: 196000, newProject: false },
+  { id: "rent-garden", title: "Garden Court Rental", area: "Uttara", price: 43000, bedrooms: 2, bathrooms: 2, sqft: 1400, status: "Ready", features: ["Balcony", "Lift", "Utility area"], furnishing: "Unfurnished", availableFrom: "2026-01-01", serviceCharge: 4500, deposit: null, newProject: false },
+  { id: "rent-riverstone", title: "Riverstone Lease", area: "Mohammadpur", price: 38000, bedrooms: 2, bathrooms: 2, sqft: 1200, status: "Ready", features: ["Balcony", "Lift", "Utility area"], furnishing: "Semi-furnished", availableFrom: "2026-09-25", serviceCharge: 3500, deposit: 76000, newProject: false },
+  { id: "rent-lakeview", title: "Lakeview Rental", area: "Uttara", price: 59000, bedrooms: 3, bathrooms: 2, sqft: 1500, status: "Ready", features: ["Balcony", "Lift", "1 parking space"], furnishing: "Furnished", availableFrom: "2026-03-01", serviceCharge: 6000, deposit: 118000, newProject: false },
+  { id: "rent-meadow", title: "Meadow Lease", area: "Mirpur", price: 29000, bedrooms: 2, bathrooms: 2, sqft: 1050, status: "Ready", features: ["Balcony", "Lift"], furnishing: "Unfurnished", availableFrom: "2026-12-01", serviceCharge: null, deposit: 58000, newProject: true },
+  { id: "rent-civic", title: "Civic Residence Rental", area: "Motijheel", price: 47000, bedrooms: 2, bathrooms: 2, sqft: 1150, status: "Ready", features: ["Lift", "1 parking space"], furnishing: "Semi-furnished", availableFrom: "2026-01-01", serviceCharge: 5000, deposit: 94000, newProject: false },
+  { id: "rent-orchid", title: "Orchid Lease Home", area: "Badda", price: 72000, bedrooms: 3, bathrooms: 3, sqft: 1680, status: "Ready", features: ["Balcony", "Lift", "Study nook"], furnishing: "Furnished", availableFrom: "2026-10-15", serviceCharge: 7500, deposit: 144000, newProject: true },
+  { id: "rent-canopy", title: "Canopy Rental", area: "Khilgaon", price: 51000, bedrooms: 3, bathrooms: 2, sqft: 1320, status: "Ready", features: ["Balcony", "Family space", "Lift"], furnishing: "Semi-furnished", availableFrom: "2026-04-01", serviceCharge: 5000, deposit: null, newProject: false },
+  { id: "rent-maple", title: "Maple Lease", area: "Tejgaon", price: 83000, bedrooms: 3, bathrooms: 3, sqft: 1780, status: "Ready", features: ["Balcony", "Lift", "1 parking space", "Separate dining"], furnishing: "Furnished", availableFrom: "2026-01-01", serviceCharge: 8500, deposit: 166000, newProject: false },
+  { id: "rent-harbor", title: "Harbor Family Rental", area: "Lalmatia", price: 105000, bedrooms: 4, bathrooms: 3, sqft: 2200, status: "Ready", features: ["2 balconies", "Lift", "Family lounge"], furnishing: "Semi-furnished", availableFrom: "2026-09-30", serviceCharge: 11000, deposit: 210000, newProject: false },
+  { id: "rent-sunbeam", title: "Sunbeam Lease", area: "Savar", price: 24000, bedrooms: 2, bathrooms: 2, sqft: 980, status: "Ready", features: ["Balcony", "Lift"], furnishing: "Unfurnished", availableFrom: "2026-01-01", serviceCharge: 2500, deposit: 48000, newProject: true },
+  { id: "rent-hearth", title: "Hearth Rental", area: "Aftab Nagar", price: 56000, bedrooms: 3, bathrooms: 2, sqft: 1450, status: "Ready", features: ["Open living and dining", "Balcony", "Lift"], furnishing: "Semi-furnished", availableFrom: "2026-05-01", serviceCharge: 5500, deposit: 112000, newProject: false },
+  { id: "rent-elm", title: "Elm Apartment Lease", area: "Rampura", price: 36000, bedrooms: 2, bathrooms: 2, sqft: 1100, status: "Ready", features: ["Utility area", "Lift"], furnishing: "Unfurnished", availableFrom: "2026-01-01", serviceCharge: null, deposit: null, newProject: false },
+  { id: "rent-palm", title: "Palm Residence Rental", area: "Wari", price: 68000, bedrooms: 3, bathrooms: 3, sqft: 1600, status: "Ready", features: ["Balcony", "Lift", "1 parking space", "Separate dining"], furnishing: "Furnished", availableFrom: "2026-10-01", serviceCharge: 7000, deposit: 136000, newProject: true },
+];
+
+for (const fixture of rentalFixtureData) {
+  properties.push({
+    ...fixture,
+    transaction: "rent",
+    rental: {
+      furnishing: fixture.furnishing,
+      availableFrom: fixture.availableFrom,
+      serviceCharge: fixture.serviceCharge,
+      deposit: fixture.deposit,
+    },
+    address: `${fixture.area}, Dhaka · fictional address`,
+    tagline: "A fictional rental option for the interactive preview.",
+    description: `A fictional ${fixture.bedrooms}-bedroom rental in ${fixture.area}; the monthly amount, furnishing and availability are sample demo data only.`,
+    tradeoff: "Illustrative details only; owner, tenancy and document checks are not established.",
+    images: [`/propty/home-${(properties.length % 6) + 1}.jpg`],
+    checks: checks(),
+    isDemo: true,
+  });
+}
+
 export interface PropertyQuery {
+  transaction?: "buy" | "rent";
   area?: string;
   /** Maximum asking price in BDT. Omit for no price limit. */
   budget?: number;
   /** Minimum bedroom count. */
   bedrooms?: number;
   readyOnly?: boolean;
+  minSqft?: number;
+  maxSqft?: number;
+  bathrooms?: number;
+  amenities?: string[];
+  furnishing?: string;
+  availableNow?: boolean;
+  newProjectsOnly?: boolean;
 }
+
+export function getTransaction(property: Property): "buy" | "rent" {
+  return property.transaction === "rent" ? "rent" : "buy";
+}
+
+const amenityKey = (value: string): string => {
+  const normalized = value.toLowerCase().trim().replaceAll("-", " ");
+  if (/^(park|parking|car space|car park)$/.test(normalized)) return "parking";
+  if (/^(balcony|balconies)$/.test(normalized)) return "balcony";
+  if (/^(lift|elevator)$/.test(normalized)) return "lift";
+  if (/^study/.test(normalized)) return "study";
+  if (/^family/.test(normalized)) return "family";
+  if (/^utility/.test(normalized)) return "utility";
+  return normalized;
+};
+
+const hasAmenity = (property: Property, requested: string): boolean => {
+  const key = amenityKey(requested);
+  return property.features.some((feature) => {
+    const value = feature.toLowerCase().replaceAll("balconies", "balcony");
+    if (key === "parking") return /parking|car space|car park/.test(value) && !/planned/.test(value);
+    if (key === "lift") return /lift|elevator/.test(value) && !/planned/.test(value);
+    if (key === "balcony") return /balcony/.test(value);
+    if (key === "study") return /study/.test(value);
+    if (key === "family") return /family/.test(value);
+    if (key === "utility") return /utility/.test(value);
+    return value.includes(key);
+  });
+};
 
 /** Strict matching: never silently replaces a buyer's requirements with alternatives. */
 export function filterProperties(
@@ -640,8 +744,11 @@ export function filterProperties(
   inventory: readonly Property[] = properties,
 ): Property[] {
   const area = query.area?.trim().toLocaleLowerCase();
+  const transaction = query.transaction ?? "buy";
+  const today = new Date().toISOString().slice(0, 10);
   return inventory.filter(
     (property) =>
+      getTransaction(property) === transaction &&
       (!area ||
         area === "all" ||
         area === "any" ||
@@ -649,8 +756,21 @@ export function filterProperties(
         property.area.toLocaleLowerCase() === area) &&
       (query.budget === undefined || property.price <= query.budget) &&
       (query.bedrooms === undefined || property.bedrooms >= query.bedrooms) &&
+      (query.minSqft === undefined || property.sqft >= query.minSqft) &&
+      (query.maxSqft === undefined || property.sqft <= query.maxSqft) &&
+      (query.bathrooms === undefined || property.bathrooms >= query.bathrooms) &&
+      (!query.amenities?.length || query.amenities.every((amenity) => hasAmenity(property, amenity))) &&
+      (!query.furnishing || property.rental?.furnishing?.toLowerCase() === query.furnishing.trim().toLowerCase()) &&
+      (!query.availableNow || (getTransaction(property) === "rent" && !!property.rental && property.rental.availableFrom <= today)) &&
+      (!query.newProjectsOnly || property.newProject === true) &&
       (!query.readyOnly || property.status === "Ready"),
   );
+}
+
+export function formatPropertyPrice(property: Property): string {
+  return getTransaction(property) === "rent"
+    ? `${formatPrice(property.price)}/month`
+    : formatPrice(property.price);
 }
 
 /** Compact local currency format. 1 crore = BDT 10,000,000. */

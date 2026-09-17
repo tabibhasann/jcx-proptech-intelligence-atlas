@@ -11,11 +11,13 @@ const { outputText } = ts.transpileModule(source, {
     module: ts.ModuleKind.ES2022,
   },
 });
-const { properties, filterProperties, formatPrice, DEMO_NOTICE } = await import(
+const { properties, filterProperties, formatPrice, formatPropertyPrice, getTransaction, DEMO_NOTICE } = await import(
   `data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`
 );
 
 assert.ok(properties.length >= 40);
+assert.equal(properties.filter((property) => getTransaction(property) === "buy").length, 49);
+assert.equal(properties.filter((property) => getTransaction(property) === "rent").length, 18);
 for (const id of [
   "banyan",
   "lightwell",
@@ -36,7 +38,13 @@ assert.match(DEMO_NOTICE, /fictional/i);
 assert.ok(!source.includes("—"), "Demo copy must not contain em dashes");
 for (const property of properties) {
   assert.equal(property.isDemo, true);
-  assert.ok(property.price >= 6_500_000 && property.price <= 40_000_000);
+  if (getTransaction(property) === "rent") {
+    assert.ok(property.price >= 20_000 && property.price <= 200_000);
+    assert.ok(property.rental);
+    assert.match(formatPropertyPrice(property), /\/month$/);
+    assert.ok(["Furnished", "Semi-furnished", "Unfurnished"].includes(property.rental.furnishing));
+    assert.match(property.rental.availableFrom, /^2026-\d{2}-\d{2}$/);
+  } else assert.ok(property.price >= 6_500_000 && property.price <= 40_000_000);
   assert.ok(
     property.bedrooms > 0 && property.bathrooms > 0 && property.sqft > 0,
   );
@@ -52,7 +60,8 @@ for (const property of properties) {
 assert.equal(formatPrice(17_500_000), "BDT 1.75 crore");
 assert.equal(formatPrice(1_500_000), "BDT 15 lakh");
 assert.equal(formatPrice(Number.NaN), "Price unavailable");
-assert.equal(filterProperties().length, properties.length);
+assert.equal(filterProperties().length, 49);
+assert.equal(filterProperties({ transaction: "rent" }).length, 18);
 assert.deepEqual(
   filterProperties({
     area: " bashundhara ",
@@ -71,9 +80,12 @@ assert.deepEqual(
 assert.ok(filterProperties({ area: "Dhanmondi", readyOnly: true }).length > 0);
 assert.deepEqual(filterProperties({ area: "Gulshan", budget: 18_000_000 }), []);
 assert.deepEqual(filterProperties({ budget: 0 }), []);
-assert.equal(filterProperties({ area: "All areas" }).length, properties.length);
+assert.equal(filterProperties({ area: "All areas" }).length, 49);
 assert.ok(filterProperties({ bedrooms: 4 }).length >= 5);
 assert.ok(filterProperties({ readyOnly: true }).length > 20);
+assert.ok(filterProperties({ transaction: "rent", furnishing: "Furnished" }).length > 0);
+assert.ok(filterProperties({ transaction: "rent", minSqft: 1500, maxSqft: 2200, bathrooms: 3 }).every((p) => p.sqft >= 1500 && p.sqft <= 2200 && p.bathrooms >= 3));
+assert.ok(filterProperties({ transaction: "rent", amenities: ["park"] }).every((p) => p.features.some((f) => /parking/.test(f.toLowerCase()))));
 assert.deepEqual(filterProperties({}, []), []);
 console.log(
   `Propty demo fixtures: ${properties.length} sample homes; filters, currency and disclosure checks passed.`,
@@ -113,6 +125,7 @@ const readyParking = search("ready homes with parking");
 const expectedReadyParking = properties
   .filter(
     (p) =>
+      (p.transaction ?? "buy") === "buy" &&
       p.status === "Ready" &&
       p.features.some((f) => f.toLowerCase().includes("parking")),
   )
@@ -123,17 +136,25 @@ assert.deepEqual(search("Lightwell"), ["lightwell"]);
 assert.deepEqual(search("rooftop pool"), []);
 assert.deepEqual(
   search(""),
-  properties.map((p) => p.id),
+  properties.filter((p) => (p.transaction ?? "buy") === "buy").map((p) => p.id),
 );
 assert.ok(search("3 bedrooms in Uttara under 2 crore").includes("lakeview"));
 for (const area of new Set(properties.map((property) => property.area))) {
-  assert.deepEqual(search(area), properties.filter((property) => property.area === area).map((property) => property.id));
+  assert.deepEqual(search(area), properties.filter((property) => property.area === area && (property.transaction ?? "buy") === "buy").map((property) => property.id));
 }
 const banglaMixed = parseHomeSearch("Uttara এ ready বাসা");
 assert.equal(banglaMixed.query.area, "Uttara");
 assert.equal(banglaMixed.query.readyOnly, true);
 assert.equal(parseHomeSearch("under 1.7 cr").query.budget, 17000000);
 assert.equal(parseHomeSearch("5 bedrooms").query.bedrooms, 5);
+assert.equal(parseHomeSearch("rent under 1800 sqft").query.maxSqft, 1800);
+assert.equal(parseHomeSearch("rent at least 1200 sqft").query.minSqft, 1200);
+assert.equal(parseHomeSearch("rent a furnished 2 bedroom home under 60k in Uttara").query.transaction, "rent");
+assert.equal(parseHomeSearch("rent a furnished 2 bedroom home under 60k in Uttara").query.budget, 60000);
+assert.equal(parseHomeSearch("buy 3 bedrooms with balcony").query.transaction, "buy");
+assert.deepEqual(parseHomeSearch("rent homes with park available now").query.amenities, ["parking"]);
+assert.equal(parseHomeSearch("rent homes with park available now").query.availableNow, true);
+assert.equal(parseHomeSearch("rent homes with park available now").query.transaction, "rent");
 assert.ok(!Number.isNaN(parseHomeSearch("under 1.2.3 crore").query.budget));
 console.log(
   "Free-text demo search: exact matches, price units, features, custom filters and no-match checks passed.",

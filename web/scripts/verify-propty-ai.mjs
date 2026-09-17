@@ -36,6 +36,23 @@ assert.deepEqual(validateInterpretation(good), {
   terms: ["parking"],
   unsupported: [],
 });
+const rental = {
+  ...good,
+  transaction: "rent",
+  maxPrice: 85000,
+  minSqft: 1200,
+  maxSqft: 1800,
+  minBathrooms: 2,
+  availableNow: true,
+  newProjectsOnly: false,
+  furnishing: "Furnished",
+  amenities: ["balcony"],
+};
+assert.equal(validateInterpretation(rental).query.transaction, "rent");
+assert.equal(validateInterpretation(rental).query.budget, 85000);
+assert.equal(validateInterpretation(rental).query.minSqft, 1200);
+assert.throws(() => validateInterpretation({ ...rental, transaction: "lease" }));
+assert.throws(() => validateInterpretation({ ...rental, minSqft: 2000, maxSqft: 1000 }));
 for (const area of propertyAreas) {
   assert.equal(validateInterpretation({ ...good, area }).query.area, area);
 }
@@ -89,6 +106,10 @@ globalThis.fetch = async () =>
 let response = await POST(request('{"text":"Bashundhara below 1.8 crore"}'));
 assert.equal(response.status, 200);
 assert.equal((await response.json()).mode, "gemini");
+response = await POST(request(JSON.stringify({ text: "Bashundhara", transaction: "rent" })));
+assert.equal(response.status, 200);
+assert.equal((await response.json()).query.transaction, "rent");
+assert.equal((await POST(request(JSON.stringify({ text: "Bashundhara", transaction: "lease" })))).status, 400);
 globalThis.fetch = async () => {
   throw new Error("private upstream detail");
 };

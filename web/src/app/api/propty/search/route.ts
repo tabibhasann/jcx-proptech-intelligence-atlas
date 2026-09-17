@@ -77,12 +77,19 @@ export async function POST(request: Request) {
   } catch {
     return reply({ error: "Invalid request" }, 400);
   }
-  let text: unknown;
+  let payload: unknown;
   try {
-    text = JSON.parse(raw).text;
+    payload = JSON.parse(raw);
   } catch {
     return reply({ error: "Invalid JSON" }, 400);
   }
+  if (!payload || typeof payload !== "object")
+    return reply({ error: "Invalid JSON" }, 400);
+  const body = payload as Record<string, unknown>;
+  const text = body.text;
+  const selectedTransaction = body.transaction;
+  if (selectedTransaction !== undefined && selectedTransaction !== "buy" && selectedTransaction !== "rent")
+    return reply({ error: "Invalid transaction" }, 400);
   if (typeof text !== "string" || !text.trim() || text.length > 180)
     return reply({ error: "Use 1–180 characters" }, 400);
   bucket.count++;
@@ -90,8 +97,19 @@ export async function POST(request: Request) {
   globalWindow.count++;
   active++;
   try {
+    const parsed = await interpretSearch(text.trim(), request.signal);
+    const explicitTransaction = parsed.query.transaction;
+    const transactionMismatch = Boolean(
+      selectedTransaction && explicitTransaction && selectedTransaction !== explicitTransaction,
+    );
+    const query = {
+      ...parsed.query,
+      ...(explicitTransaction ? {} : selectedTransaction ? { transaction: selectedTransaction } : {}),
+    };
     return reply({
-      ...(await interpretSearch(text.trim(), request.signal)),
+      ...parsed,
+      query,
+      ...(transactionMismatch ? { transactionMismatch: true } : {}),
       mode: "gemini",
     });
   } catch {
