@@ -33,9 +33,7 @@ export function SearchHero({
 }) {
   const scene = useRef<HTMLDivElement>(null);
   const hero = useRef<HTMLElement>(null);
-  const [transaction, setTransaction] = useState<Transaction>(
-    (query as ExtendedPropertyQuery).transaction ?? "buy",
-  );
+  const transaction: Transaction = query.transaction ?? "buy";
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const extendedQuery = query as ExtendedPropertyQuery;
   const budgetOptions = transaction === "rent"
@@ -54,7 +52,6 @@ export function SearchHero({
     return chips;
   }, [extendedQuery, transaction]);
   const setTransactionMode = (next: Transaction) => {
-    setTransaction(next);
     if (onTransactionChange) onTransactionChange(next);
     else onQuery({ ...query, transaction: next } as PropertyQuery);
   };

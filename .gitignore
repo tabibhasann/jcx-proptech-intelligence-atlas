@@ -7,4 +7,4 @@ web/out/
 web/.vercel/
 web/.pnpm-store/
 *.log
-
+*.tsbuildinfo

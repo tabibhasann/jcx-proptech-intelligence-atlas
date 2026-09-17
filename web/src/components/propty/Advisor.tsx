@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   filterProperties,
   formatPrice,
+  formatPropertyPrice,
   propertyAreas,
   type PropertyQuery,
 } from "@/content/propty-demo";
@@ -12,12 +13,15 @@ import { Icon } from "./Icon";
 export function Advisor({
   onOpen,
   onApply,
+  transaction = "buy",
 }: {
+  transaction?: "buy" | "rent";
   onOpen: (id: string) => void;
   onApply: (query: PropertyQuery) => void;
 }) {
   const [step, setStep] = useState(0);
-  const [query, setQuery] = useState<PropertyQuery>({});
+  const [query, setQuery] = useState<PropertyQuery>({ transaction });
+  const budgetLabel = (value: number) => transaction === "rent" ? `BDT ${value.toLocaleString()} / month` : formatPrice(value);
   const choose = (part: PropertyQuery) => {
     setQuery((current) => ({ ...current, ...part }));
     setStep((current) => current + 1);
@@ -25,7 +29,7 @@ export function Advisor({
   const matches = filterProperties(query).sort((a, b) => a.price - b.price);
   const questions = [
     "Where would you like to live?",
-    "What asking price feels comfortable?",
+    transaction === "rent" ? "What monthly rent feels comfortable?" : "What asking price feels comfortable?",
     "How many bedrooms do you need?",
   ];
   return (
@@ -42,7 +46,7 @@ export function Advisor({
           {step > 1 && (
             <span>
               {query.budget
-                ? `Up to ${formatPrice(query.budget)}`
+                ? `Up to ${budgetLabel(query.budget)}`
                 : "Flexible budget"}
             </span>
           )}
@@ -66,9 +70,9 @@ export function Advisor({
           )}
           <div className="pt-choice-grid">
             {step === 1 &&
-              [15000000, 18000000, 25000000, 40000000].map((budget) => (
+              (transaction === "rent" ? [25000, 40000, 60000, 100000] : [15000000, 18000000, 25000000, 40000000]).map((budget) => (
                 <button key={budget} onClick={() => choose({ budget })}>
-                  Up to {formatPrice(budget)}
+                  Up to {budgetLabel(budget)}
                   <Icon name="arrow" size={17} />
                 </button>
               ))}
@@ -116,7 +120,7 @@ export function Advisor({
               <span>
                 <strong>{p.title}</strong>
                 <small>
-                  {formatPrice(p.price)} · {p.bedrooms} beds
+                  {formatPropertyPrice(p)} · {p.bedrooms} beds
                 </small>
                 <small>
                   {p.sqft.toLocaleString()} sq ft · {p.area}
@@ -137,7 +141,7 @@ export function Advisor({
             className="pt-text-button"
             onClick={() => {
               setStep(0);
-              setQuery({});
+              setQuery({ transaction });
             }}
           >
             Start a new brief

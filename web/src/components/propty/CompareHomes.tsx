@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { formatPrice, type Property } from "@/content/propty-demo";
+import { formatPrice, formatPropertyPrice, getTransaction, type Property } from "@/content/propty-demo";
 import { Icon } from "./Icon";
 
 export function CompareHomes({
@@ -12,14 +12,15 @@ export function CompareHomes({
   onOpen: (id: string) => void;
 }) {
   const [differences, setDifferences] = useState(false);
+  const isRent = homes.length > 0 && getTransaction(homes[0]) === "rent";
   const rows: [string, (p: Property) => string][] = [
-    ["Asking price", (p) => formatPrice(p.price)],
+    [isRent ? "Monthly rent" : "Asking price", formatPropertyPrice],
     ["Area", (p) => p.area],
     ["Bedrooms", (p) => String(p.bedrooms)],
     ["Bathrooms", (p) => String(p.bathrooms)],
     ["Floor space", (p) => `${p.sqft.toLocaleString()} sq ft`],
     [
-      "Price / sq ft",
+      isRent ? "Monthly rent / sq ft" : "Price / sq ft",
       (p) => `BDT ${Math.round(p.price / p.sqft).toLocaleString()}`,
     ],
     ["Sample status", (p) => p.status],
@@ -27,6 +28,12 @@ export function CompareHomes({
     ["Trade-off", (p) => p.tradeoff],
     ["Document review", () => "Not performed. Sample home only."],
   ];
+  if (isRent) rows.splice(6, 0,
+    ["Furnishing", p => p.rental?.furnishing ?? "Not specified"],
+    ["Available from", p => p.rental?.availableFrom ?? "Not specified"],
+    ["Monthly service charge", p => p.rental?.serviceCharge == null ? "Not specified" : `BDT ${p.rental.serviceCharge.toLocaleString()}`],
+    ["Deposit", p => p.rental?.deposit == null ? "Not specified" : `BDT ${p.rental.deposit.toLocaleString()}`],
+  );
   const priceGap =
     Math.max(...homes.map((p) => p.price)) -
     Math.min(...homes.map((p) => p.price));
@@ -58,7 +65,7 @@ export function CompareHomes({
               <small>{p.area}</small>
               <strong>{p.title}</strong>
               <span>
-                {formatPrice(p.price)} <Icon name="arrow" size={16} />
+                {formatPropertyPrice(p)} <Icon name="arrow" size={16} />
               </span>
             </span>
           </button>
@@ -66,8 +73,8 @@ export function CompareHomes({
       </div>
       <div className="pt-compare-insight">
         <p>
-          <strong>{formatPrice(priceGap)}</strong>
-          <span>sample price difference</span>
+          <strong>{isRent ? `BDT ${priceGap.toLocaleString()} / month` : formatPrice(priceGap)}</strong>
+          <span>{isRent ? "monthly rent difference" : "sample price difference"}</span>
         </p>
         <p>
           <strong>{spaceGap.toLocaleString()} sq ft</strong>

@@ -5,6 +5,8 @@ import {
   DEMO_NOTICE,
   filterProperties,
   formatPrice,
+  formatPropertyPrice,
+  getTransaction,
   properties,
   propertyAreas,
   type Property,
@@ -17,10 +19,11 @@ import { CompareHomes } from "./CompareHomes";
 import { SearchHero } from "./SearchHero";
 import { PropertyGallery } from "./PropertyGallery";
 import { ProptyBrand, JcxBrand } from "./Brand";
+import { ProductHeader, type ProductDestination } from "./ProductHeader";
 import { parseHomeSearch, matchesHomeText } from "@/content/propty-search";
 import { getCloseMatches } from "@/content/propty-matches";
 
-type View = "explore" | "saved" | "visits" | "team";
+type View = "explore" | "saved" | "visits" | "team" | "compare";
 type Visit = {
   id: string;
   propertyId: string;
@@ -78,7 +81,7 @@ function HomeCard({
             sizes="(max-width: 640px) 94vw, (max-width: 1000px) 46vw, 31vw"
           />
         </button>
-        <span className="pt-image-tag">{p.status}</span>
+        <span className="pt-image-tag">{getTransaction(p) === "rent" ? "For rent" : p.status}</span>
         <button
           className={`pt-save ${saved ? "is-saved" : ""}`}
           aria-label={`${saved ? "Unsave" : "Save"} ${p.title}`}
@@ -112,7 +115,7 @@ function HomeCard({
           <span>{p.sqft.toLocaleString()} sq ft</span>
         </div>
         <div className="pt-card-bottom">
-          <strong>{formatPrice(p.price)}</strong>
+          <strong>{formatPropertyPrice(p)}</strong>
           <button
             className={compared ? "is-selected" : ""}
             aria-pressed={compared}
@@ -135,8 +138,7 @@ export function ProptyApp() {
   const [compared, setCompared] = useState<string[]>([]);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [large, setLarge] = useState(false);
-  const [query, setQuery] = useState<PropertyQuery>({});
+  const [query, setQuery] = useState<PropertyQuery>({transaction:"buy"});
   const [sort, setSort] = useState("featured");
   const [collectionPage, setCollectionPage] = useState({ key: "", count: 9 });
   const [searchText, setSearchText] = useState("");
@@ -163,10 +165,11 @@ export function ProptyApp() {
       setHome(validId(id) ? id : null);
       const next = params.get("view");
       setView(
-        next === "saved" || next === "visits" || next === "team"
+        next === "saved" || next === "visits" || next === "team" || next === "compare"
           ? next
           : "explore",
       );
+      setQuery({transaction:params.get("mode")==="rent"?"rent":"buy",newProjectsOnly:params.get("projects")==="1"});
     };
     sync();
     window.addEventListener("popstate", sync);
@@ -187,7 +190,6 @@ export function ProptyApp() {
                 ["Requested", "Reviewed", "Cancelled"].includes(v.status),
             ),
           );
-        setLarge(raw.large === true);
       }
     } catch {
       /* Invalid demo storage starts fresh. */
@@ -204,13 +206,13 @@ export function ProptyApp() {
       try {
         localStorage.setItem(
           STORAGE,
-          JSON.stringify({ version: 1, saved, visits, large }),
+          JSON.stringify({ version: 1, saved, visits }),
         );
       } catch {
         /* Demo remains usable when storage is unavailable. */
       }
     }
-  }, [loaded, saved, visits, large]);
+  }, [loaded, saved, visits]);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const observer = new IntersectionObserver(
@@ -252,7 +254,7 @@ export function ProptyApp() {
     history.pushState(
       null,
       "",
-      next === "explore" ? "/prototype" : `/prototype?view=${next}`,
+      `/prototype?mode=${query.transaction || "buy"}${next !== "explore" ? `&view=${next}` : query.newProjectsOnly ? "&projects=1" : ""}`,
     );
     scrollTop();
   };
@@ -264,7 +266,7 @@ export function ProptyApp() {
     history.pushState(
       null,
       "",
-      `/prototype?home=${id}${view !== "explore" ? `&view=${view}` : ""}`,
+      `/prototype?home=${id}&mode=${getTransaction(getProperty(id))}${view !== "explore" ? `&view=${view}` : query.newProjectsOnly ? "&projects=1" : ""}`,
     );
     scrollTop();
   };
@@ -277,6 +279,10 @@ export function ProptyApp() {
     );
   };
   const toggleCompare = (id: string) => {
+    if (compared.length && getTransaction(getProperty(compared[0])) !== getTransaction(getProperty(id))) {
+      notify("Compare buying and renting separately. Clear your comparison to switch.");
+      return;
+    }
     if (compared.includes(id)) setCompared((c) => c.filter((x) => x !== id));
     else if (compared.length < 3) setCompared((c) => [...c, id]);
     else notify("Compare up to three homes. Remove one to add another.");
@@ -294,6 +300,7 @@ export function ProptyApp() {
   const listing =
     view === "saved"
       ? properties.filter((p) => saved.includes(p.id))
+      : view === "compare" ? filterProperties({transaction:query.transaction || "buy"})
       : [...matched].sort((a, b) =>
           sort === "low"
             ? a.price - b.price
@@ -334,7 +341,7 @@ export function ProptyApp() {
         const response = await fetch("/api/propty/search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text }),
+          body: JSON.stringify({ text, transaction: query.transaction || "buy" }),
           signal: AbortSignal.any([
             controller.signal,
             AbortSignal.timeout(16000),
@@ -356,7 +363,13 @@ export function ProptyApp() {
       }
     }
     if (controller.signal.aborted) return;
-    setQuery((q) => ({ ...(reset ? {} : q), ...parsed.query }));
+    const nextTransaction = parsed.query.transaction || query.transaction || "buy";
+    if (nextTransaction !== (query.transaction || "buy")) {
+      note = `Switched to ${nextTransaction === "rent" ? "Rent" : "Buy"} to match your request.`;
+      setCompared([]);
+    }
+    setQuery((q) => ({ ...(reset || nextTransaction !== (q.transaction || "buy") ? {} : q), ...parsed.query, transaction:nextTransaction }));
+    history.replaceState(null,"",`/prototype?mode=${nextTransaction}`);
     setSearchTerms(parsed.terms);
     setUnsupported(parsed.unsupported);
     setSubmittedText(text.trim());
@@ -367,66 +380,32 @@ export function ProptyApp() {
   const clearSearch = () => {
     searchRequest.current?.abort();
     setSearchBusy(false);
-    setQuery({});
+    setQuery({transaction:query.transaction || "buy"});
     setSearchText("");
     setSearchTerms([]);
     setSubmittedText("");
     setUnsupported([]);
     setSearchNote("");
   };
+  const switchTransaction = (transaction:"buy"|"rent", projects=false) => {
+    clearSearch();
+    setQuery({transaction,newProjectsOnly:projects});
+    setCompared([]);
+    setBrief(null);
+    setHome(null);
+    setView("explore");
+    history.pushState(null,"",`/prototype?mode=${transaction}${projects?"&projects=1":""}`);
+    scrollTop();
+    if(projects) requestAnimationFrame(showResults);
+  };
+  const navActive:ProductDestination|undefined = home ? undefined : view==="explore" ? query.newProjectsOnly?"projects":query.transaction||"buy" : view==="team"?undefined:view;
   return (
-    <div className={`pt-app ${large ? "pt-large" : ""}`}>
-      <header className="pt-header">
-        <button
-          className="pt-brand"
-          onClick={() => navigate("explore")}
-          aria-label="Propty home"
-        >
-          <ProptyBrand />
-        </button>
-        <nav aria-label="Propty navigation">
-          <button
-            aria-current={view === "explore" && !home ? "page" : undefined}
-            onClick={() => navigate("explore")}
-          >
-            Explore homes
-          </button>
-          <button
-            aria-current={view === "saved" && !home ? "page" : undefined}
-            onClick={() => navigate("saved")}
-          >
-            Saved
-            {saved.length > 0 && (
-              <span className="pt-count">{saved.length}</span>
-            )}
-          </button>
-          <button
-            aria-current={view === "visits" && !home ? "page" : undefined}
-            onClick={() => navigate("visits")}
-          >
-            My visits
-            {activeVisits.length > 0 && (
-              <span className="pt-count">{activeVisits.length}</span>
-            )}
-          </button>
-        </nav>
-        <div className="pt-header-actions">
-          <button
-            className="reading-toggle"
-            aria-label="Larger text"
-            aria-pressed={large}
-            onClick={() => setLarge((l) => !l)}
-          >
-            Aa
-          </button>
-          <button
-            className="pt-advisor-button"
-            onClick={() => setDialog("advisor")}
-          >
-            <span>Help me choose</span>
-          </button>
-        </div>
-      </header>
+    <div className="pt-app">
+      <ProductHeader active={navActive} savedCount={saved.length} onHelp={()=>setDialog("advisor")} onNavigate={(destination)=>{
+        if(destination==="buy"||destination==="rent") switchTransaction(destination);
+        else if(destination==="projects") switchTransaction("buy",true);
+        else navigate(destination);
+      }}/>
       <main id="main">
         {selected ? (
           <div className="pt-detail pt-container">
@@ -491,7 +470,7 @@ export function ProptyApp() {
                         ? "In progress"
                         : selected.status}
                     </strong>
-                    completion
+                    {getTransaction(selected)==="rent"?"building status":"completion"}
                   </span>
                 </div>
                 <section className="pt-detail-section">
@@ -506,6 +485,15 @@ export function ProptyApp() {
                     ))}
                   </div>
                 </section>
+                {selected.rental && <section className="pt-detail-section">
+                  <h2>Rental details</h2>
+                  <dl className="pt-rental-details">
+                    <div><dt>Furnishing</dt><dd>{selected.rental.furnishing}</dd></div>
+                    <div><dt>Available from</dt><dd>{prettyDate(selected.rental.availableFrom)}</dd></div>
+                    <div><dt>Monthly service charge</dt><dd>{selected.rental.serviceCharge===null?"Not specified":`BDT ${selected.rental.serviceCharge.toLocaleString()}`}</dd></div>
+                    <div><dt>Security deposit</dt><dd>{selected.rental.deposit===null?"Not specified":`BDT ${selected.rental.deposit.toLocaleString()}`}</dd></div>
+                  </dl>
+                </section>}
                 <section className="pt-tradeoff">
                   <p className="pt-eyebrow">WORTH CONSIDERING</p>
                   <p>{selected.tradeoff}</p>
@@ -528,12 +516,12 @@ export function ProptyApp() {
                 </section>
               </div>
               <aside className="pt-detail-summary">
-                <p className="pt-eyebrow">ASKING PRICE</p>
-                <h2>{formatPrice(selected.price)}</h2>
+                <p className="pt-eyebrow">{getTransaction(selected)==="rent"?"MONTHLY RENT":"ASKING PRICE"}</p>
+                <h2>{formatPropertyPrice(selected)}</h2>
                 <p className="pt-unit-price">
                   BDT{" "}
                   {Math.round(selected.price / selected.sqft).toLocaleString()}{" "}
-                  / sq ft
+                  / sq ft{getTransaction(selected)==="rent"?" / month":""}
                 </p>
                 <p className="pt-summary-description">{selected.tagline}</p>
                 <button
@@ -543,8 +531,7 @@ export function ProptyApp() {
                   Request a viewing <Icon name="arrow" size={17} />
                 </button>
                 <small className="pt-summary-disclosure">
-                  Demo request only. No real appointment is booked. Additional
-                  charges are not established.
+                  Demo request only. No real appointment is booked. {selected.rental?"Rent excludes any separately stated service charge. Unspecified costs need confirmation.":"Additional charges are not established."}
                 </small>
               </aside>
             </div>
@@ -560,6 +547,7 @@ export function ProptyApp() {
                   setSearchText(text);
                 }}
                 query={query}
+                onTransactionChange={switchTransaction}
                 onQuery={(q) => {
                   searchRequest.current?.abort();
                   setSearchBusy(false);
@@ -569,7 +557,7 @@ export function ProptyApp() {
                 onSearch={runSearch}
               />
             )}
-            {(view === "explore" || view === "saved") && (
+            {(view === "explore" || view === "saved" || view === "compare") && (
               <section
                 className="pt-listings pt-container"
                 id="homes"
@@ -582,22 +570,27 @@ export function ProptyApp() {
                         ? "YOUR PERSONAL SHORTLIST"
                         : "THE COLLECTION"}
                     </p>
-                    {view === "saved" ? (
+                    {view === "compare" ? <h1>See the differences.</h1> : view === "saved" ? (
                       <h1>Your saved homes</h1>
                     ) : (
                       <h2>
-                        {submittedText
+                        {query.newProjectsOnly ? "New projects" : submittedText
                           ? "Homes for your search"
-                          : "Find a home that feels right"}
+                          : query.transaction==="rent" ? "Find your next rental" : "Find a home that feels right"}
                       </h2>
                     )}
                     <p className="pt-muted">
-                      {view === "saved"
+                      {view === "compare" ? "Choose two or three homes of the same type. Compare the space, price and details that matter." : view === "saved"
                         ? "The homes you like, all in one place. Saved on this device."
-                        : "Find your next home in Dhaka’s neighbourhoods."}
+                        : query.newProjectsOnly ? "Under-construction homes in our sample collection. Handover dates and developer details require confirmation." : "Find your next home in Dhaka’s neighbourhoods."}
                     </p>
                   </div>
                 </div>
+                {view==="compare" && <div className="pt-compare-workspace">
+                  <div className="pt-compare-type"><button aria-pressed={query.transaction!=="rent"} onClick={()=>{setQuery({transaction:"buy"});setCompared([]);}}>Buy</button><button aria-pressed={query.transaction==="rent"} onClick={()=>{setQuery({transaction:"rent"});setCompared([]);}}>Rent</button>{compared.length>0&&<button onClick={()=>setCompared([])}>Clear selection</button>}</div>
+                  {compared.length>=2 && <CompareHomes homes={compared.map(getProperty)} onOpen={openHome}/>}
+                  <p className="pt-muted">{compared.length} of 3 selected. Use Compare on the homes below.</p>
+                </div>}
                 {view === "explore" && (
                   <div className="pt-filters">
                     <div className="pt-area-chips">
@@ -623,7 +616,7 @@ export function ProptyApp() {
                             }))
                           }
                         />
-                        Ready homes only
+                        {query.transaction==="rent"?"Ready buildings only":"Ready homes only"}
                       </label>
                       <label className="pt-sort">
                         <select
@@ -651,14 +644,14 @@ export function ProptyApp() {
                   <span>
                     {listing.length} {listing.length === 1 ? "home" : "homes"}
                     {query.budget && view === "explore"
-                      ? ` · up to ${formatPrice(query.budget)}`
+                      ? ` · up to ${query.transaction==="rent"?`BDT ${query.budget.toLocaleString()}/month`:formatPrice(query.budget)}`
                       : ""}
                     {query.bedrooms && view === "explore"
                       ? ` · ${query.bedrooms}+ bedrooms`
                       : ""}
                   </span>
                   {view === "explore" &&
-                    (Object.values(query).some(Boolean) || submittedText) && (
+                    (Object.entries(query).some(([key, value]) => key !== "transaction" && (Array.isArray(value) ? value.length > 0 : Boolean(value))) || submittedText) && (
                       <button onClick={clearSearch}>Clear search</button>
                     )}
                 </div>
@@ -773,11 +766,11 @@ export function ProptyApp() {
                 )}
                 {view === "team" && brief && (
                   <div className="pt-brief">
-                    <strong>Latest buyer brief</strong>
+                    <strong>Latest home brief</strong>
                     <span>
                       {brief.area === "All" ? "Any area" : brief.area}
                     </span>
-                    <span>Up to {formatPrice(brief.budget || 0)}</span>
+                    <span>{brief.budget ? `Up to ${brief.transaction === "rent" ? `BDT ${brief.budget.toLocaleString()} / month` : formatPrice(brief.budget)}` : "Flexible budget"}</span>
                     <span>{brief.bedrooms}+ bedrooms</span>
                   </div>
                 )}
@@ -1005,6 +998,7 @@ export function ProptyApp() {
       {dialog === "advisor" && (
         <Modal title="Let’s narrow it down" onClose={() => setDialog(null)}>
           <Advisor
+            transaction={query.transaction || "buy"}
             onOpen={openHome}
             onApply={(q) => {
               clearSearch();
@@ -1015,7 +1009,7 @@ export function ProptyApp() {
               setSubmittedText("");
               setView("explore");
               setHome(null);
-              history.pushState(null, "", "/prototype");
+              history.pushState(null, "", `/prototype?mode=${q.transaction || "buy"}`);
               setDialog(null);
               requestAnimationFrame(() =>
                 resultsRef.current?.scrollIntoView({ behavior: "instant" }),

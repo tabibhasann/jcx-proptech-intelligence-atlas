@@ -1,14 +1,15 @@
 import Image from "next/image";
+import styles from "./Brand.module.css";
 
-/** The entire lockup from slide 1. Only the surrounding empty canvas is masked. */
+/** User-supplied artwork; only surrounding white canvas is masked. */
 export function ProptyBrand() {
   return (
-    <span className="pt-original-brand">
+    <span className={styles.propty}>
       <Image
-        src="/propty/propty-deck.png"
-        width={1000}
-        height={1000}
-        alt="Propty, powered by JCX"
+        src="/brand/propty.jpg"
+        width={1080}
+        height={1080}
+        alt="Propty"
         priority
       />
     </span>
@@ -16,10 +17,10 @@ export function ProptyBrand() {
 }
 export function JcxBrand() {
   return (
-    <span className="pt-jcx-brand">
+    <span className={styles.endorsement}>
       <span>Powered by</span>
       <Image
-        src="/propty/jcx-deck.png"
+        src="/brand/jcx.png"
         width={374}
         height={135}
         alt="JCX, beyond bonding"
